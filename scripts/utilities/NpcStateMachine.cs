@@ -3,12 +3,12 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-public class PlayerStateMachine : StateMachine
+public class NpcStateMachine : StateMachine
 {
     private string[] prioritizedStates = { "battle" };
 
     public override void _Ready() {
-        Character parent = (Player)GetParent();
+        Character parent = (Npc)GetParent();
         statesMap = new Dictionary<string, State> {
             { "idle", (State)GetNode("Idle")},
             { "move", (State)GetNode("Move")},
@@ -17,9 +17,10 @@ public class PlayerStateMachine : StateMachine
         };
         base._Ready();
     }
-
     public override void _UnhandledInput(InputEvent @event) {
-        // Put only input that can interrupt other states here.
+    }
+
+    public virtual void _OnNpcClick(Node viewPort, InputEvent @event, int shapeIndex) {
         CurrentState.HandleInput(@event);
     }
 

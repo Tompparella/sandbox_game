@@ -1,18 +1,23 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://tilemaps/proptest.tres" type="TileSet" id=1]
 [ext_resource path="res://tilemaps/placeholdertile.tres" type="TileSet" id=2]
 [ext_resource path="res://assets/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/utilities/Pathfinding.cs" type="Script" id=4]
+[ext_resource path="res://assets/npc.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/dialogueManager.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scripts/utilities/InterfaceManager.cs" type="Script" id=7]
+[ext_resource path="res://scripts/utilities/GameManager.cs" type="Script" id=8]
 
 [node name="Debug" type="Node2D"]
+script = ExtResource( 8 )
 
 [node name="NavigationHandler" type="Navigation2D" parent="."]
 script = ExtResource( 4 )
 
-[node name="YSort" type="YSort" parent="NavigationHandler"]
+[node name="MapSort" type="YSort" parent="NavigationHandler"]
 
-[node name="Floor" type="TileMap" parent="NavigationHandler/YSort"]
+[node name="Floor" type="TileMap" parent="NavigationHandler/MapSort"]
 mode = 1
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 256, 128 )
@@ -21,15 +26,15 @@ show_collision = true
 format = 1
 tile_data = PoolIntArray( -458748, 0, 0, -458747, 2, 0, -458746, 0, 0, -458745, 0, 0, -458744, 0, 0, -393215, 0, 0, -393213, 0, 0, -393212, 0, 0, -393211, 0, 0, -393207, 0, 0, -327677, 0, 0, -327675, 0, 0, -327669, 0, 0, -327668, 0, 0, -327667, 0, 0, -262144, 0, 0, -262143, 0, 0, -262142, 0, 0, -262141, 0, 0, -262139, 0, 0, -262138, 0, 0, -262137, 0, 0, -262136, 0, 0, -262131, 0, 0, -262127, 0, 0, -262126, 0, 0, -262125, 0, 0, -196607, 0, 0, -196606, 0, 0, -196605, 0, 0, -196600, 0, 0, -196599, 0, 0, -196598, 0, 0, -196597, 0, 0, -196596, 0, 0, -196595, 0, 0, -196591, 0, 0, -196590, 0, 0, -196589, 0, 0, -131071, 0, 0, -131070, 0, 0, -131069, 0, 0, -131068, 0, 0, -131067, 0, 0, -131063, 0, 0, -131057, 0, 0, -131056, 0, 0, -131055, 0, 0, -131054, 0, 0, -131053, 0, 0, -65531, 0, 0, -65530, 0, 0, -65529, 0, 0, -65521, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 14, 0, 0, 15, 0, 0, 65543, 0, 0, 65544, 0, 0, 65545, 0, 0, 65546, 0, 0, 65547, 0, 0, 65549, 0, 0, 65550, 0, 0, 131080, 0, 0, 131083, 0, 0, 131084, 0, 0, 131085, 0, 0, 196616, 2, 0, 262152, 0, 0, 327688, 0, 0, 327689, 0, 0, 327690, 0, 0, 393224, 0, 0, 393225, 0, 0, 393226, 0, 0 )
 
-[node name="Player" parent="NavigationHandler/YSort" instance=ExtResource( 3 )]
+[node name="Characters" type="YSort" parent="NavigationHandler/MapSort"]
+
+[node name="Player" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 3 )]
 position = Vector2( 640, -16 )
 
-[node name="PlayerCamera" type="Camera2D" parent="NavigationHandler/YSort/Player"]
-position = Vector2( 0, -160 )
-current = true
-zoom = Vector2( 1.8, 1.8 )
+[node name="Npc" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+position = Vector2( 2056, 472 )
 
-[node name="Walls" type="TileMap" parent="NavigationHandler/YSort"]
+[node name="Walls" type="TileMap" parent="NavigationHandler/MapSort"]
 mode = 1
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 256, 126 )
@@ -42,3 +47,16 @@ tile_data = PoolIntArray( -393210, 1, 0, 262153, 536870913, 0 )
 visible = false
 points = PoolVector2Array( 1880, 1144 )
 default_color = Color( 1, 1, 1, 1 )
+
+[node name="InterfaceManager" type="CanvasLayer" parent="."]
+script = ExtResource( 7 )
+
+[node name="MainCamera" type="Camera2D" parent="InterfaceManager"]
+position = Vector2( 640, -176 )
+offset = Vector2( 0, -150 )
+current = true
+zoom = Vector2( 1.8, 1.8 )
+smoothing_enabled = true
+smoothing_speed = 6.0
+
+[node name="DialogueManager" parent="InterfaceManager" instance=ExtResource( 6 )]

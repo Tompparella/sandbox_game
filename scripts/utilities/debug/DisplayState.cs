@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class DisplayState : Panel
 {
     private Label States;
-    private Label Numbers;
     public override void _Ready()
     {
         States = (Label)GetNode("States");
