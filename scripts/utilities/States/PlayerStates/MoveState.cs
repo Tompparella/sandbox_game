@@ -4,7 +4,6 @@ using System.Linq;
 
 public class MoveState : MotionState
 {
-
     public override void Enter()
     {
         owner.GetMovePath(owner.GlobalPosition,  owner.GetGlobalMousePosition(), owner);
@@ -19,7 +18,7 @@ public class MoveState : MotionState
        MovementLoop(delta);
     }
 
-    protected void MovementLoop(float delta) {
+    protected virtual void MovementLoop(float delta) {
         owner.currentSpeed += owner.currentSpeed < owner.maxSpeed ? owner.acceleration * delta : 0;
         MoveAlongPath();
     }

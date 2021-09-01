@@ -17,7 +17,7 @@ public class NpcMoveState : NpcMotionState
        MovementLoop(delta);
     }
 
-    protected void MovementLoop(float delta) {
+    protected virtual void MovementLoop(float delta) {
         owner.currentSpeed += owner.currentSpeed < owner.maxSpeed ? owner.acceleration * delta : 0;
         MoveAlongPath();
     }

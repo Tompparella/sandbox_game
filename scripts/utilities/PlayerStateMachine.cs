@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class PlayerStateMachine : StateMachine
 {
+    private ActionMenu actionMenu;
     private string[] prioritizedStates = { "battle" };
 
     public override void _Ready() {
@@ -15,6 +16,9 @@ public class PlayerStateMachine : StateMachine
             { "battle", (State)GetNode("Battle")},
             { "dead", (State)GetNode("Dead")}
         };
+        // We find the actionmenu to receive action signals from it (Move, Battle).
+        actionMenu = (ActionMenu)GetTree().Root.FindNode("ActionMenu", owned: false);
+        actionMenu.Connect("CallAction", this, nameof(_ChangeState));
         base._Ready();
     }
 

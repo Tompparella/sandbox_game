@@ -5,6 +5,7 @@ public class NpcDeadState : State
 {
     
     public override void Enter() {
+        owner.isDead = true;
     }
 
     public override void _OnAnimationFinished(string animationName) {

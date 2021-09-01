@@ -5,6 +5,11 @@ public class DeadState : State
 {
     
     public override void Enter() {
+        owner.isDead = true;
+    }
+
+    public override void HandleAttacked()
+    {
     }
 
     public override void _OnAnimationFinished(string animationName) {

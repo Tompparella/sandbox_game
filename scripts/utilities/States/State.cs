@@ -23,6 +23,14 @@ public class State : Node
     public virtual void HandleInput(InputEvent @event) {
         return;
     }
+    public virtual void HandleAttacked() {
+        if (owner.health <= 0) {
+            EmitSignal("Finished", "dead");
+        } else {
+        EmitSignal("Finished", "battle");
+        return;
+        }
+    }
     public virtual void Update(float delta) {
         return;
     }

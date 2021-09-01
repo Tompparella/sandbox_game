@@ -13,11 +13,24 @@ public class GameManager : Node
         characters = GetTree().GetNodesInGroup("character");
         foreach (Node character in characters)
         {
-            character.Connect("OnCharacterClick", this, nameof(OpenCharacterDialog));
+            character.Connect("OnMouseOver", this, nameof(OpenCharacterDialog));
+            character.Connect("OnMouseExit", this, nameof(CloseCharacterDialog));
+            character.Connect("OnCharacterClick", this, nameof(HandleClickEvent));
         }
     }
 
     private void OpenCharacterDialog(Character source) {
         interfaceManager.HandleDialogue(source);
+    }
+    private void CloseCharacterDialog() {
+        interfaceManager.HandleDialogue();
+    }
+    private void HandleClickEvent(Character source, InputEvent @event) {
+        if (@event.IsActionPressed("R-Click")) {
+            interfaceManager.OpenActionMenu(source);
+        }
+    }
+    private void OpenActionMenu() {
+
     }
 }

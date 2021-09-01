@@ -17,8 +17,12 @@ public class NpcStateMachine : StateMachine
         };
         base._Ready();
     }
+    /*
     public override void _UnhandledInput(InputEvent @event) {
+        //Mainly for testing purposes.
+        //CurrentState.HandleInput(@event);
     }
+    */
 
     public virtual void _OnNpcClick(Node viewPort, InputEvent @event, int shapeIndex) {
         CurrentState.HandleInput(@event);

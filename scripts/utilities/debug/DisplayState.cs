@@ -9,7 +9,6 @@ public class DisplayState : Panel
         States = (Label)GetNode("States");
     }
     public void _OnStateChanged(State CurrentState) {
-
         string stateNames = "";
         stateNames += CurrentState.GetType().ToString();
         States.Text = stateNames;

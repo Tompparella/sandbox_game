@@ -16,7 +16,7 @@ public class NpcIdleState : NpcMotionState
 
     public override void HandleInput(InputEvent @event)
     {
-        if (@event.IsActionPressed("Click")) {
+        if (@event.IsActionPressed("L-Click")) {
 			EmitSignal(nameof(Finished), "move");
 		}
         //base.HandleInput(@event);

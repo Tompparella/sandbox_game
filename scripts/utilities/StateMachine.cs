@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 
 public class StateMachine : Node
@@ -22,8 +22,9 @@ public class StateMachine : Node
     public override void _Ready()
     {
         foreach (State state in statesMap.Values) {
-            state.Connect("Finished", this, "_ChangeState");
+            state.Connect("Finished", this, nameof(_ChangeState));
         }
+        Owner.Connect("Attacked", this, nameof(_OnAttacked));
         Initialize(StartState);
     }
 
@@ -55,6 +56,10 @@ public class StateMachine : Node
     protected virtual void _OnAnimationFinished(string animationName) {
         if (!_active) { return; }
         CurrentState._OnAnimationFinished(animationName);
+    }
+
+    protected virtual void _OnAttacked() {
+        CurrentState.HandleAttacked();
     }
 
     protected virtual void _ChangeState(string stateName) {
