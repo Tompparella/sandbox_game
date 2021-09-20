@@ -1,0 +1,14 @@
+{
+    "10001": {
+        "Name": "Wooden Sword",
+        "Category": "Weapon",
+        "Type": "Sword",
+        "AttackRange": 100.0,
+        "MinDamage": 5,
+        "MaxDamage": 20
+    },
+    "10002": {
+        "Name": "Lumber",
+        "Category": "Resource"
+    }
+}

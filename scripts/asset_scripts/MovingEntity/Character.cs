@@ -6,15 +6,23 @@ using System.Linq;
 public class Character : MovingEntity
 {
     // Character specific variables here.
-    [Export]
-    public string characterName = Constants.DEF_CHARACTERNAME;
-    [Export]
-    public float attackSpeed = Constants.DEF_ATTACKSPEED;
-    [Export]
-    public float health = Constants.DEF_HEALTH; // Placeholder
+    public float attackSpeed; // Placeholder
+    public float health; // Placeholder
+
     [Export]
     public bool isDead = false;
-
+    [Export]
+    public int strength = 0;
+    [Export]
+    public int vitality = 0;
+    [Export]
+    public int agility = 0;
+    [Export]
+    public int dexterity = 0;
+    [Export]
+    public int defence = 0;
+    [Export]
+    public int labour = 0;
 
     // Signals
 
@@ -30,10 +38,18 @@ public class Character : MovingEntity
     // Utility variables
 
     private List<Character> targets = new List<Character>();
+    private Interactive currentInteractive;
     private PackedScene damageCounter;
 
     // Helper functions
 
+    public void SetInteractive(Interactive interactive = null) {
+        currentInteractive = interactive;
+    }
+    public Interactive GetInteractive() {
+        return currentInteractive;
+    }
+    
     public void AddTarget(Character target) {
         if (!targets.Contains(target)) {
             targets.Add(target);
@@ -77,6 +93,10 @@ public class Character : MovingEntity
     
     public override void _Ready()
     {
+        dialogue = new CharacterDialogue(this);
+        portrait = (Texture)ResourceLoader.Load(portraitResource);
+        attackSpeed = Constants.DEF_ATTACKSPEED;
+        health = Constants.DEF_HEALTH + vitality;
         this.Connect("mouse_entered", this, nameof(_OnMouseOver));
         this.Connect("mouse_exited", this, nameof(_OnMouseExit));
         this.Connect("input_event", this, nameof(_OnClickEvent));

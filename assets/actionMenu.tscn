@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://resources/Fonts/CharacterName.tres" type="DynamicFont" id=1]
-[ext_resource path="res://scripts/utilities/ActionMenu.cs" type="Script" id=2]
+[ext_resource path="res://scripts/utilities/ui/ActionMenu.cs" type="Script" id=2]
 
 [node name="ActionMenu" type="Control"]
 margin_right = 144.0
-margin_bottom = 144.0
+margin_bottom = 120.0
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -14,14 +14,14 @@ __meta__ = {
 [node name="Popup" type="Popup" parent="."]
 visible = true
 margin_right = 144.0
-margin_bottom = 144.0
+margin_bottom = 120.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Control" type="Control" parent="Popup"]
 margin_right = 144.0
-margin_bottom = 144.0
+margin_bottom = 120.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

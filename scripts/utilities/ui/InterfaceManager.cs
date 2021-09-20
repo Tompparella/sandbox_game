@@ -34,13 +34,19 @@ public class InterfaceManager : CanvasLayer
         actionMenu = (ActionMenu)GetNode("ActionMenu");
     }
 
-    public void HandleDialogue(Character source = null) {
-        if (source == null) {
-            dialogueManager.CloseDialogueBox();
+    //DialogueManager
+    public void HandleDialogue(Character source = null, Resource resource = null) {
+        if (source != null) {
+            dialogueManager.ShowDialogueBox(source: source);
+        } else if (resource != null){
+            player.SetInteractive(resource);
+            dialogueManager.ShowDialogueBox(resource: resource);
         } else {
-            dialogueManager.ShowDialogueBox(source);
+            dialogueManager.CloseDialogueBox();
         }
     }
+
+    // ActionMenu
     public void UpdateActionMenu(Character source = null) {
         actionMenu.UpdateActionMenu(source);
     }

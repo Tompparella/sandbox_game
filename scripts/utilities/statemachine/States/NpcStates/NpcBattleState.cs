@@ -1,8 +1,7 @@
 using Godot;
-using System;
 using System.Linq;
 
-public class BattleState : MoveState
+public class NpcBattleState : NpcMoveState
 {
     private float weaponRange = Constants.DEF_ATTACKRANGE; // Placeholder
     private const float tickSpeed = Constants.TICK;
@@ -19,13 +18,6 @@ public class BattleState : MoveState
             return;
         }
         owner.GetMovePath(owner.GlobalPosition, owner.GetTarget().Position, owner);
-    }
-
-    public override void HandleInput(InputEvent @event)
-    {
-        if (@event.IsActionPressed("L-Click")) {
-			owner.GetMovePath(owner.GlobalPosition,  owner.GetGlobalMousePosition(), owner);
-		}
     }
 
     public override void Exit()
@@ -66,7 +58,6 @@ public class BattleState : MoveState
             combatCooldown = 0;
             EmitSignal("Finished", "previous");
         }
-
     }
 
     private void AttackTarget() {

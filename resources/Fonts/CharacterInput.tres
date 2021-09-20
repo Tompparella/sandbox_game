@@ -3,7 +3,5 @@
 [ext_resource path="res://resources/Fonts/Origin/Connection/ConnectionIi-2wj8.otf" type="DynamicFontData" id=1]
 
 [resource]
-size = 20
-outline_size = 2
-outline_color = Color( 0.235294, 0.235294, 0.235294, 1 )
+outline_color = Color( 0.309804, 0.317647, 0.341176, 1 )
 font_data = ExtResource( 1 )

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://resources/Fonts/Origin/Consola/consola.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://scripts/utilities/DamageCounter.cs" type="Script" id=2]
+[ext_resource path="res://scripts/utilities/combat/DamageCounter.cs" type="Script" id=2]
 [ext_resource path="res://assets/combat/Animations/damageCounter.tres" type="Animation" id=3]
 
 [sub_resource type="DynamicFont" id=1]

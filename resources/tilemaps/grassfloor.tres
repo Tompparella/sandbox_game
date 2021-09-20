@@ -1,0 +1,80 @@
+[gd_resource type="TileSet" load_steps=15 format=2]
+
+[ext_resource path="res://resources/tilemaps/grasstiles/grasstileset.png" type="Texture" id=1]
+
+[sub_resource type="NavigationPolygon" id=1]
+vertices = PoolVector2Array( 128, 0, 0, 64, 128, 128, 256, 64 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
+
+[sub_resource type="NavigationPolygon" id=2]
+vertices = PoolVector2Array( 0, 64, 32, 64, 128, 16, 128, 0, 256, 64, 128, 128 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5 ) ]
+
+[sub_resource type="NavigationPolygon" id=3]
+vertices = PoolVector2Array( 128, 128, 0, 64, 128, 0, 128, 16, 224, 64, 128, 112, 128, 128 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5, 6 ) ]
+
+[sub_resource type="NavigationPolygon" id=4]
+vertices = PoolVector2Array( 128, 0, 0, 64, 128, 128, 256, 64 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
+
+[sub_resource type="NavigationPolygon" id=5]
+vertices = PoolVector2Array( 128, 0, 0, 64, 128, 128, 256, 64, 224, 64, 128, 16 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5 ) ]
+
+[sub_resource type="NavigationPolygon" id=6]
+vertices = PoolVector2Array( 0, 64, 128, 0, 256, 64, 128, 128 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
+
+[sub_resource type="NavigationPolygon" id=7]
+vertices = PoolVector2Array( 0, 64, 32, 64, 128, 112, 128, 128, 256, 64, 128, 0 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5 ) ]
+
+[sub_resource type="NavigationPolygon" id=8]
+vertices = PoolVector2Array( 0, 64, 128, 0, 256, 64, 128, 128 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
+
+[sub_resource type="NavigationPolygon" id=9]
+vertices = PoolVector2Array( 128, 128, 128, 112, 224, 64, 256, 64, 128, 0, 0, 64 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5 ) ]
+
+[sub_resource type="NavigationPolygon" id=10]
+vertices = PoolVector2Array( 0, 64, 128, 0, 256, 64, 128, 128 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
+
+[sub_resource type="NavigationPolygon" id=11]
+vertices = PoolVector2Array( 128, 0, 0, 64, 32, 64, 128, 112, 224, 64, 256, 64 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5 ) ]
+
+[sub_resource type="NavigationPolygon" id=12]
+vertices = PoolVector2Array( 128, 16, 32, 64, 0, 64, 128, 128, 256, 64, 224, 64 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5 ) ]
+
+[sub_resource type="NavigationPolygon" id=13]
+vertices = PoolVector2Array( 128, 128, 256, 64, 128, 0, 128, 16, 32, 64, 128, 112 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5 ) ]
+
+[resource]
+0/name = "grasstileset.png 1"
+0/texture = ExtResource( 1 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 1536, 384 )
+0/tile_mode = 1
+0/autotile/bitmask_mode = 1
+0/autotile/bitmask_flags = [ Vector2( 0, 0 ), 511, Vector2( 0, 1 ), 438, Vector2( 0, 2 ), 216, Vector2( 1, 0 ), 511, Vector2( 1, 1 ), 504, Vector2( 2, 0 ), 511, Vector2( 2, 1 ), 63, Vector2( 3, 0 ), 511, Vector2( 3, 1 ), 219, Vector2( 4, 0 ), 511, Vector2( 4, 1 ), 27, Vector2( 5, 0 ), 432, Vector2( 5, 1 ), 54 ]
+0/autotile/icon_coordinate = Vector2( 0, 0 )
+0/autotile/tile_size = Vector2( 256, 128 )
+0/autotile/spacing = 0
+0/autotile/occluder_map = [  ]
+0/autotile/navpoly_map = [ Vector2( 0, 0 ), SubResource( 1 ), Vector2( 0, 1 ), SubResource( 2 ), Vector2( 0, 2 ), SubResource( 3 ), Vector2( 1, 0 ), SubResource( 4 ), Vector2( 1, 1 ), SubResource( 5 ), Vector2( 2, 0 ), SubResource( 6 ), Vector2( 2, 1 ), SubResource( 7 ), Vector2( 3, 0 ), SubResource( 8 ), Vector2( 3, 1 ), SubResource( 9 ), Vector2( 4, 0 ), SubResource( 10 ), Vector2( 4, 1 ), SubResource( 11 ), Vector2( 5, 0 ), SubResource( 12 ), Vector2( 5, 1 ), SubResource( 13 ) ]
+0/autotile/priority_map = [ Vector3( 0, 0, 14 ), Vector3( 2, 0, 2 ), Vector3( 3, 0, 3 ) ]
+0/autotile/z_index_map = [  ]
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0

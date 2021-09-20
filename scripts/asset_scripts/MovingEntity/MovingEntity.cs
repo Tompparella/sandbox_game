@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-public class MovingEntity : Area2D
+public class MovingEntity : Interactive
 {
 
     [Signal]

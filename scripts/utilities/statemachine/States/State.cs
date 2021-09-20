@@ -37,6 +37,4 @@ public class State : Node
     public virtual void _OnAnimationFinished(string animationName) {
         return;
     }
-
-
 }

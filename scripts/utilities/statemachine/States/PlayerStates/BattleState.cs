@@ -1,7 +1,8 @@
 using Godot;
+using System;
 using System.Linq;
 
-public class NpcBattleState : NpcMoveState
+public class BattleState : MoveState
 {
     private float weaponRange = Constants.DEF_ATTACKRANGE; // Placeholder
     private const float tickSpeed = Constants.TICK;
@@ -20,6 +21,13 @@ public class NpcBattleState : NpcMoveState
         owner.GetMovePath(owner.GlobalPosition, owner.GetTarget().Position, owner);
     }
 
+    public override void HandleInput(InputEvent @event)
+    {
+        if (@event.IsActionPressed("L-Click")) {
+			owner.GetMovePath(owner.GlobalPosition,  owner.GetGlobalMousePosition(), owner);
+		}
+    }
+
     public override void Exit()
     {
         base.Exit();
@@ -27,13 +35,21 @@ public class NpcBattleState : NpcMoveState
 
     public override void Update(float delta)
     {
-        if (staggered) {
-            TickLoop(delta);
-        } else if (owner.Position.DistanceTo(owner.GetTarget().Position) < weaponRange) {
-            AttackTarget();
-            return;
-        } else {
-            CombatEscape(delta);
+        try
+        {
+            if (staggered) {
+                TickLoop(delta);
+            } else if (owner.Position.DistanceTo(owner.GetTarget().Position) < weaponRange) {
+                AttackTarget();
+                return;
+            } else {
+                CombatEscape(delta);
+            }
+        }
+        catch (System.Exception e)
+        {
+            GD.Print("Error:", e); // Weird bug still exists. This should help with finding it.
+            throw;
         }
         base.Update(delta);
     }
