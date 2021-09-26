@@ -4,12 +4,14 @@ using System.Linq;
 
 public class NpcMoveState : NpcMotionState
 {
-
+    private RandomNumberGenerator rand = new RandomNumberGenerator();
 
     public override void Enter()
     {
-        Node2D player = (Node2D)GetTree().Root.GetNode("Debug/NavigationHandler/MapSort/Characters/Player");
-        owner.GetMovePath(owner.GlobalPosition, player.Position, owner);
+        owner.GetMovePath(owner.GlobalPosition, owner.GlobalPosition + new Vector2(rand.RandfRange(-300,300), rand.RandfRange(-300,300)), owner);
+        if (owner.movePath == null) {
+            EmitSignal(nameof(Finished), "idle");
+        }
     }
 
     public override void Update(float delta) {

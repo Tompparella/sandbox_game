@@ -94,13 +94,18 @@ public class Character : MovingEntity
     public override void _Ready()
     {
         dialogue = new CharacterDialogue(this);
-        portrait = (Texture)ResourceLoader.Load(portraitResource);
+
         attackSpeed = Constants.DEF_ATTACKSPEED;
         health = Constants.DEF_HEALTH + vitality;
+
+        portrait = (Texture)ResourceLoader.Load(portraitResource);
+        damageCounter = (PackedScene)ResourceLoader.Load("res://assets/combat/damagecounter.tscn");
+
         this.Connect("mouse_entered", this, nameof(_OnMouseOver));
         this.Connect("mouse_exited", this, nameof(_OnMouseExit));
         this.Connect("input_event", this, nameof(_OnClickEvent));
-        damageCounter = (PackedScene)ResourceLoader.Load("res://assets/combat/damagecounter.tscn");
+
+        base._Ready();
     }
 
     // Input functions

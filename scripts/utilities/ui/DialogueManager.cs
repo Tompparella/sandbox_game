@@ -17,6 +17,7 @@ public class DialogueManager : Control
     private GridContainer stats;
     private LineEdit doInput, sayInput;
     private DialogueHandler dialogueHandler = new DialogueHandler();
+    private InventoryDisplay inventoryDisplay;
     
     private void SetStats(Character source) {
 
@@ -60,7 +61,7 @@ public class DialogueManager : Control
         dialogue.Text = text;
     }
 
-    public void ShowDialogueBox(Character source = null, Resource resource = null) {
+    public void ShowDialogueBox(Character source = null, Resources resource = null) {
         StopTimer();
         this.SetProcess(true);
         popup.Visible = true;
@@ -81,15 +82,21 @@ public class DialogueManager : Control
         portrait.Texture = source.portrait;
         name.Text = source.entityName;
         SetDialogue(source.dialogue.initial);
+        inventoryDisplay.UpdateInventory(source.inventory);
         SetStats(source);
     }
 
-    private void HandleResourceDialogue(Resource resource) {
+    private void HandleResourceDialogue(Resources resource) {
         target = resource;
         portrait.Texture = resource.portrait;
         name.Text = resource.entityName;
         SetDialogue(resource.dialogue.initial);
+        inventoryDisplay.UpdateInventory(resource.inventory);
         ClearStats();
+    }
+
+    private void UpdateInventory(Inventory inventory) {
+        inventoryDisplay.UpdateInventory(inventory);
     }
 
     public void HidePopup() {
@@ -145,11 +152,7 @@ public class DialogueManager : Control
         stats = (GridContainer)popup.GetNode("TabContainer/Details/Stats");
         sayInput = (LineEdit)popup.GetNode("TabContainer/Dialogue/InputSay");
         doInput = (LineEdit)popup.GetNode("TabContainer/Details/InputDo");
-    }
-
-    public override void _Process(float delta)
-    {
-        this.SetPosition(target.Position);
+        inventoryDisplay = (InventoryDisplay)popup.GetNode("TabContainer/Details/Inventory");
     }
 
     public override void _GuiInput(InputEvent @event)

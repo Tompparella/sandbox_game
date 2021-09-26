@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -10,6 +10,17 @@
 [ext_resource path="res://scripts/utilities/GameManager.cs" type="Script" id=8]
 [ext_resource path="res://assets/actionMenu.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/resources/Tree.tscn" type="PackedScene" id=10]
+[ext_resource path="res://resources/items/resources/Lumber.tres" type="Resource" id=11]
+[ext_resource path="res://resources/items/Inventory.cs" type="Script" id=12]
+[ext_resource path="res://assets/resources/Deposit.tscn" type="PackedScene" id=13]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 12 )
+items = [ ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+
+[sub_resource type="Resource" id=2]
+script = ExtResource( 12 )
+items = [ null, null, ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, null, null, null, null, null, null, null ]
 
 [node name="Debug" type="Node2D"]
 script = ExtResource( 8 )
@@ -29,14 +40,23 @@ tile_data = PoolIntArray( -1769478, 0, 5, -1769477, 0, 65537, -1769476, 0, 65537
 
 [node name="Assets" type="YSort" parent="NavigationHandler/MapSort"]
 
+[node name="Deposit" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]
+position = Vector2( -512, 528 )
+depositType = "iron"
+
+[node name="Deposit2" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]
+position = Vector2( 520, 256 )
+depositType = "silver"
+
 [node name="Tree" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 10 )]
 position = Vector2( 1288, -80 )
 
 [node name="Characters" type="YSort" parent="NavigationHandler/MapSort"]
 
 [node name="Player" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 3 )]
-position = Vector2( 640, -16 )
+position = Vector2( 640, 0 )
 entityName = "Tompparella"
+inventory = SubResource( 1 )
 strength = 4
 vitality = 1
 agility = 3
@@ -44,9 +64,15 @@ dexterity = 1
 defence = 1
 labour = 5
 
-[node name="Npc" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+[node name="Miner" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
 position = Vector2( 2056, 472 )
 entityName = "Eduardo Fernandez"
+inventory = SubResource( 2 )
+profession = "miner"
+
+[node name="Lumberjack" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+position = Vector2( 544, 880 )
+profession = "lumberjack"
 
 [node name="Walls" type="TileMap" parent="NavigationHandler/MapSort"]
 mode = 1
@@ -74,16 +100,7 @@ smoothing_enabled = true
 smoothing_speed = 6.0
 
 [node name="DialogueManager" parent="InterfaceManager" instance=ExtResource( 6 )]
-anchor_left = 0.0
-anchor_top = 0.5
-anchor_right = 0.0
-anchor_bottom = 0.5
-margin_left = 0.0
-margin_top = -132.0
-margin_right = 336.0
-margin_bottom = 132.0
 
 [node name="ActionMenu" parent="InterfaceManager" instance=ExtResource( 9 )]
-visible = false
 margin_right = 0.0
 margin_bottom = 0.0

@@ -5,6 +5,8 @@ using System.Linq;
 
 public class Interactive : Area2D
 {
+    [Signal]
+    public delegate void OnRemoval(Interactive entity);
     public Dialogue dialogue;
     [Export]
     public String portraitResource = Constants.DEF_PORTRAIT;
@@ -13,5 +15,14 @@ public class Interactive : Area2D
     
     public Texture portrait;
     public string type;
+    [Export]
+    public Inventory inventory;
+
+    public override void _Ready()
+    {
+        if (inventory == null) {
+            inventory = new Inventory();
+        }
+    }
 
 }

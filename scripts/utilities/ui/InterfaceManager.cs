@@ -35,7 +35,7 @@ public class InterfaceManager : CanvasLayer
     }
 
     //DialogueManager
-    public void HandleDialogue(Character source = null, Resource resource = null) {
+    public void HandleDialogue(Character source = null, Resources resource = null) {
         if (source != null) {
             dialogueManager.ShowDialogueBox(source: source);
         } else if (resource != null){

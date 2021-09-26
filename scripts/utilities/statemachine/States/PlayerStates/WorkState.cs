@@ -10,9 +10,14 @@ public class WorkState : MoveState
     private float tickDelta = 0;
     private int ticks = 0;
     private bool staggered = false;
+    private Resources resource;
 
     public override void Enter() {
-        owner.GetMovePath(owner.GlobalPosition, owner.GetInteractive().Position, owner);
+        resource = (Resources)owner.GetInteractive();
+        if (resource.inventory.IsEmpty()) {
+            EmitSignal(nameof(Finished), "idle");
+        }
+        owner.GetMovePath(owner.GlobalPosition, resource.Position, owner);
     }
 
     public override void Update(float delta)
@@ -21,7 +26,7 @@ public class WorkState : MoveState
         {
             if (staggered) {
                 TickLoop(delta);
-            } else if (owner.Position.DistanceTo(owner.GetInteractive().Position) < workRange) {
+            } else if (owner.Position.DistanceTo(resource.Position) < workRange) {
                 WorkTarget();
                 return;
             }
@@ -48,11 +53,11 @@ public class WorkState : MoveState
     }
 
     private void WorkTarget() {
+        resource.workAction(owner);
         if (owner.GetInteractive() == null) {
             EmitSignal("Finished", "idle");
             return;
         }
-        // Work logic here
         staggered = true;
     }
 

@@ -35,21 +35,13 @@ public class BattleState : MoveState
 
     public override void Update(float delta)
     {
-        try
-        {
-            if (staggered) {
-                TickLoop(delta);
-            } else if (owner.Position.DistanceTo(owner.GetTarget().Position) < weaponRange) {
-                AttackTarget();
-                return;
-            } else {
-                CombatEscape(delta);
-            }
-        }
-        catch (System.Exception e)
-        {
-            GD.Print("Error:", e); // Weird bug still exists. This should help with finding it.
-            throw;
+        if (staggered) {
+            TickLoop(delta);
+        } else if (owner.Position.DistanceTo(owner.GetTarget().Position) < weaponRange) {
+            AttackTarget();
+            return;
+        } else {
+            CombatEscape(delta);
         }
         base.Update(delta);
     }

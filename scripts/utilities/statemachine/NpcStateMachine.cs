@@ -13,7 +13,8 @@ public class NpcStateMachine : StateMachine
             { "idle", (State)GetNode("Idle")},
             { "move", (State)GetNode("Move")},
             { "battle", (State)GetNode("Battle")},
-            { "dead", (State)GetNode("Dead")}
+            { "dead", (State)GetNode("Dead")},
+            { "work", (State)GetNode("Work")}
         };
         base._Ready();
     }
@@ -35,11 +36,6 @@ public class NpcStateMachine : StateMachine
         if (prioritizedStates.Contains(stateName)) {
             stateStack.Insert(0, statesMap[stateName]);
         }
-        /* Tähän tilakohtainen kohtelu, esim:
-        if (stateName == 'jump') {
-            ...jotakin
-        }
-        */
         base._ChangeState(stateName);
     }
 }

@@ -30,7 +30,7 @@ public class GameManager : Node
     private void OpenCharacterDialog(Character source) {
         interfaceManager.HandleDialogue(source: source);
     }
-    private void OpenResourceDialog(Resource resource) {
+    private void OpenResourceDialog(Resources resource) {
         interfaceManager.HandleDialogue(resource: resource);
     }
 
