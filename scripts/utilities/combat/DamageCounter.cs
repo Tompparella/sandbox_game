@@ -5,7 +5,7 @@ public class DamageCounter : Node2D
 {
     private AnimationPlayer animationPlayer;
     private Label damageLabel;
-    private float damage;
+    private string damage;
 
     public override void _Ready()
     {
@@ -15,7 +15,7 @@ public class DamageCounter : Node2D
         damageLabel.Text = damage.ToString();
         animationPlayer.Play("damageCounter");
     }
-    public void init(float _damage) {
+    public void init(string _damage) {
         damage = _damage;
     }
     public void OnAnimationFinished(string animationName) {

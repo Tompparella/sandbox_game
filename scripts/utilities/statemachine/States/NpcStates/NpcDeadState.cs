@@ -12,6 +12,6 @@ public class NpcDeadState : State
     }
     
     public override void _OnAnimationFinished(string animationName) {
-        EmitSignal(nameof(Finished), "dead");
+        //EmitSignal(nameof(Finished), "dead");
     }
 }

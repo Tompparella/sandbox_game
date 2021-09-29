@@ -25,7 +25,7 @@ public class ActionMenu : Control
     public void UpdateActionMenu(Character source) {
     if (source != null) {
         interfaceManager.AddPlayerTarget(source);
-        name.Text = source.Name;
+        name.Text = source.entityName;
     } else {
         name.Text = "";
     }

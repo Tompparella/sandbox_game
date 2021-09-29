@@ -15,7 +15,7 @@ public class NpcIdleState : NpcMotionState
             EmitSignal(nameof(Finished), "work");
         } else {
             System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(MoveAtRandom);   // If there's nothing to do, wait five seconds and look for a path.
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(MoveAtRandom);   // If there's nothing to do, wait three seconds and look for a path.
             timer.Interval = 3000;
             timer.AutoReset = false;
             timer.Start();

@@ -6,23 +6,11 @@ using System.Linq;
 public class Character : MovingEntity
 {
     // Character specific variables here.
-    public float attackSpeed; // Placeholder
-    public float health; // Placeholder
 
     [Export]
     public bool isDead = false;
     [Export]
-    public int strength = 0;
-    [Export]
-    public int vitality = 0;
-    [Export]
-    public int agility = 0;
-    [Export]
-    public int dexterity = 0;
-    [Export]
-    public int defence = 0;
-    [Export]
-    public int labour = 0;
+    public Stats stats;
 
     // Signals
 
@@ -80,13 +68,17 @@ public class Character : MovingEntity
 
     public void TakeAttack(Attack attack) {
         AddTarget(attack.source);
-        health -= attack.damage;
-        GD.Print(Name, ":", health);
+        Random random = new Random();
         DamageCounter newCounter = (DamageCounter)damageCounter.Instance();
-        newCounter.init(attack.damage);
-        this.AddChild(newCounter);
+        if (random.NextDouble() >= stats.dodge) {
+            stats.currentHealth -= attack.damage * (1 - 0.01f * stats.defence);
+            GD.Print(Name, ":", stats.currentHealth);
+            newCounter.init(attack.damage.ToString());
+        } else {
+            newCounter.init("Dodge");
+        }
         EmitSignal("Attacked");
-
+        this.AddChild(newCounter);
     }
 
     // Utility functions
@@ -95,8 +87,11 @@ public class Character : MovingEntity
     {
         dialogue = new CharacterDialogue(this);
 
-        attackSpeed = Constants.DEF_ATTACKSPEED;
-        health = Constants.DEF_HEALTH + vitality;
+        if (stats == null) {
+            stats = new Stats();
+        } else {
+            stats.UpdateStats();
+        }
 
         portrait = (Texture)ResourceLoader.Load(portraitResource);
         damageCounter = (PackedScene)ResourceLoader.Load("res://assets/combat/damagecounter.tscn");

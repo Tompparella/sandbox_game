@@ -19,7 +19,7 @@ public class MoveState : MotionState
     }
 
     protected virtual void MovementLoop(float delta) {
-        owner.currentSpeed += owner.currentSpeed < owner.maxSpeed ? owner.acceleration * delta : 0;
+        owner.currentSpeed += owner.currentSpeed < owner.stats.moveSpeed ? owner.acceleration * delta : 0;
         MoveAlongPath();
     }
 

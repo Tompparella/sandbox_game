@@ -5,9 +5,9 @@ using System.Linq;
 public class NpcMoveState : NpcMotionState
 {
     private RandomNumberGenerator rand = new RandomNumberGenerator();
-
     public override void Enter()
     {
+        rand.Randomize();
         owner.GetMovePath(owner.GlobalPosition, owner.GlobalPosition + new Vector2(rand.RandfRange(-300,300), rand.RandfRange(-300,300)), owner);
         if (owner.movePath == null) {
             EmitSignal(nameof(Finished), "idle");
@@ -20,7 +20,7 @@ public class NpcMoveState : NpcMotionState
     }
 
     protected virtual void MovementLoop(float delta) {
-        owner.currentSpeed += owner.currentSpeed < owner.maxSpeed ? owner.acceleration * delta : 0;
+        owner.currentSpeed += owner.currentSpeed < owner.stats.moveSpeed ? owner.acceleration * delta : 0;
         MoveAlongPath();
     }
 

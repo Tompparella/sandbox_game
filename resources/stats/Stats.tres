@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://resources/stats/Stats.cs" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+strength = 0
+vitality = 0
+dexterity = 0
+defence = 0
+agility = 0
+labour = 0

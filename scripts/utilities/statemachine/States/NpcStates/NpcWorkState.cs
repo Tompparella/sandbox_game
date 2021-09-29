@@ -5,10 +5,8 @@ using System.Linq;
 public class NpcWorkState : NpcMoveState
 {
     private float workRange = Constants.DEF_ATTACKRANGE;
-    private float workspeed = Constants.DEF_ATTACKSPEED; // Placeholder. Take labour level to note.
     private const float tickSpeed = Constants.TICK;
     private float tickDelta = 0;
-    private int ticks = 0;
     private bool staggered = false;
     private Resources resource;
 
@@ -41,13 +39,12 @@ public class NpcWorkState : NpcMoveState
 
     private void TickLoop(float delta) {
         tickDelta += delta;
-        if (tickDelta >= tickSpeed) {
-            ticks++;
+
+        if (tickDelta >= owner.stats.workSpeed) {
+            if (resource.GetExhausted()) {
+                EmitSignal(nameof(Finished), "idle");
+            }
             tickDelta = 0;
-        }
-        if (ticks >= workspeed) {
-            tickDelta = 0;
-            ticks = 0;
             staggered = false;
         }
     }
@@ -55,7 +52,7 @@ public class NpcWorkState : NpcMoveState
     private void WorkTarget() {
         resource.workAction(owner);
         if (owner.GetInteractive() == null) {
-            EmitSignal("Finished", "idle");
+            EmitSignal(nameof(Finished), "idle");
             return;
         }
         staggered = true;

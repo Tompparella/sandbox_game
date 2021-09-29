@@ -24,7 +24,7 @@ public class State : Node
         return;
     }
     public virtual void HandleAttacked() {
-        if (owner.health <= 0) {
+        if (owner.stats.currentHealth <= 0) {
             EmitSignal("Finished", "dead");
         } else {
         EmitSignal("Finished", "battle");

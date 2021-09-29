@@ -28,6 +28,8 @@ public class ResourceDialogue: Dialogue {
                 return "work";
             case "chop":
                 return "work";
+            case "mine":
+                return "work";
             default:
                 return unknown;
         }

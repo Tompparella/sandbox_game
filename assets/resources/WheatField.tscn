@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://scripts/utilities/resources/WheatField.cs" type="Script" id=1]
+[ext_resource path="res://resources/sprites/assets/resources/full/wheatfield.png" type="Texture" id=2]
+
+[node name="WheatField" type="Area2D" groups=[
+"resource",
+]]
+position = Vector2( 0, 24 )
+script = ExtResource( 1 )
+portraitResource = "res://resources/sprites/assets/resources/portrait/wheatfield_portrait.png"
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 5.60001, -160 )
+texture = ExtResource( 2 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( 5.60001, -160 )
+polygon = PoolVector2Array( 0, -28, -112, 28, -104, 76, -112, 84, -96, 132, 0, 180, 104, 132, 112, 92, 104, 84, 120, 28 )

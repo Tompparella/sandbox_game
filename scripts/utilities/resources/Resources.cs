@@ -20,8 +20,12 @@ public class Resources : Interactive
     protected string exhaustedPortrait;
     protected string exhaustedName;
     protected string exhaustedDescription;
+    protected bool isExhausted = false;
 
 
+    public bool GetExhausted() {
+        return isExhausted;
+    }
     public void workAction(Character worker) {
         currentActions++;
         GD.Print(currentActions);
@@ -32,20 +36,23 @@ public class Resources : Interactive
     }
 
     private void GiveResource(Character worker) {
-        if (!worker.inventory.IsFull()) {
-            worker.inventory.AddItem(inventory.PopLastItem());
-            if (worker.inventory.IsFull()) {
-                worker.SetInteractive();
-                EmitSignal(nameof(OnRemoval), this);
-            }
-            if (inventory.IsEmpty()) {
-                worker.SetInteractive();
-                ExhaustResource();
+        if (!isExhausted) {
+            if (!worker.inventory.IsFull()) {
+                worker.inventory.AddItem(inventory.PopLastItem());
+                if (worker.inventory.IsFull()) {
+                    worker.SetInteractive();
+                    EmitSignal(nameof(OnRemoval), this);
+                }
+                if (inventory.IsEmpty()) {
+                    worker.SetInteractive();
+                    ExhaustResource();
+                }
             }
         }
     }
 
     private void ExhaustResource() {
+        isExhausted = true;
         EmitSignal(nameof(OnRemoval), this);
         sprite.Texture = (Texture)ResourceLoader.Load(exhaustedTexture);
         portrait = (Texture)ResourceLoader.Load(exhaustedPortrait);

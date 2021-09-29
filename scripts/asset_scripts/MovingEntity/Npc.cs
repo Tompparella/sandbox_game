@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -24,13 +25,20 @@ public class Npc : Character
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
                 break;
+            
+            case "farmer":
+                if (area is WheatField) {
+                    surroundingResources.Add((Resources)area);
+                    area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+                }
+                break;
                 
             default:
                 break;
         }
     }
     public void _OnSurroundingsExited(Area2D area) {
-        if (surroundingResources.Contains((Resources)area)) {
+        if (surroundingResources.Contains(area)) {
             if (area.IsConnected("OnRemoval", this, nameof(SurroundingRemoved))) {
                 area.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
             }
@@ -46,7 +54,7 @@ public class Npc : Character
         float shortestDistance = float.MaxValue;
         foreach(Resources i in surroundingResources) {
             if ((currentResource == null || Position.DistanceTo(i.Position) < shortestDistance)) {
-                if (!IsInstanceValid(i)) {
+                if (!IsInstanceValid(i) || i.GetExhausted()) {
                     surroundingResources.Remove(i);
                     continue;
                 }
@@ -56,5 +64,14 @@ public class Npc : Character
         }
         SetInteractive(currentResource);
         return foundWork;
+    }
+    public override void _Ready()
+    {
+        if (profession == null) {
+            Random r = new Random();
+            int index = r.Next(Constants.PROFESSIONS.Count());
+            profession = Constants.PROFESSIONS[index];
+        }
+        base._Ready();
     }
 }

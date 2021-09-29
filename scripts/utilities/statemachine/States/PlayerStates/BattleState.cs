@@ -52,7 +52,7 @@ public class BattleState : MoveState
             ticks++;
             tickDelta = 0;
         }
-        if (ticks >= owner.attackSpeed) {
+        if (ticks >= owner.stats.attackSpeed) {
             tickDelta = 0;
             ticks = 0;
             staggered = false;
@@ -73,7 +73,7 @@ public class BattleState : MoveState
         if (owner.GetTarget().isDead) {
             owner.ClearCurrentTarget();
             if (owner.GetTarget() == null) {
-                EmitSignal("Finished", "previous");
+                EmitSignal("Finished", "idle");
                 return;
             }
         }
@@ -86,7 +86,7 @@ public class BattleState : MoveState
 
     public override void HandleAttacked()
     {
-        if (owner.health <= 0) {
+        if (owner.stats.currentHealth <= 0) {
             base.HandleAttacked();
         } else {
             // Play staggered animation

@@ -69,10 +69,9 @@ public class StateMachine : Node
         CurrentState.Exit();
 
         if (stateName == "previous") { // States can be added here as needed.
-                //State popState = stateStack[0]; // In GDScript this is just pop_front, so I initially save the item to a variable.
-                stateStack.RemoveAt(0);
+            stateStack.RemoveAt(0);
         } else {
-                stateStack[0] = statesMap[stateName];
+            stateStack[0] = statesMap[stateName];
         }
         /* Tähän tilakohtainen käsittely, esim:
         if (stateName == 'jump') {

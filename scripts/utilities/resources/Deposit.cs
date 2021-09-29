@@ -12,7 +12,7 @@ public class Deposit : Resources
         sprite = (Sprite)GetNode("Sprite");
         
         actions = Constants.DEPOSITACTIONS;
-        exhaustedDescription = Constants.EMPTYDEPOSITDESCRIPTION;
+        exhaustedDescription = Constants.EMPTYDEPOSIT_DESCRIPTION;
         exhaustedTexture = Constants.DEPOSIT_TEXTURE;
         exhaustedName = "Barren Ore Deposit";
         exhaustedPortrait = Constants.DEPOSIT_PORTRAIT;
@@ -21,24 +21,25 @@ public class Deposit : Resources
         switch (depositType)
         {
             case "iron":
-                inventory = (Inventory)ResourceLoader.Load(Constants.IRON_DEPOSIT_INVENTORY);
-                description = Constants.IRONDEPOSITDESCRIPTION;
+                inventory = (Inventory)ResourceLoader.Load(Constants.IRON_DEPOSIT_INVENTORY).Duplicate();
+                description = Constants.IRONDEPOSIT_DESCRIPTION;
                 entityName = "Iron Deposit";
                 portraitResource = Constants.IRON_DEPOSIT_PORTRAIT;
                 sprite.Texture = (Texture)ResourceLoader.Load(Constants.IRON_DEPOSIT_TEXTURE);
                 break;
             case "silver":
-                inventory = (Inventory)ResourceLoader.Load(Constants.SILVER_DEPOSIT_INVENTORY);
-                description = Constants.SILVERDEPOSITDESCRIPTION;
+                inventory = (Inventory)ResourceLoader.Load(Constants.SILVER_DEPOSIT_INVENTORY).Duplicate();
+                description = Constants.SILVERDEPOSIT_DESCRIPTION;
                 entityName = "Silver Deposit";
                 portraitResource = Constants.SILVER_DEPOSIT_PORTRAIT;
                 sprite.Texture = (Texture)ResourceLoader.Load(Constants.SILVER_DEPOSIT_TEXTURE);
                 break;
             default:
-                description = Constants.EMPTYDEPOSITDESCRIPTION;
+                description = Constants.EMPTYDEPOSIT_DESCRIPTION;
                 entityName = "Barren Ore Deposit";
                 portraitResource = Constants.DEPOSIT_PORTRAIT;
                 sprite.Texture = (Texture)ResourceLoader.Load(Constants.DEPOSIT_TEXTURE);
+                isExhausted = true;
                 break;
         }
         dialogue = new ResourceDialogue(this, description, actions);

@@ -19,7 +19,7 @@ public class DialogueManager : Control
     private DialogueHandler dialogueHandler = new DialogueHandler();
     private InventoryDisplay inventoryDisplay;
     
-    private void SetStats(Character source) {
+    private void SetStats(Stats statSource) {
 
         Label str, vit, agi, dxt, def, lbr;
 
@@ -30,12 +30,13 @@ public class DialogueManager : Control
         def = (Label)stats.GetNode("Def/Label");
         lbr = (Label)stats.GetNode("Lbr/Label");
 
-        str.Text = "Str: " + source.strength.ToString();
-        vit.Text = "Vit: " + source.vitality.ToString();
-        agi.Text = "Agi: " + source.agility.ToString();
-        dxt.Text = "Dxt: " + source.dexterity.ToString();
-        def.Text = "Def: " + source.defence.ToString();
-        lbr.Text = "Lbr: " + source.labour.ToString();
+        int[] statList = statSource.GetStats();
+        str.Text = "Str: " + statList[0].ToString();
+        vit.Text = "Vit: " + statList[1].ToString();
+        agi.Text = "Agi: " + statList[2].ToString();
+        dxt.Text = "Dxt: " + statList[3].ToString();
+        def.Text = "Def: " + statList[4].ToString();
+        lbr.Text = "Lbr: " + statList[5].ToString();
     }
 
     private void ClearStats() {
@@ -83,7 +84,7 @@ public class DialogueManager : Control
         name.Text = source.entityName;
         SetDialogue(source.dialogue.initial);
         inventoryDisplay.UpdateInventory(source.inventory);
-        SetStats(source);
+        SetStats(source.stats);
     }
 
     private void HandleResourceDialogue(Resources resource) {
