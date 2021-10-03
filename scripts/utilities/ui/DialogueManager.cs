@@ -18,6 +18,7 @@ public class DialogueManager : Control
     private LineEdit doInput, sayInput;
     private DialogueHandler dialogueHandler = new DialogueHandler();
     private InventoryDisplay inventoryDisplay;
+    private Label currencyText;
     
     private void SetStats(Stats statSource) {
 
@@ -83,6 +84,7 @@ public class DialogueManager : Control
         portrait.Texture = source.portrait;
         name.Text = source.entityName;
         SetDialogue(source.dialogue.initial);
+        currencyText.Text = "Currency: " + source.inventory.currency.ToString();
         inventoryDisplay.UpdateInventory(source.inventory);
         SetStats(source.stats);
     }
@@ -92,6 +94,7 @@ public class DialogueManager : Control
         portrait.Texture = resource.portrait;
         name.Text = resource.entityName;
         SetDialogue(resource.dialogue.initial);
+        currencyText.Text = "Currency: " + resource.inventory.currency.ToString();
         inventoryDisplay.UpdateInventory(resource.inventory);
         ClearStats();
     }
@@ -148,6 +151,7 @@ public class DialogueManager : Control
         timer = (Timer)GetNode("Timer");
         popup = (Popup)GetNode("Popup");
         dialogue = (RichTextLabel)popup.GetNode("TabContainer/Dialogue/DialogueText");
+        currencyText = (Label)popup.GetNode("TabContainer/Details/Currency");
         name = (Label)popup.GetNode("Name");
         portrait = (TextureRect)popup.GetNode("TabContainer/Dialogue/Portrait");
         stats = (GridContainer)popup.GetNode("TabContainer/Details/Stats");

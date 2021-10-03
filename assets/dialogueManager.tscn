@@ -186,14 +186,14 @@ __meta__ = {
 }
 
 [node name="Stats" type="GridContainer" parent="Popup/TabContainer/Details"]
-anchor_left = 0.061
-anchor_top = 0.277
-anchor_right = 0.061
-anchor_bottom = 0.277
-margin_left = -0.00800133
-margin_top = -15.984
-margin_right = 103.992
-margin_bottom = 48.016
+anchor_left = 0.012
+anchor_top = 0.204
+anchor_right = 0.012
+anchor_bottom = 0.204
+margin_left = 0.0639999
+margin_top = -0.064003
+margin_right = 136.064
+margin_bottom = 63.936
 custom_constants/vseparation = -11
 custom_constants/hseparation = 10
 columns = 3
@@ -288,6 +288,16 @@ custom_styles/panel = SubResource( 2 )
 margin_right = 40.0
 margin_bottom = 14.0
 text = "Lbr: 0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Currency" type="Label" parent="Popup/TabContainer/Details"]
+margin_left = 4.0
+margin_top = 162.145
+margin_right = 140.0
+margin_bottom = 176.145
+text = "Currency: 999999999"
 __meta__ = {
 "_edit_use_anchors_": false
 }

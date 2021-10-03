@@ -7,10 +7,12 @@ public class NpcMoveState : NpcMotionState
     private RandomNumberGenerator rand = new RandomNumberGenerator();
     public override void Enter()
     {
-        rand.Randomize();
-        owner.GetMovePath(owner.GlobalPosition, owner.GlobalPosition + new Vector2(rand.RandfRange(-300,300), rand.RandfRange(-300,300)), owner);
-        if (owner.movePath == null) {
-            EmitSignal(nameof(Finished), "idle");
+        if (!owner.movePath.Any()) {
+            rand.Randomize();
+            owner.GetMovePath(owner.GlobalPosition, owner.GlobalPosition + new Vector2(rand.RandfRange(-300,300), rand.RandfRange(-300,300)), owner);
+            if (owner.movePath == null) {
+                EmitSignal(nameof(Finished), "idle");
+            }
         }
     }
 

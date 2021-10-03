@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://resources/sprites/placeholderCharacter/placeholder_character.png" type="Texture" id=1]
 [ext_resource path="res://scripts/asset_scripts/MovingEntity/Npc.cs" type="Script" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://scripts/utilities/statemachine/States/NpcStates/NpcMoveState.cs" type="Script" id=7]
 [ext_resource path="res://scripts/utilities/statemachine/States/NpcStates/NpcDeadState.cs" type="Script" id=8]
 [ext_resource path="res://scripts/utilities/statemachine/States/NpcStates/NpcWorkState.cs" type="Script" id=9]
+[ext_resource path="res://scripts/utilities/statemachine/States/NpcStates/NpcTradeState.cs" type="Script" id=10]
 
 [node name="Npc" type="Area2D" groups=[
 "character",
@@ -39,6 +40,9 @@ script = ExtResource( 8 )
 
 [node name="Work" type="Node" parent="StateMachine"]
 script = ExtResource( 9 )
+
+[node name="Trade" type="Node" parent="StateMachine"]
+script = ExtResource( 10 )
 
 [node name="Panel" parent="." instance=ExtResource( 4 )]
 margin_top = -288.0

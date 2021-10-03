@@ -6,28 +6,36 @@ using System.Collections.Generic;
 public class Npc : Character
 {
     private List<Resources> surroundingResources = new List<Resources>();
+    private List<Npc> nearbyTraders = new List<Npc>();
     [Export]
-    private string profession = null;
+    public string profession { get; private set; }
+    public bool hasTraded = true;
 
     public void _OnSurroundingsEntered(Area2D area) {
         switch (profession)
         {
-            case "lumberjack":
+            case Constants.LUMBERJACK_PROFESSION:
                 if (area is Lumber) {
                     surroundingResources.Add((Resources)area);
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
                 break;
 
-            case "miner":
+            case Constants.MINER_PROFESSION:
                 if (area is Deposit) {
                     surroundingResources.Add((Resources)area);
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
                 break;
             
-            case "farmer":
+            case Constants.FARMER_PROFESSION:
                 if (area is WheatField) {
+                    surroundingResources.Add((Resources)area);
+                    area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+                }
+                break;
+            case Constants.TRADER_PROFESSION:
+                if (area is TradeStall) {
                     surroundingResources.Add((Resources)area);
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
@@ -35,6 +43,9 @@ public class Npc : Character
                 
             default:
                 break;
+        }
+        if (area.IsInGroup("traders")) {
+            nearbyTraders.Add((Npc)area);
         }
     }
     public void _OnSurroundingsExited(Area2D area) {
@@ -49,6 +60,9 @@ public class Npc : Character
         surroundingResources.Remove((Resources)resource);
     }
     public bool GetNextWork() {
+        if (inventory.IsFull()) {
+            return false;
+        }
         bool foundWork = surroundingResources.Any();
         Resources currentResource = null;
         float shortestDistance = float.MaxValue;
@@ -65,6 +79,31 @@ public class Npc : Character
         SetInteractive(currentResource);
         return foundWork;
     }
+
+    public bool GetTrader() {
+        if (nearbyTraders.Any() && !hasTraded) {
+            SelectTrader();
+            return true;
+        }
+        return false;
+    }
+
+    private void SelectTrader() {
+        Npc trader = null;
+        float shortestDistance = float.MaxValue;
+        foreach(Npc i in nearbyTraders) {
+            if ((trader == null || Position.DistanceTo(i.Position) < shortestDistance)) {
+                if (!IsInstanceValid(i)) {
+                    nearbyTraders.Remove(i);
+                    continue;
+                }
+                trader = i;
+                shortestDistance = Position.DistanceTo(trader.Position);
+            }
+        }
+        SetInteractive(trader);
+    }
+
     public override void _Ready()
     {
         if (profession == null) {

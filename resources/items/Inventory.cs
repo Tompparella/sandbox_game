@@ -5,6 +5,8 @@ using System.Linq;
 public class Inventory : Resource
 {
     [Export]
+    public int currency;
+    [Export]
     public List<Item> items = new List<Item> {
         null, null, null, null,
         null, null, null, null,

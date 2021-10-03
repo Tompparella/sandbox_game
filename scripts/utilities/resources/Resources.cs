@@ -35,7 +35,7 @@ public class Resources : Interactive
         }
     }
 
-    private void GiveResource(Character worker) {
+    public virtual void GiveResource(Character worker) {
         if (!isExhausted) {
             if (!worker.inventory.IsFull()) {
                 worker.inventory.AddItem(inventory.PopLastItem());

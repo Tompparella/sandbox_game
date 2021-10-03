@@ -10,3 +10,4 @@ itemName = "Lumber"
 texture = ExtResource( 2 )
 worldTexture = ExtResource( 3 )
 itemDescription = "It's a pile of some high-quality wood matter. Carpenters can utilize these for their craft."
+value = 10

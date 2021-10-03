@@ -14,7 +14,8 @@ public class NpcStateMachine : StateMachine
             { "move", (State)GetNode("Move")},
             { "battle", (State)GetNode("Battle")},
             { "dead", (State)GetNode("Dead")},
-            { "work", (State)GetNode("Work")}
+            { "work", (State)GetNode("Work")},
+            { "trade", (State)GetNode("Trade")}
         };
         base._Ready();
     }

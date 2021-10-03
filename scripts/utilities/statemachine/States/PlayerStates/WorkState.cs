@@ -57,7 +57,7 @@ public class WorkState : MoveState
 
     protected override void MovementLoop(float delta)
     {
-        float distanceToLast = owner.Position.DistanceTo(owner.movePath.Last());
+        float distanceToLast = owner.Position.DistanceTo(owner.movePath.LastOrDefault());
         if (distanceToLast > workRange) {
             base.MovementLoop(delta);
         }

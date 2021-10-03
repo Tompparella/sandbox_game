@@ -11,4 +11,6 @@ public class Item : Resource
     public Texture worldTexture;
     [Export]
     public string itemDescription = "";
+    [Export]
+    public int value = 0;
 }

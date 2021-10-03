@@ -7,7 +7,7 @@ public class Constants
     public const float TICK = 0.4f; // Determines how many seconds one combat tick takes to activate.
     public const int DEF_ATTACKSPEED = 3; // Determines how many combat ticks an attack takes to commence.
     public const int DEF_REQUIREDACTIONS = 5;
-    public const float DEF_WORKSPEED = 5;
+    public const float DEF_WORKSPEED = 20;
     public const float DEF_DODGECHANCE = 0.05f;
     public const float DEF_ATTACKRANGE = 100.0f;
     public const float DEF_MINDAMAGE = 1.0f;
@@ -34,6 +34,17 @@ public class Constants
     public const string LUMBER_INVENTORY = "res://resources/items/resources/LumberInventory.tres";
     public const string WHEATFIELD_INVENTORY = "res://resources/items/resources/WheatFieldInventory.tres";
 
+    public const int WHEATPRICE = 15;
+    public const int IRONPRICE = 20;
+    public const int SILVERPRICE = 25;
+    public const int LUMBERPRICE = 10;
+
+    public const string LUMBERJACK_PROFESSION = "lumberjack";
+    public const string MINER_PROFESSION = "miner";
+    public const string TRADER_PROFESSION = "trader";
+    public const string FARMER_PROFESSION = "farmer";
+
+
     public static readonly string[] ROOTWORDS = new string[] {"yes", "no", "how", "where"};
     public static readonly string[] SUPPORTWORDS = new string[] {"find", "are", "chop", "work", "mine", "farm", "collect", "harvest"};
     public static readonly string[] OBJECTWORDS = new string[] {"iron sword", "you"};
@@ -50,12 +61,15 @@ public class Constants
     public static readonly string IRONDEPOSIT_DESCRIPTION = "It's a huge mass of stone with rich veins of Iron. An essential resource for any civilization.";
     public static readonly string SILVERDEPOSIT_DESCRIPTION = "It's a huge mass of stone with clear traces of silver. It's used in almost all vessels that bear magic.";
     public static readonly string EMPTYDEPOSIT_DESCRIPTION = "It's a huge mass of stone. Any traces of ore have already been exploited";
+    public static readonly string TRADESTALL_DESCRIPTION = "The next best thing to supermarkets.";
+
 
     public static readonly string[] DEPOSITACTIONS = new string[] {"mine", "work"};
     public static readonly string[] LUMBERACTIONS = new string[] {"chop", "work"};
     public static readonly string[] FARMACTIONS = new string[] {"farm", "collect", "harvest", "work"};
+    public static readonly string[] TRADEACTIONS = new string[] {"trade", "sell", "buy"};
 
-    public static readonly string[] PROFESSIONS = new string[] {"farmer", "miner", "lumberjack", null};
+    public static readonly string[] PROFESSIONS = new string[] {FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, null};
 
     public const string RESOURCECOLOR = "ffa100";
     public const string EMPTYCOLOR = "ffffff";

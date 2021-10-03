@@ -11,7 +11,9 @@ public class NpcIdleState : NpcMotionState
     public override void Enter()
     {
         Npc npcOwner = (Npc)owner;
-        if (npcOwner.GetNextWork()) {
+        if (npcOwner.GetTrader()) {
+            EmitSignal(nameof(Finished), "trade");
+        } else if (npcOwner.GetNextWork()) {
             EmitSignal(nameof(Finished), "work");
         } else {
             System.Timers.Timer timer = new System.Timers.Timer();

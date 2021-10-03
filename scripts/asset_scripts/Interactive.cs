@@ -16,7 +16,7 @@ public class Interactive : Area2D
     public Texture portrait;
     public string type;
     [Export]
-    public Inventory inventory;
+    public Inventory inventory = new Inventory();
 
     public override void _Ready()
     {

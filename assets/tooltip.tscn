@@ -6,6 +6,7 @@
 [ext_resource path="res://scripts/utilities/ui/Tooltip.cs" type="Script" id=4]
 
 [node name="Tooltip" type="Popup"]
+visible = true
 margin_right = 152.0
 margin_bottom = 112.0
 script = ExtResource( 4 )
@@ -41,7 +42,7 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/MarginContainer"]
 margin_right = 142.0
-margin_bottom = 99.0
+margin_bottom = 111.0
 mouse_filter = 2
 
 [node name="itemName" type="Label" parent="NinePatchRect/MarginContainer/VBoxContainer"]
@@ -124,3 +125,12 @@ margin_bottom = 8.0
 custom_fonts/font = ExtResource( 2 )
 custom_colors/font_color = Color( 0.882353, 0.415686, 0, 1 )
 text = "(!)"
+
+[node name="Value" type="Label" parent="NinePatchRect/MarginContainer/VBoxContainer/Stat3"]
+margin_left = 68.0
+margin_right = 102.0
+margin_bottom = 8.0
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0.768627, 0.686275, 0, 1 )
+text = "100 co"
+align = 2

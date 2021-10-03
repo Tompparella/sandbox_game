@@ -12,10 +12,17 @@ public class NpcWorkState : NpcMoveState
 
     public override void Enter() {
         resource = (Resources)owner.GetInteractive();
-        if (resource.inventory.IsEmpty()) {
+        if (resource.GetExhausted()) {
             EmitSignal(nameof(Finished), "idle");
         }
         owner.GetMovePath(owner.GlobalPosition, resource.Position, owner);
+    }
+
+    public override void Exit()
+    {
+        ((Npc)owner).hasTraded = false;
+        owner.SetInteractive();
+        base.Exit();
     }
 
     public override void Update(float delta)
@@ -60,7 +67,7 @@ public class NpcWorkState : NpcMoveState
 
     protected override void MovementLoop(float delta)
     {
-        float distanceToLast = owner.Position.DistanceTo(owner.movePath.Last());
+        float distanceToLast = owner.Position.DistanceTo(owner.movePath.LastOrDefault());
         if (distanceToLast > workRange) {
             base.MovementLoop(delta);
         }
