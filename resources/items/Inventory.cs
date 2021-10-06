@@ -13,15 +13,21 @@ public class Inventory : Resource
         null, null, null, null,
         null, null, null, null
     };
-    public void AddItem(Item item) {
-        int index = items.IndexOf(null);
-        if (index != -1) {
-            items[index] = item;
+    public void AddItem(Item item, int amount = 1) {
+        for (int i = 0; i < amount; i++) {
+            int index = items.IndexOf(null);
+            if (index != -1) {
+                items[index] = item;
+            }
         }
     }
-    public void RemoveItem(Item item) {
-        int index = items.IndexOf(item);
-        items[index] = null;
+    public void RemoveItem(Item item, int amount = 1) {
+        for (int i = 0; i < amount; i++) {
+            int index = items.IndexOf(item);
+            if (index != -1) {
+                items[index] = null;
+            }
+        }
     }
 
     public bool IsFull() {
@@ -30,6 +36,20 @@ public class Inventory : Resource
 
     public bool IsEmpty() {
         return !items.Any(x => x != null);
+    }
+
+    public int FreeSpace() {
+        return items.Where(x => x == null).Count();
+    }
+
+    public bool HasItems(Godot.Collections.Dictionary<Item, int> requiredItems) {
+        foreach(KeyValuePair<Item, int> kvp in requiredItems) {
+            int itemsInInventory = items.Where(x => x == kvp.Key).Count();
+            if (itemsInInventory < kvp.Value) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Item PopLastItem() {

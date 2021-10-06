@@ -40,6 +40,12 @@ public class Npc : Character
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
                 break;
+            case Constants.BAKER_PROFESSION:
+                if (area is Oven) {
+                    surroundingResources.Add((Resources)area);
+                    area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+                }
+                break;
                 
             default:
                 break;

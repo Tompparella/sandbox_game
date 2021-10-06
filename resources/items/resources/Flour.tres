@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://resources/items/resources/ResourceItem.cs" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+itemName = "Flour"
+itemDescription = "Ground down wheat. Can be processed into all sorts of food."
+value = 20
+recipe = {
+}

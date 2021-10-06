@@ -4,7 +4,7 @@ public class Constants
     public const float DEF_HEALTH = 100;
     public const float DEF_MAXPEED = 3;
     public const float DEF_ACCELERATION = 6;
-    public const float TICK = 0.4f; // Determines how many seconds one combat tick takes to activate.
+    public const float TICK = 0.4f; // Determines how many seconds one tick takes to activate.
     public const int DEF_ATTACKSPEED = 3; // Determines how many combat ticks an attack takes to commence.
     public const int DEF_REQUIREDACTIONS = 5;
     public const float DEF_WORKSPEED = 20;
@@ -43,6 +43,7 @@ public class Constants
     public const string MINER_PROFESSION = "miner";
     public const string TRADER_PROFESSION = "trader";
     public const string FARMER_PROFESSION = "farmer";
+    public const string BAKER_PROFESSION = "baker";
 
 
     public static readonly string[] ROOTWORDS = new string[] {"yes", "no", "how", "where"};
@@ -62,15 +63,20 @@ public class Constants
     public static readonly string SILVERDEPOSIT_DESCRIPTION = "It's a huge mass of stone with clear traces of silver. It's used in almost all vessels that bear magic.";
     public static readonly string EMPTYDEPOSIT_DESCRIPTION = "It's a huge mass of stone. Any traces of ore have already been exploited";
     public static readonly string TRADESTALL_DESCRIPTION = "The next best thing to supermarkets.";
-
+    public static readonly string OVEN_DESCRIPTION = "A professional culinarian could make something edible here.";
 
     public static readonly string[] DEPOSITACTIONS = new string[] {"mine", "work"};
     public static readonly string[] LUMBERACTIONS = new string[] {"chop", "work"};
     public static readonly string[] FARMACTIONS = new string[] {"farm", "collect", "harvest", "work"};
     public static readonly string[] TRADEACTIONS = new string[] {"trade", "sell", "buy"};
+    public static readonly string[] OVENACTIONS = new string[] {"bake", "cook", "work"};
 
     public static readonly string[] PROFESSIONS = new string[] {FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, null};
 
     public const string RESOURCECOLOR = "ffa100";
     public const string EMPTYCOLOR = "ffffff";
+
+    public const string FLOURITEM = "res://resources/items/resources/Flour.tres";
+    public const string BREADITEM = "res://resources/items/consumables/Bread.tres";
+
 }

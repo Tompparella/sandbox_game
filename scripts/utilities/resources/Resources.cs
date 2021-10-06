@@ -11,8 +11,8 @@ public class Resources : Interactive
     [Signal]
     public delegate void OnMouseExit();
 
-    private int requiredActions = Constants.DEF_REQUIREDACTIONS;
-    private int currentActions = 0;
+    protected int requiredActions = Constants.DEF_REQUIREDACTIONS;
+    protected int currentActions = 0;
     protected Sprite sprite;
     protected string[] actions;
 
@@ -26,7 +26,7 @@ public class Resources : Interactive
     public bool GetExhausted() {
         return isExhausted;
     }
-    public void workAction(Character worker) {
+    public virtual void workAction(Character worker) {
         currentActions++;
         GD.Print(currentActions);
         if (currentActions >= requiredActions) {

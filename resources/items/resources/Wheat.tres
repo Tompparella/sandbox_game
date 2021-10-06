@@ -9,5 +9,7 @@ script = ExtResource( 1 )
 itemName = "Wheat"
 texture = ExtResource( 3 )
 worldTexture = ExtResource( 2 )
-itemDescription = "A bushel of dry wheat. Bakers can turn this into something edible."
+itemDescription = "A bushel of dry wheat. It could be ground into something usable."
 value = 15
+recipe = {
+}
