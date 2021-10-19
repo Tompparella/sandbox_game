@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -16,6 +16,7 @@
 [ext_resource path="res://resources/stats/TestStats1.tres" type="Resource" id=14]
 [ext_resource path="res://assets/resources/WheatField.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/resources/TradeStall.tscn" type="PackedScene" id=16]
+[ext_resource path="res://assets/resources/BreadOven.tscn" type="PackedScene" id=17]
 
 [sub_resource type="CSharpScript" id=1]
 
@@ -78,7 +79,11 @@ position = Vector2( 1784, 1880 )
 
 [node name="TradeStall" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 16 )]
 position = Vector2( 136, -176 )
+rotation = -6.28319
 inventory = SubResource( 2 )
+
+[node name="BreadOven" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 17 )]
+position = Vector2( -912, -568 )
 
 [node name="Characters" type="YSort" parent="NavigationHandler/MapSort"]
 

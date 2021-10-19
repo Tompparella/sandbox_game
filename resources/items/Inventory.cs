@@ -38,7 +38,7 @@ public class Inventory : Resource
         return !items.Any(x => x != null);
     }
 
-    public int FreeSpace() {
+    public int GetFreeSpace() {
         return items.Where(x => x == null).Count();
     }
 
