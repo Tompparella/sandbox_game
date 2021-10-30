@@ -28,7 +28,7 @@ public class Resources : Interactive
     }
     public virtual void workAction(Character worker) {
         currentActions++;
-        GD.Print(currentActions);
+        //GD.Print(currentActions);
         if (currentActions >= requiredActions) {
             GiveResource(worker);
             currentActions = 0;

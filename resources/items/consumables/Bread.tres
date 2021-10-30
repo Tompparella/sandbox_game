@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource( 1 )
-itemName = ""
+itemName = "Bread"
 itemDescription = ""
 value = 75
 recipe = {

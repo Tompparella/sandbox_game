@@ -23,9 +23,10 @@ public class TradeStall : Resources
             worker.inventory.currency++;
         }
     }
-
+/*
     public override void _OnMouseOver() {
     }
     public override void _OnMouseExit() {
     }
+*/
 }

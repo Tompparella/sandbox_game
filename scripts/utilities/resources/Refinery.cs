@@ -8,12 +8,20 @@ public class Refinery : Resources
     protected List<Item> craftableItems; // In priority order.
     protected List<Item> workItemQueue;
 
-    public override void workAction(Character worker) {
+    public override void _Ready()
+    {
         if (workItemQueue == null) {
+            workItemQueue = new List<Item>();
+        }
+        base._Ready();
+    }
+    public override void workAction(Character worker) {
+        if (!workItemQueue.Any()) {
             if (!setWorkItemQueue(worker)) {
                 worker.SetInteractive(); // Leave work state if no longer resources to continue crafting.
                 return;
             };
+            GD.Print(workItemQueue[0].itemName);
         }
         currentActions++;
         GD.Print(currentActions);
