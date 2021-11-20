@@ -22,6 +22,9 @@ public class InventoryDisplay : GridContainer {
             case "ResourceItem":
                 modulateColor = Constants.RESOURCECOLOR;
                 break;
+            case "ConsumableItem":
+                modulateColor = Constants.CONSUMABLECOLOR;
+                break;
             default:
                 modulateColor = Constants.EMPTYCOLOR;
                 break;

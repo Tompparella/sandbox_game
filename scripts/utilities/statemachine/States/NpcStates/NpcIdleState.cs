@@ -11,18 +11,32 @@ public class NpcIdleState : NpcMotionState
     public override void Enter()
     {
         Npc npcOwner = (Npc)owner;
-        if (npcOwner.GetTrader()) {
-            EmitSignal(nameof(Finished), "trade");
-        } else if (npcOwner.GetNextWork()) {
-            EmitSignal(nameof(Finished), "work");
-        } else {
+        if (!npcOwner.outOfWork) {
+            if (npcOwner.GetTrader()) {
+                EmitSignal(nameof(Finished), "trade");
+                return;
+            } else if (npcOwner.GetNextWork()) {
+                EmitSignal(nameof(Finished), "work");
+                return;
+            }
+        }
+        StartRandomMovementTimer();
+    }
+
+    private void StartRandomMovementTimer() {
+        try
+        {
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Elapsed += new System.Timers.ElapsedEventHandler(MoveAtRandom);   // If there's nothing to do, wait three seconds and look for a path.
             timer.Interval = 3000;
             timer.AutoReset = false;
-            timer.Start();
+            timer.Start();    
         }
-        base.Enter();
+        catch (System.Exception)
+        {
+            GD.Print("Crash on idle movement timer.");
+            throw;
+        }
     }
 
     public void MoveAtRandom(object source, System.Timers.ElapsedEventArgs e) {

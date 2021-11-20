@@ -105,7 +105,9 @@ profession = "miner"
 position = Vector2( 584, 248 )
 profession = "lumberjack"
 
-[node name="Trader" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+[node name="Trader" parent="NavigationHandler/MapSort/Characters" groups=[
+"traders",
+] instance=ExtResource( 5 )]
 position = Vector2( 464, -48 )
 inventory = SubResource( 1 )
 profession = "trader"

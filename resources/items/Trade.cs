@@ -19,11 +19,11 @@ public class Trade
                 buyer.AddItem(item);
             }
         } else {
-            GD.Print("Buying: No item or currency in inventory.");
+            GD.Print(string.Format("Buying {0}: No item or currency in inventory.", item.itemName));
         }
     }
 
-    public void SellItem(Item item) {
+    public bool SellItem(Item item) {
         if (buyer.items.Contains(item)) {
             if (seller.currency > item.value && !seller.IsFull()) {
                 int value = item.value;
@@ -31,9 +31,11 @@ public class Trade
                 seller.currency -= item.value;
                 buyer.RemoveItem(item);
                 seller.AddItem(item);
+                return true;
             }
         } else {
-            GD.Print("Selling: No item or currency in inventory.");
+            GD.Print(string.Format("Selling {0}: No item or currency in inventory.", item.itemName));
         }
+        return false;
     }
 }

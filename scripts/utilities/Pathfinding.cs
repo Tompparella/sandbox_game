@@ -17,6 +17,14 @@ public class Pathfinding : Navigation2D
 
     public void FindPath(Vector2 start, Vector2 end, Character caller) {
         //pathLine.Points = GetSimplePath(start, end);
-        caller.MovePath = GetSimplePath(start, end);
+        try
+        {
+            caller.MovePath = GetSimplePath(start, end);
+        }
+        catch (System.Exception e)
+        {
+            GD.Print(e);
+            throw e;
+        }
     }
 }

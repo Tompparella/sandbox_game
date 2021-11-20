@@ -10,6 +10,9 @@ public class Npc : Character
     [Export]
     public string profession { get; private set; }
     public bool hasTraded = true;
+    public bool outOfWork = false; // If there's nothing for the Npc to do, idle.
+    private List<Item> neededItems = new List<Item>();
+    private List<Item> soldItems = new List<Item>();
 
     public void _OnSurroundingsEntered(Area2D area) {
         switch (profession)
@@ -85,8 +88,43 @@ public class Npc : Character
         SetInteractive(currentResource);
         return foundWork;
     }
+    public void addToBuyQueue(List<Item> items) {
+        neededItems.AddRange(items);
+    }
 
+    public override bool checkBuyQueue(Dictionary<Item,int> items) {
+        bool itemsAdded = false;
+        foreach(KeyValuePair<Item, int> kvp in items) {
+            int itemsInQueue = neededItems.Where(x => x == kvp.Key).Count();
+            if (itemsInQueue < kvp.Value) {
+                for (int i = itemsInQueue; i < kvp.Value; i++) {
+                    neededItems.Add(kvp.Key);
+                    GD.Print(string.Format("Item added to buy queue. {0}", kvp.Key.itemName));
+                }
+                itemsAdded = true;
+            }
+        }
+        neededItems.ForEach(x => GD.Print(x.itemName));
+        return itemsAdded;
+    }
+    public bool checkBuyQueue() {
+        return neededItems.Any();
+    }
+    public List<Item> GetBuyQueue() {
+        return neededItems;
+    }
+    public override List<Item> GetSellQueue() {
+        return soldItems;
+    }
+    public override void AddToSellQueue(Item item) {
+        soldItems.Add(item);
+    }
+    public override void PopFromSellQueue(Item item)
+    {
+        soldItems.Remove(item);
+    }
     public bool GetTrader() {
+        //GD.Print(string.Format("{0} found {1} traders.", this.Name, nearbyTraders.Count()));
         if (nearbyTraders.Any() && !hasTraded) {
             SelectTrader();
             return true;

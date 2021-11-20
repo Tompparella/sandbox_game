@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public class NpcTradeState : NpcMoveState
@@ -23,14 +23,33 @@ public class NpcTradeState : NpcMoveState
         if (distanceToLast > Constants.DEF_ATTACKRANGE) {
             base.MovementLoop(delta);
         } else {
-            SellResourceItems();
+            TradeInventory();
         }
     }
 
-    private void SellResourceItems() {
+    private void TradeInventory() {
         Trade tradeInstance = new Trade(owner.inventory, owner.GetInteractive().inventory);
-        owner.inventory.items.Where(x => x is ResourceItem).ToList().ForEach(x => tradeInstance.SellItem(x));
+        SellProduceItems(tradeInstance);
+        if (((Npc)owner).checkBuyQueue()) {
+            BuyNeededItems(tradeInstance);
+        }
         owner.SetInteractive();
         EmitSignal(nameof(Finished), "idle");
+    }
+
+    private void SellProduceItems(Trade tradeInstance) {
+        
+        owner.GetSellQueue().ForEach(x => GD.Print(x.itemName));
+
+        List<Item> sellQueue = owner.GetSellQueue().ToList();
+        foreach (Item item in sellQueue) {
+            if (tradeInstance.SellItem(item)) {
+                owner.PopFromSellQueue(item);
+            }
+        }
+    }
+
+    private void BuyNeededItems(Trade tradeInstance) {
+        ((Npc)owner).GetBuyQueue().ForEach(x => tradeInstance.BuyItem(x));
     }
 }

@@ -13,5 +13,6 @@ public class Item : Resource
     public string itemDescription = "";
     [Export]
     public int value = 0;
-    public Godot.Collections.Dictionary<Item,int> recipe;
+    [Export]
+    public Recipe recipe;
 }

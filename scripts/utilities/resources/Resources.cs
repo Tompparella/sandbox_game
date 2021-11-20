@@ -38,7 +38,9 @@ public class Resources : Interactive
     public virtual void GiveResource(Character worker) {
         if (!isExhausted) {
             if (!worker.inventory.IsFull()) {
-                worker.inventory.AddItem(inventory.PopLastItem());
+                Item givenItem = inventory.PopLastItem();
+                worker.AddToSellQueue(givenItem);
+                worker.inventory.AddItem(givenItem);
                 if (worker.inventory.IsFull()) {
                     worker.SetInteractive();
                     EmitSignal(nameof(OnRemoval), this);

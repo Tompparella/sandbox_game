@@ -20,9 +20,21 @@ public class NpcWorkState : NpcMoveState
 
     public override void Exit()
     {
+        if (!((Npc)owner).hasTraded) {      // If the Npc is out of work, put a timer for 1 minutes to enter work state again.
+            ((Npc)owner).outOfWork = true;
+            System.Timers.Timer timer = new System.Timers.Timer();
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(toggleOutOfWork);
+            timer.Interval = 60000;
+            timer.AutoReset = false;
+            timer.Start();    
+        }
         ((Npc)owner).hasTraded = false;
         owner.SetInteractive();
         base.Exit();
+    }
+
+    private void toggleOutOfWork(object source, System.Timers.ElapsedEventArgs e) {
+        ((Npc)owner).outOfWork = false;
     }
 
     public override void Update(float delta)
@@ -59,6 +71,7 @@ public class NpcWorkState : NpcMoveState
     private void WorkTarget() {
         resource.workAction(owner);
         if (owner.GetInteractive() == null) {
+            GD.Print("Exiting workstate");
             EmitSignal(nameof(Finished), "idle");
             return;
         }

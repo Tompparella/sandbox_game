@@ -9,7 +9,16 @@ public class NpcMoveState : NpcMotionState
     {
         if (!owner.movePath.Any()) {
             rand.Randomize();
-            owner.GetMovePath(owner.GlobalPosition, owner.GlobalPosition + new Vector2(rand.RandfRange(-300,300), rand.RandfRange(-300,300)), owner);
+            try
+            {
+                int radius = 300;
+                owner.GetMovePath(owner.GlobalPosition, owner.GlobalPosition + new Vector2(rand.RandiRange(-radius,radius), rand.RandiRange(-radius, radius)), owner);
+            }
+            catch (System.Exception e)
+            { 
+                GD.Print("Crash on random movement.");
+                throw e;
+            }
             if (owner.movePath == null) {
                 EmitSignal(nameof(Finished), "idle");
             }

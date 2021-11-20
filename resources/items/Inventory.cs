@@ -42,13 +42,16 @@ public class Inventory : Resource
         return items.Where(x => x == null).Count();
     }
 
-    public bool HasItems(Godot.Collections.Dictionary<Item, int> requiredItems) {
+    public bool HasItems(Dictionary<Item,int> requiredItems) {
+        
         foreach(KeyValuePair<Item, int> kvp in requiredItems) {
             int itemsInInventory = items.Where(x => x == kvp.Key).Count();
+            GD.Print(string.Format("{0} in inventory: {1}\n{0} required: {2}", kvp.Key.itemName, itemsInInventory, kvp.Value));
             if (itemsInInventory < kvp.Value) {
                 return false;
             }
         }
+
         return true;
     }
 

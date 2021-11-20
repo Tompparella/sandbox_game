@@ -82,6 +82,19 @@ public class Character : MovingEntity
     }
 
     // Utility functions
+
+    public virtual bool checkBuyQueue(Dictionary<Item,int> items) {
+        return false;
+    }
+    public virtual List<Item> GetSellQueue() {
+        return new List<Item>();
+    }
+    public virtual void AddToSellQueue(Item item) {
+        return;
+    }
+    public virtual void PopFromSellQueue(Item item) {
+        return;
+    }
     
     public override void _Ready()
     {

@@ -1,11 +1,11 @@
-[gd_resource type="Resource" load_steps=2 format=2]
+[gd_resource type="Resource" load_steps=3 format=2]
 
-[ext_resource path="res://resources/items/Item.cs" type="Script" id=1]
+[ext_resource path="res://resources/items/consumables/ConsumableItem.cs" type="Script" id=1]
+[ext_resource path="res://resources/items/recipes/BreadRecipe.tres" type="Resource" id=2]
 
 [resource]
 script = ExtResource( 1 )
 itemName = "Bread"
-itemDescription = ""
+itemDescription = "It's bread! Yummy!"
 value = 75
-recipe = {
-}
+recipe = ExtResource( 2 )

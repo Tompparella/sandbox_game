@@ -17,7 +17,6 @@ public class Helper
         }
         return str;
     }
-
     public string[] ParseInput(string input) {
         input = RemoveSpecialCharacters(input).ToLower();
         string[] keywords = input.Split(' ');
