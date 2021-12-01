@@ -25,7 +25,7 @@ public class Refinery : Resources
             GD.Print(String.Format("Refinery {0} now working on item {1}", this.Name, workItemQueue[0].itemName));
         }
         currentActions++;
-        GD.Print(currentActions);
+        //GD.Print(worker.Name, currentActions);
         if (currentActions >= requiredActions) {
             GiveResource(worker);
         }
@@ -55,7 +55,6 @@ public class Refinery : Resources
                 worker.inventory.RemoveItem(kvp.Key, kvp.Value);
                 worker.PopFromSellQueue(kvp.Key);
                 inventory.AddItem(kvp.Key, kvp.Value);
-                GD.Print(String.Format("Refinery {0} new inventory: {1}", this.Name, inventory));
             }
             workItemQueue.Add(item);
         }

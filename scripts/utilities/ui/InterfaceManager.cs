@@ -32,6 +32,11 @@ public class InterfaceManager : CanvasLayer
         camera = (Camera2D)GetNode("MainCamera");
         dialogueManager = (DialogueManager)GetNode("DialogueManager");
         actionMenu = (ActionMenu)GetNode("ActionMenu");
+
+        DebugInstance debugInstance = (DebugInstance)GetNode("DebugInstance");
+        debugInstance.AddStat("Frames Per Second", "system", "GetFramesPerSecond", true);
+        debugInstance.AddStat("Player position", player, "position", false);
+        debugInstance.AddStat("Player speed", player, "currentSpeed", false);
     }
 
     //DialogueManager

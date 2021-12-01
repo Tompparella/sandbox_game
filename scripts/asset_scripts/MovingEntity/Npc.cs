@@ -5,14 +5,16 @@ using System.Collections.Generic;
 
 public class Npc : Character
 {
-    private List<Resources> surroundingResources = new List<Resources>();
-    private List<Npc> nearbyTraders = new List<Npc>();
+    public List<Resources> surroundingResources { get; private set; } = new List<Resources>();
+    public List<Npc> nearbyTraders { get; private set; } = new List<Npc>();
+    public List<Item> neededItems { get; private set; } = new List<Item>();
+    public List<Item> soldItems { get; private set; } = new List<Item>();
+
     [Export]
     public string profession { get; private set; }
+
     public bool hasTraded = true;
     public bool outOfWork = false; // If there's nothing for the Npc to do, idle.
-    private List<Item> neededItems = new List<Item>();
-    private List<Item> soldItems = new List<Item>();
 
     public void _OnSurroundingsEntered(Area2D area) {
         switch (profession)
@@ -57,6 +59,9 @@ public class Npc : Character
             nearbyTraders.Add((Npc)area);
         }
     }
+    public bool WorkableResourcesExist() {
+        return surroundingResources.Any() && !(surroundingResources[0] is Refinery);
+    }
     public void _OnSurroundingsExited(Area2D area) {
         if (surroundingResources.Contains(area)) {
             if (area.IsConnected("OnRemoval", this, nameof(SurroundingRemoved))) {
@@ -66,6 +71,7 @@ public class Npc : Character
         }
     }
     private void SurroundingRemoved(Interactive resource) {
+        resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
         surroundingResources.Remove((Resources)resource);
     }
     public bool GetNextWork() {
@@ -75,21 +81,22 @@ public class Npc : Character
         bool foundWork = surroundingResources.Any();
         Resources currentResource = null;
         float shortestDistance = float.MaxValue;
-        foreach(Resources i in surroundingResources) {
-            if ((currentResource == null || Position.DistanceTo(i.Position) < shortestDistance)) {
+        int leastWorkers = int.MaxValue;
+        foreach(Resources i in surroundingResources.ToList()) {
+            if ((currentResource == null || i.GetWorkers().Count() <= leastWorkers)) {
                 if (!IsInstanceValid(i) || i.GetExhausted()) {
                     surroundingResources.Remove(i);
                     continue;
                 }
-                currentResource = i;
-                shortestDistance = Position.DistanceTo(currentResource.Position);
+                if (Position.DistanceTo(i.Position) < shortestDistance) {
+                    currentResource = i;
+                    shortestDistance = Position.DistanceTo(currentResource.Position);
+                    leastWorkers = i.GetWorkers().Count();
+                }
             }
         }
         SetInteractive(currentResource);
         return foundWork;
-    }
-    public void addToBuyQueue(List<Item> items) {
-        neededItems.AddRange(items);
     }
 
     public override bool checkBuyQueue(Dictionary<Item,int> items) {
@@ -148,6 +155,19 @@ public class Npc : Character
         SetInteractive(trader);
     }
 
+    private void createDebugInstance() {
+        PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");
+        DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();
+        AddChild(debugInstance);
+        debugInstance.AddStat("Profession", this, "profession", false);
+        debugInstance.AddStat("Surrounding Resources", this, "surroundingResources", false);
+        debugInstance.AddStat("Nearby Traders", this, "nearbyTraders", false);
+        debugInstance.AddStat("Needed Items", this, "neededItems", false);
+        debugInstance.AddStat("Sold Items", this, "soldItems", false);
+        debugInstance.AddStat("Has Traded", this, "hasTraded", false);
+        debugInstance.AddStat("Out Of Work", this, "outOfWork", false);
+    }
+
     public override void _Ready()
     {
         if (profession == null) {
@@ -155,6 +175,7 @@ public class Npc : Character
             int index = r.Next(Constants.PROFESSIONS.Count());
             profession = Constants.PROFESSIONS[index];
         }
+        createDebugInstance();
         base._Ready();
     }
 }

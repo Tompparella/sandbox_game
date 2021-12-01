@@ -6,7 +6,7 @@ public class Constants
     public const float DEF_ACCELERATION = 6;
     public const float TICK = 0.4f; // Determines how many seconds one tick takes to activate.
     public const int DEF_ATTACKSPEED = 3; // Determines how many combat ticks an attack takes to commence.
-    public const int DEF_REQUIREDACTIONS = 2;
+    public const int DEF_REQUIREDACTIONS = 5;
     public const float DEF_WORKSPEED = 20;
     public const float DEF_DODGECHANCE = 0.05f;
     public const float DEF_ATTACKRANGE = 100.0f;

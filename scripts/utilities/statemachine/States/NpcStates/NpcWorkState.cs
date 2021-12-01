@@ -12,29 +12,20 @@ public class NpcWorkState : NpcMoveState
 
     public override void Enter() {
         resource = (Resources)owner.GetInteractive();
-        if (resource.GetExhausted()) {
+        if (resource != null && !resource.GetExhausted()) {
+            resource.AddWorker(owner);
+            owner.GetMovePath(owner.GlobalPosition, resource.Position, owner);
+        } else {
             EmitSignal(nameof(Finished), "idle");
         }
-        owner.GetMovePath(owner.GlobalPosition, resource.Position, owner);
     }
 
     public override void Exit()
     {
-        if (!((Npc)owner).hasTraded) {      // If the Npc is out of work, put a timer for 1 minutes to enter work state again.
-            ((Npc)owner).outOfWork = true;
-            System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(toggleOutOfWork);
-            timer.Interval = 60000;
-            timer.AutoReset = false;
-            timer.Start();    
-        }
+        resource?.RemoveWorker(owner); // Could make this into a signal.
         ((Npc)owner).hasTraded = false;
         owner.SetInteractive();
         base.Exit();
-    }
-
-    private void toggleOutOfWork(object source, System.Timers.ElapsedEventArgs e) {
-        ((Npc)owner).outOfWork = false;
     }
 
     public override void Update(float delta)
@@ -50,8 +41,8 @@ public class NpcWorkState : NpcMoveState
         }
         catch (System.Exception e)
         {
-            GD.Print("Error:", e); // Weird bug still exists. This should help with finding it.
-            throw;
+            GD.Print("Error in NpcWorkState: ", resource); // Weird bug still exists. This should help with finding it.
+            throw e;
         }
         base.Update(delta);
     }

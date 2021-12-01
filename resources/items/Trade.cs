@@ -9,7 +9,7 @@ public class Trade
         seller = _seller;
     }
 
-    public void BuyItem(Item item) {
+    public bool BuyItem(Item item) {
         if (seller.items.Contains(item)) {
             if (buyer.currency > item.value && !buyer.IsFull()) {
                 int value = item.value;
@@ -17,10 +17,12 @@ public class Trade
                 buyer.currency -= item.value;
                 seller.RemoveItem(item);
                 buyer.AddItem(item);
+                return true;
             }
         } else {
             GD.Print(string.Format("Buying {0}: No item or currency in inventory.", item.itemName));
         }
+        return false;
     }
 
     public bool SellItem(Item item) {

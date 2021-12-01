@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://resources/items/resources/Wheat.tres" type="Resource" id=11]
 [ext_resource path="res://resources/items/Inventory.cs" type="Script" id=12]
 [ext_resource path="res://assets/resources/Deposit.tscn" type="PackedScene" id=13]
+[ext_resource path="res://assets/debug/DebugInstance.tscn" type="PackedScene" id=14]
 [ext_resource path="res://assets/resources/WheatField.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/resources/TradeStall.tscn" type="PackedScene" id=16]
 [ext_resource path="res://assets/resources/BreadOven.tscn" type="PackedScene" id=17]
@@ -148,3 +149,9 @@ smoothing_speed = 6.0
 [node name="ActionMenu" parent="InterfaceManager" instance=ExtResource( 9 )]
 margin_right = 0.0
 margin_bottom = 0.0
+
+[node name="DebugInstance" parent="InterfaceManager" instance=ExtResource( 14 )]
+margin_left = 30.0
+margin_top = 30.0
+margin_right = 54.0
+margin_bottom = 13.0

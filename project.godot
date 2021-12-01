@@ -18,10 +18,6 @@ config/icon="res://icon.png"
 
 GameData="*res://scripts/singletons/GameData.cs"
 
-[debug]
-
-settings/stdout/print_fps=true
-
 [global]
 
 rendering=false
@@ -53,6 +49,7 @@ ScrollOut={
 
 [mono]
 
+debugger_agent/wait_for_debugger=true
 debugger_agent/wait_timeout=15000
 
 [physics]

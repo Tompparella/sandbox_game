@@ -3,8 +3,14 @@ using System;
 
 public class NpcIdleState : NpcMotionState
 {
+    private Timer timer = new Timer();
+    
     public override void _Ready()
     {
+        timer.OneShot = true;
+        timer.WaitTime = 3;
+        timer.Connect("timeout", this, "MoveAtRandom");
+        AddChild(timer);
         base._Ready();
     }
 
@@ -20,26 +26,10 @@ public class NpcIdleState : NpcMotionState
                 return;
             }
         }
-        StartRandomMovementTimer();
+        timer.Start();
     }
 
-    private void StartRandomMovementTimer() {
-        try
-        {
-            System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(MoveAtRandom);   // If there's nothing to do, wait three seconds and look for a path.
-            timer.Interval = 3000;
-            timer.AutoReset = false;
-            timer.Start();    
-        }
-        catch (System.Exception)
-        {
-            GD.Print("Crash on idle movement timer.");
-            throw;
-        }
-    }
-
-    public void MoveAtRandom(object source, System.Timers.ElapsedEventArgs e) {
+    public void MoveAtRandom() {
         EmitSignal(nameof(Finished), "move");
     }
 

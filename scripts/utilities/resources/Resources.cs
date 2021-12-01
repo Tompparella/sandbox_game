@@ -21,8 +21,18 @@ public class Resources : Interactive
     protected string exhaustedName;
     protected string exhaustedDescription;
     protected bool isExhausted = false;
+    protected List<Character> workers = new List<Character>();
 
 
+    public List<Character> GetWorkers() {
+        return workers;
+    }
+    public void AddWorker(Character worker) {
+        workers.Add(worker);
+    }
+    public void RemoveWorker(Character worker) {
+        workers.Remove(worker);
+    }
     public bool GetExhausted() {
         return isExhausted;
     }
