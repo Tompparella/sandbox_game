@@ -26,8 +26,10 @@ public class NpcMoveState : NpcMotionState
     }
 
     public override void Update(float delta) {
-       // Movement handling here - if (!moving) { EmitSignal(nameof(Finished), "idle")}
-       MovementLoop(delta);
+        // Movement handling here - if (!moving) { EmitSignal(nameof(Finished), "idle")}
+        MovementLoop(delta);
+
+        base.Update(delta);
     }
 
     protected virtual void MovementLoop(float delta) {

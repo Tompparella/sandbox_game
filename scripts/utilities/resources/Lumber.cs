@@ -9,8 +9,14 @@ public class Lumber : Resources
     {
         actions = Constants.LUMBERACTIONS;
         dialogue = new ResourceDialogue(this, Constants.LUMBER_DESCRIPTION, actions);
-        entityName = "Lumber";
+        entityName = Constants.TREE_NAME;
         inventory = (Inventory)ResourceLoader.Load(Constants.LUMBER_INVENTORY).Duplicate();
+
+        defaultTexture = Constants.TREE_TEXTURE;
+        defaultPortrait = Constants.TREE_PORTRAIT;
+        defaultName = entityName;
+        defaultDescription = Constants.LUMBER_DESCRIPTION;
+        defaultInventory = Constants.LUMBER_INVENTORY;
 
         exhaustedDescription = Constants.TREETRUNK_DESCRIPTION;
         exhaustedTexture = Constants.TREETRUNK_TEXTURE;

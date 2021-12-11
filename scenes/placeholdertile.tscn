@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -18,6 +18,11 @@
 [ext_resource path="res://assets/resources/TradeStall.tscn" type="PackedScene" id=16]
 [ext_resource path="res://assets/resources/BreadOven.tscn" type="PackedScene" id=17]
 
+[sub_resource type="Resource" id=3]
+script = ExtResource( 12 )
+currency = 500
+items = [ ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
 currency = 1000
@@ -25,8 +30,8 @@ items = [ ExtResource( 11 ), ExtResource( 11 ), ExtResource( 11 ), ExtResource( 
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 12 )
-currency = 150
-items = [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+currency = 60
+items = [ ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
 
 [node name="Debug" type="Node2D"]
 script = ExtResource( 8 )
@@ -52,6 +57,7 @@ scale = Vector2( 0.8, 0.8 )
 
 [node name="TradeStall" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 16 )]
 position = Vector2( 216, -312 )
+inventory = SubResource( 3 )
 
 [node name="Tree" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 10 )]
 position = Vector2( 1832, -112 )

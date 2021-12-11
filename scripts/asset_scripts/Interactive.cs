@@ -23,6 +23,10 @@ public class Interactive : Area2D
         if (inventory == null) {
             inventory = new Inventory();
         }
+        inventory.Connect("OnItemAdd", this, "CheckNeeds");
+    }
+
+    public virtual void CheckNeeds() {
     }
 
 }

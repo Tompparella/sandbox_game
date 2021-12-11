@@ -32,6 +32,9 @@ public class Stats : Resource
 
     private float health;
     public float currentHealth;
+    public float hunger { get; private set; }
+    public float maxHunger { get; private set; }
+    public float minHunger { get; private set; }
 
     public Stats() {
         strength = 0;
@@ -40,10 +43,13 @@ public class Stats : Resource
         dexterity = 0;
         defence = 0;
         labour = 0;
+        hunger = 50;
 
         attackSpeed = Constants.DEF_ATTACKSPEED;
         health = Constants.DEF_HEALTH;
         currentHealth = health;
+        maxHunger = Constants.DEF_MAXHUNGER;
+        minHunger = Constants.DEF_MINHUNGER;
         moveSpeed = Constants.DEF_MAXPEED;
         workSpeed = Constants.DEF_WORKSPEED;
         maxDamage = Constants.DEF_MAXDAMAGE;
@@ -79,6 +85,15 @@ public class Stats : Resource
             }
         }
         UpdateStats();
+    }
+    public void lowerHunger() {
+        hunger = (hunger - 0.1f > minHunger ? hunger - 0.1f : minHunger);
+        if (hunger < 0) {
+            currentHealth -= 0.1f;
+        }
+    }
+    public void raiseHunger(float nutrition) {
+        hunger += nutrition;
     }
 
     public void RaiseLabour() {

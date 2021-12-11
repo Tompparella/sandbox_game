@@ -4,6 +4,8 @@ using System.Linq;
 
 public class Inventory : Resource
 {
+    [Signal]
+    public delegate void OnItemAdd();
     [Export]
     public int currency;
     [Export]
@@ -20,6 +22,7 @@ public class Inventory : Resource
                 items[index] = item;
             }
         }
+        EmitSignal(nameof(OnItemAdd));
     }
     public void RemoveItem(Item item, int amount = 1) {
         for (int i = 0; i < amount; i++) {
@@ -46,13 +49,18 @@ public class Inventory : Resource
         
         foreach(KeyValuePair<Item, int> kvp in requiredItems) {
             int itemsInInventory = items.Where(x => x == kvp.Key).Count();
-            GD.Print(string.Format("{0} in inventory: {1}\n{0} required: {2}", kvp.Key.itemName, itemsInInventory, kvp.Value));
+            //GD.Print(string.Format("{0} in inventory: {1}\n{0} required: {2}", kvp.Key.itemName, itemsInInventory, kvp.Value));
             if (itemsInInventory < kvp.Value) {
                 return false;
             }
         }
-
         return true;
+    }
+    public List<ConsumableItem> GetEdibleItems() {
+        if (items.Any(x => x is ConsumableItem)) {
+            return items.Where(x => x is ConsumableItem).DefaultIfEmpty().Cast<ConsumableItem>().OrderBy(x => x.nutritionValue).ToList();
+        }
+        return null;
     }
 
     public Item PopLastItem() {

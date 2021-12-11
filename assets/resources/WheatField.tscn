@@ -9,6 +9,7 @@
 position = Vector2( 0, 24 )
 script = ExtResource( 1 )
 portraitResource = "res://resources/sprites/assets/resources/portrait/wheatfield_portrait.png"
+refreshTime = 300.0
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 5.60001, -160 )

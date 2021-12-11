@@ -5,15 +5,13 @@ using System.Linq;
 public class NpcWorkState : NpcMoveState
 {
     private float workRange = Constants.DEF_ATTACKRANGE;
-    private const float tickSpeed = Constants.TICK;
     private float tickDelta = 0;
     private bool staggered = false;
     private Resources resource;
 
     public override void Enter() {
         resource = (Resources)owner.GetInteractive();
-        if (resource != null && !resource.GetExhausted()) {
-            resource.AddWorker(owner);
+        if (resource != null && !resource.GetExhausted() && resource.AddWorker(owner)) {
             owner.GetMovePath(owner.GlobalPosition, resource.Position, owner);
         } else {
             EmitSignal(nameof(Finished), "idle");
@@ -41,7 +39,7 @@ public class NpcWorkState : NpcMoveState
         }
         catch (System.Exception e)
         {
-            GD.Print("Error in NpcWorkState: ", resource); // Weird bug still exists. This should help with finding it.
+            GD.Print("Error in NpcWorkState: ", resource.Name); // Weird bug still exists. This should help with finding it.
             throw e;
         }
         base.Update(delta);
@@ -62,7 +60,7 @@ public class NpcWorkState : NpcMoveState
     private void WorkTarget() {
         resource.workAction(owner);
         if (owner.GetInteractive() == null) {
-            GD.Print("Exiting workstate");
+            //GD.Print("Exiting workstate");
             EmitSignal(nameof(Finished), "idle");
             return;
         }

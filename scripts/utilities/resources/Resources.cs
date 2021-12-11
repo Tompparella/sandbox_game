@@ -16,19 +16,31 @@ public class Resources : Interactive
     protected Sprite sprite;
     protected string[] actions;
 
+    [Export]
+    protected float refreshTime = 600;
+
+    protected string defaultTexture;
+    protected string defaultPortrait;
+    protected string defaultName;
+    protected string defaultDescription;
+
     protected string exhaustedTexture;
     protected string exhaustedPortrait;
     protected string exhaustedName;
     protected string exhaustedDescription;
     protected bool isExhausted = false;
     protected List<Character> workers = new List<Character>();
+    protected string defaultInventory; // The inventory that will be loaded upon refreshing the resource.
+
+    private Timer refreshTimer = new Timer();
 
 
     public List<Character> GetWorkers() {
         return workers;
     }
-    public void AddWorker(Character worker) {
+    public virtual bool AddWorker(Character worker) {
         workers.Add(worker);
+        return true;
     }
     public void RemoveWorker(Character worker) {
         workers.Remove(worker);
@@ -70,7 +82,17 @@ public class Resources : Interactive
         portrait = (Texture)ResourceLoader.Load(exhaustedPortrait);
         entityName = exhaustedName;
         dialogue = new ResourceDialogue(this, exhaustedDescription, actions);
+        refreshTimer.Start();               // After resource is exhausted, put on a timer that will eventually refresh its resources.
         //QueueFree();
+    }
+
+    private void RefreshResource() { // Make it so that after a resource refreshes, the Npc:s working on them are notified.
+        inventory = (Inventory)ResourceLoader.Load(defaultInventory).Duplicate();
+        isExhausted = false;
+        sprite.Texture = (Texture)ResourceLoader.Load(defaultTexture);
+        portrait = (Texture)ResourceLoader.Load(defaultPortrait);
+        entityName = defaultName;
+        dialogue = new ResourceDialogue(this, defaultDescription, actions);
     }
 
     public override void _Ready()
@@ -81,6 +103,12 @@ public class Resources : Interactive
         portrait = (Texture)ResourceLoader.Load(portraitResource);
         this.Connect("mouse_entered", this, nameof(_OnMouseOver));
         this.Connect("mouse_exited", this, nameof(_OnMouseExit));
+
+        // Instance the refreshTimer
+        refreshTimer.OneShot = true;
+        refreshTimer.WaitTime = refreshTime;
+        refreshTimer.Connect("timeout", this, "RefreshResource");
+        AddChild(refreshTimer);
         
         base._Ready();
     }

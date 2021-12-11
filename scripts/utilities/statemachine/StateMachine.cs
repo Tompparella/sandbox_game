@@ -30,7 +30,7 @@ public class StateMachine : Node
 
     private void Initialize(State startState) {
         SetActive(true);
-        stateStack.Insert(0, StartState);
+        stateStack.Insert(0, startState);
         CurrentState = stateStack[0];
         CurrentState.Enter();
     }

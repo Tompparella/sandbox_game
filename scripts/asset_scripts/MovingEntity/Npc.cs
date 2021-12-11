@@ -7,20 +7,22 @@ public class Npc : Character
 {
     public List<Resources> surroundingResources { get; private set; } = new List<Resources>();
     public List<Npc> nearbyTraders { get; private set; } = new List<Npc>();
-    public List<Item> neededItems { get; private set; } = new List<Item>();
     public List<Item> soldItems { get; private set; } = new List<Item>();
 
     [Export]
     public string profession { get; private set; }
 
     public bool hasTraded = true;
-    public bool outOfWork = false; // If there's nothing for the Npc to do, idle.
+    public bool outOfWork = true; // If there's nothing for the Npc to do, idle.
+
+    public Timer outOfWorkTimer = new Timer();
 
     public void _OnSurroundingsEntered(Area2D area) {
         switch (profession)
         {
             case Constants.LUMBERJACK_PROFESSION:
                 if (area is Lumber) {
+                    outOfWork = false;
                     surroundingResources.Add((Resources)area);
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
@@ -28,6 +30,7 @@ public class Npc : Character
 
             case Constants.MINER_PROFESSION:
                 if (area is Deposit) {
+                    outOfWork = false;
                     surroundingResources.Add((Resources)area);
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
@@ -35,18 +38,21 @@ public class Npc : Character
             
             case Constants.FARMER_PROFESSION:
                 if (area is WheatField) {
+                    outOfWork = false;
                     surroundingResources.Add((Resources)area);
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
                 break;
             case Constants.TRADER_PROFESSION:
                 if (area is TradeStall) {
+                    outOfWork = false;
                     surroundingResources.Add((Resources)area);
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
                 break;
             case Constants.BAKER_PROFESSION:
                 if (area is Oven) {
+                    outOfWork = false;
                     surroundingResources.Add((Resources)area);
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
@@ -59,9 +65,11 @@ public class Npc : Character
             nearbyTraders.Add((Npc)area);
         }
     }
+
     public bool WorkableResourcesExist() {
-        return surroundingResources.Any() && !(surroundingResources[0] is Refinery);
+        return (surroundingResources.Any());
     }
+
     public void _OnSurroundingsExited(Area2D area) {
         if (surroundingResources.Contains(area)) {
             if (area.IsConnected("OnRemoval", this, nameof(SurroundingRemoved))) {
@@ -71,8 +79,25 @@ public class Npc : Character
         }
     }
     private void SurroundingRemoved(Interactive resource) {
+        if (!WorkableResourcesExist()) {
+            outOfWork = true;
+        }
         resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
         surroundingResources.Remove((Resources)resource);
+    }
+    private void toggleOutOfWork() {
+        GD.Print(String.Format("{0}: Started outOfWorkTimer", Name));
+
+        CheckNeeds();
+        if (GetBuyQueue().Any()) {
+            hasTraded = false;
+            outOfWork = false;
+        }
+        if (!WorkableResourcesExist()) {      // If the Npc is out of work, put a timer for 1 minutes to enter work state again.
+            outOfWorkTimer.Start();
+        } else {
+            outOfWork = false;
+        }
     }
     public bool GetNextWork() {
         if (inventory.IsFull()) {
@@ -99,20 +124,21 @@ public class Npc : Character
         return foundWork;
     }
 
-    public override bool checkBuyQueue(Dictionary<Item,int> items) {
-        bool itemsAdded = false;
-        foreach(KeyValuePair<Item, int> kvp in items) {
-            int itemsInQueue = neededItems.Where(x => x == kvp.Key).Count();
-            if (itemsInQueue < kvp.Value) {
-                for (int i = itemsInQueue; i < kvp.Value; i++) {
-                    neededItems.Add(kvp.Key);
-                    GD.Print(string.Format("Item added to buy queue. {0}", kvp.Key.itemName));
-                }
-                itemsAdded = true;
-            }
+    public float GetHunger() {
+        return stats.hunger;
+    }
+    public float GetCurrentHealth() {
+        return stats.currentHealth;
+    }
+    public override void GetFood()
+    {
+        addFoodToBuyQueue();
+    }
+
+    public void addFoodToBuyQueue() {
+        if (!neededItems.Any(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0)) {
+            neededItems.Add(new ConsumableItem(1));
         }
-        neededItems.ForEach(x => GD.Print(x.itemName));
-        return itemsAdded;
     }
     public bool checkBuyQueue() {
         return neededItems.Any();
@@ -166,6 +192,8 @@ public class Npc : Character
         debugInstance.AddStat("Sold Items", this, "soldItems", false);
         debugInstance.AddStat("Has Traded", this, "hasTraded", false);
         debugInstance.AddStat("Out Of Work", this, "outOfWork", false);
+        debugInstance.AddStat("Hunger", this, "GetHunger", true);
+        debugInstance.AddStat("Current Health", this, "GetCurrentHealth", true);
     }
 
     public override void _Ready()
@@ -175,7 +203,14 @@ public class Npc : Character
             int index = r.Next(Constants.PROFESSIONS.Count());
             profession = Constants.PROFESSIONS[index];
         }
-        createDebugInstance();
+        createDebugInstance(); // For debugging. Comment out to disable.
+
+        // Instance the outOfWork timer
+        outOfWorkTimer.OneShot = true;
+        outOfWorkTimer.WaitTime = 10;
+        outOfWorkTimer.Connect("timeout", this, "toggleOutOfWork");
+        AddChild(outOfWorkTimer);
+
         base._Ready();
     }
 }

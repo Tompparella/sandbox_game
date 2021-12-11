@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource( 1 )
 itemName = "Bread"
-itemDescription = "It's bread! Yummy!"
-value = 75
+itemDescription = "It's bread!"
+value = 50
 recipe = ExtResource( 2 )
+nutritionValue = 40.0

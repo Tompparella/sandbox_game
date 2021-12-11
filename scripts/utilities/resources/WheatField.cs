@@ -12,6 +12,12 @@ public class WheatField : Resources
         entityName = "Wheat Field";
         inventory = (Inventory)ResourceLoader.Load(Constants.WHEATFIELD_INVENTORY).Duplicate();
 
+        defaultTexture = Constants.FARM_TEXTURE;
+        defaultPortrait = Constants.FARM_PORTRAIT;
+        defaultName = Constants.FARM_NAME;
+        defaultDescription = Constants.FARM_DESCRIPTION;
+        defaultInventory = Constants.WHEATFIELD_INVENTORY;
+
         exhaustedDescription = Constants.EMPTYFARM_DESCRIPTION;
         exhaustedTexture = Constants.EMPTYFARM_TEXTURE;
         exhaustedName = "Farm Patch";

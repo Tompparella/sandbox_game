@@ -22,10 +22,12 @@ public class Character : MovingEntity
     public delegate void OnCharacterClick(Character character, InputEvent @event);
     [Signal]
     public delegate void Attacked();
+
     
     // Utility variables
 
     private List<Character> targets = new List<Character>();
+    public List<Item> neededItems { get; private set; } = new List<Item>();
     private Interactive currentInteractive;
     private PackedScene damageCounter;
 
@@ -83,9 +85,42 @@ public class Character : MovingEntity
 
     // Utility functions
 
-    public virtual bool checkBuyQueue(Dictionary<Item,int> items) {
-        return false;
+    public bool checkBuyQueue(Dictionary<Item,int> items) {
+        bool itemsAdded = false;
+        foreach(KeyValuePair<Item, int> kvp in items) {
+            int itemsInQueue = neededItems.Where(x => x == kvp.Key).Count();
+            if (itemsInQueue < kvp.Value) {
+                for (int i = itemsInQueue; i < kvp.Value; i++) {
+                    neededItems.Add(kvp.Key);
+                    GD.Print(string.Format("'{0}' added item '{1}' to buy queue.", Name, kvp.Key.itemName));
+                }
+                itemsAdded = true;
+            }
+        }
+        //neededItems.ForEach(x => GD.Print(x.itemName));
+        return itemsAdded;
     }
+
+    public override void CheckNeeds() {
+        if (stats.hunger < stats.maxHunger/2) {
+            Eat();
+        } else {
+            neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0); // If not hungry, don't buy more food.
+        }
+    }
+    private void Eat() {
+        ConsumableItem bestFood = inventory.GetEdibleItems()?.Last();
+        if(bestFood?.nutritionValue > 0) {
+            stats.raiseHunger(bestFood.nutritionValue);
+            inventory.RemoveItem(bestFood);
+        } else {
+            GetFood();
+        }
+    }
+    
+
+    // Virtual Functions
+
     public virtual List<Item> GetSellQueue() {
         return new List<Item>();
     }
@@ -95,7 +130,12 @@ public class Character : MovingEntity
     public virtual void PopFromSellQueue(Item item) {
         return;
     }
-    
+    public virtual void GetFood() {
+        return;
+    }
+
+    // GD
+
     public override void _Ready()
     {
         dialogue = new CharacterDialogue(this);

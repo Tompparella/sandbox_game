@@ -5,4 +5,5 @@
 
 [resource]
 script = ExtResource( 1 )
-items = [ ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), ExtResource( 2 ), null, null, null, null, null, null, null, null ]
+currency = 0
+items = [ ExtResource( 2 ), ExtResource( 2 ), null, null, null, null, null, null, null, null ]

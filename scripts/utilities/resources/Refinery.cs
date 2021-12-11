@@ -15,6 +15,17 @@ public class Refinery : Resources
         }
         base._Ready();
     }
+    public override bool AddWorker(Character worker)
+    {
+        if(worker is Npc && ((Npc)worker).hasTraded && !setWorkItemQueue(worker)){ // Lisää tähän sääntö jolla baker ei jatka turhaa ramppaamista kyökin ja traderin välillä.
+            Npc npcWorker = (Npc)worker;
+            npcWorker.outOfWork = true;
+            npcWorker.outOfWorkTimer.Start();
+            return false;
+        }
+        workers.Add(worker);
+        return true;
+    }
     public override void workAction(Character worker) {
         if (!workItemQueue.Any()) {
             if (!setWorkItemQueue(worker)) {
@@ -35,7 +46,7 @@ public class Refinery : Resources
         // In descending priority order, 
         foreach(Item i in craftableItems) {
             if (worker.inventory.HasItems(i.recipe.GetRecipeDictionary())) {
-                GD.Print(String.Format("Craftable item: {0}\n{1}", i.itemName, i.recipe.GetRecipe()));
+                //GD.Print(String.Format("Craftable item: {0}\n{1}", i.itemName, i.recipe.GetRecipe()));
                 addItemToWorkQueue(i, worker);
                 return true;
             }
@@ -72,7 +83,7 @@ public class Refinery : Resources
                 worker.inventory.AddItem(workItem);
                 workItemQueue.RemoveAt(0);
             } else {
-                GD.Print(this.Name, ": Inventory lacks required raw materials.");
+                GD.Print(this.Name, ": Refinery : GiveResource: Inventory lacks required raw materials.");
             }
         }
         currentActions = 0;
