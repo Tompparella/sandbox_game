@@ -124,8 +124,11 @@ public class Npc : Character
         return foundWork;
     }
 
-    public float GetHunger() {
+    public float GetHungerValue() {
         return stats.hunger;
+    }
+    public float GetCommoditiesValue() {
+        return stats.commodities;
     }
     public float GetCurrentHealth() {
         return stats.currentHealth;
@@ -134,12 +137,22 @@ public class Npc : Character
     {
         addFoodToBuyQueue();
     }
+    public override void GetCommodities()
+    {
+        addCommoditiesToBuyQueue();
+    }
 
     public void addFoodToBuyQueue() {
         if (!neededItems.Any(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0)) {
-            neededItems.Add(new ConsumableItem(1));
+            neededItems.Add(new ConsumableItem(_nutritionValue: 1));
         }
     }
+    public void addCommoditiesToBuyQueue() {
+        if (!neededItems.Any(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0)) {
+            neededItems.Add(new ConsumableItem(_commodityValue: 1));
+        }
+    }
+
     public bool checkBuyQueue() {
         return neededItems.Any();
     }
@@ -187,12 +200,13 @@ public class Npc : Character
         AddChild(debugInstance);
         debugInstance.AddStat("Profession", this, "profession", false);
         debugInstance.AddStat("Surrounding Resources", this, "surroundingResources", false);
-        debugInstance.AddStat("Nearby Traders", this, "nearbyTraders", false);
+       // debugInstance.AddStat("Nearby Traders", this, "nearbyTraders", false);
         debugInstance.AddStat("Needed Items", this, "neededItems", false);
-        debugInstance.AddStat("Sold Items", this, "soldItems", false);
+       // debugInstance.AddStat("Sold Items", this, "soldItems", false);
         debugInstance.AddStat("Has Traded", this, "hasTraded", false);
         debugInstance.AddStat("Out Of Work", this, "outOfWork", false);
-        debugInstance.AddStat("Hunger", this, "GetHunger", true);
+        debugInstance.AddStat("Hunger", this, "GetHungerValue", true);
+        debugInstance.AddStat("Commodities", this, "GetCommoditiesValue", true);
         debugInstance.AddStat("Current Health", this, "GetCurrentHealth", true);
     }
 

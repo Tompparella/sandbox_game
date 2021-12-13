@@ -102,19 +102,36 @@ public class Character : MovingEntity
     }
 
     public override void CheckNeeds() {
+
         if (stats.hunger < stats.maxHunger/2) {
             Eat();
         } else {
             neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0); // If not hungry, don't buy more food.
         }
+
+        if (stats.commodities < stats.maxCommodities/2) {
+            Consooom();
+        } else {
+            neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0); // If no need for commodities, don't buy more commodities.
+        }
     }
     private void Eat() {
         ConsumableItem bestFood = inventory.GetEdibleItems()?.Last();
         if(bestFood?.nutritionValue > 0) {
-            stats.raiseHunger(bestFood.nutritionValue);
+            stats.RaiseHunger(bestFood.nutritionValue);
             inventory.RemoveItem(bestFood);
         } else {
             GetFood();
+        }
+    }
+
+    private void Consooom() {
+        ConsumableItem bestConsumable = inventory.GetCommodityItems()?.Last();
+        if(bestConsumable?.commodityValue > 0) {
+            stats.RaiseCommodities(bestConsumable.commodityValue);
+            inventory.RemoveItem(bestConsumable);
+        } else {
+            GetCommodities();
         }
     }
     
@@ -130,7 +147,11 @@ public class Character : MovingEntity
     public virtual void PopFromSellQueue(Item item) {
         return;
     }
+
     public virtual void GetFood() {
+        return;
+    }
+    public virtual void GetCommodities() {
         return;
     }
 

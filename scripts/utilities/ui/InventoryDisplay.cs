@@ -11,7 +11,10 @@ public class InventoryDisplay : GridContainer {
         }
     }
     public Item GetInventoryItem(int index) {
-        return currentInventory.items[index];
+        if (index >= 0) {
+            return currentInventory.items[index];
+        }
+        return null;
     }
     private void UpdateSlotTexture(int index) {
         Panel slot = (Panel)GetChild(index);

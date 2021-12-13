@@ -82,17 +82,19 @@ public class Resources : Interactive
         portrait = (Texture)ResourceLoader.Load(exhaustedPortrait);
         entityName = exhaustedName;
         dialogue = new ResourceDialogue(this, exhaustedDescription, actions);
-        refreshTimer.Start();               // After resource is exhausted, put on a timer that will eventually refresh its resources.
+        Monitorable = false;
+        refreshTimer.Start();       // After resource is exhausted, put on a timer that will eventually refresh its resources.
         //QueueFree();
     }
 
-    private void RefreshResource() { // Make it so that after a resource refreshes, the Npc:s working on them are notified.
+    private void RefreshResource() {
         inventory = (Inventory)ResourceLoader.Load(defaultInventory).Duplicate();
         isExhausted = false;
         sprite.Texture = (Texture)ResourceLoader.Load(defaultTexture);
         portrait = (Texture)ResourceLoader.Load(defaultPortrait);
         entityName = defaultName;
         dialogue = new ResourceDialogue(this, defaultDescription, actions);
+        Monitorable = true;         // Makes it so that after a resource refreshes, the Npc:s working on them will take note.
     }
 
     public override void _Ready()

@@ -28,15 +28,33 @@ public class Trade
         return false;
     }
 
-    public bool BuyFoodItem() {
+    public bool BuyConsumableItem(string itemType) {
         if (seller.items.Any(x => x is ConsumableItem)) {
-            ConsumableItem food = seller.items.Where(x => x is ConsumableItem).Cast<ConsumableItem>().OrderBy(x => x.nutritionValue).Last();
-            int value = (int)Math.Round((food.value * (1 + tradeProfit)), 0);
-            if (buyer.currency >= value && !buyer.IsFull() && food.nutritionValue > 0) {
+            ConsumableItem itemToBuy;
+            switch (itemType)
+            {
+                case "food":
+                    itemToBuy = seller.items.Where(x => x is ConsumableItem).Cast<ConsumableItem>().OrderBy(x => x.nutritionValue).Last();
+                    if (itemToBuy.nutritionValue <= 0) {
+                        return false;
+                    }
+                    break;
+                case "commodity":
+                    itemToBuy = seller.items.Where(x => x is ConsumableItem).Cast<ConsumableItem>().OrderBy(x => x.commodityValue).Last();
+                    if (itemToBuy.commodityValue <= 0) {
+                        return false;
+                    }
+                    break;
+                default:
+                    GD.Print(String.Format("Wrong item type when buying consumable item: {0}", itemType));
+                    return false;
+            }
+            int value = (int)Math.Round((itemToBuy.value * (1 + tradeProfit)), 0);
+            if (buyer.currency >= value && !buyer.IsFull()) {
                 seller.currency += value;
                 buyer.currency -= value;
-                seller.RemoveItem(food);
-                buyer.AddItem(food);
+                seller.RemoveItem(itemToBuy);
+                buyer.AddItem(itemToBuy);
                 return true;
             }
         } else {

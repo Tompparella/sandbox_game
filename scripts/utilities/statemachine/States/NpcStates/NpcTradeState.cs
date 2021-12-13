@@ -64,9 +64,14 @@ public class NpcTradeState : NpcMoveState
         bool tradeSuccess = false;
         foreach (Item item in ((Npc)owner).GetBuyQueue().ToList())
         {
-            if (item is ConsumableItem && ((ConsumableItem)item).nutritionValue > 0) {
-                tradeInstance.BuyFoodItem();
-                tradeSuccess = true;
+            if (item is ConsumableItem){
+                if (((ConsumableItem)item).commodityValue > 0) {
+                    tradeInstance.BuyConsumableItem("commodity");
+                    tradeSuccess = true;
+                } else if (((ConsumableItem)item).nutritionValue > 0) {
+                    tradeInstance.BuyConsumableItem("food");
+                    tradeSuccess = true;
+                }
             }
             else if (tradeInstance.BuyItem(item)) {
                 tradeSuccess = true;

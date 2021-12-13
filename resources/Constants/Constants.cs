@@ -6,7 +6,7 @@ public class Constants
     public const float DEF_ACCELERATION = 6;
     public const float TICK = 0.4f; // Determines how many seconds one tick takes to activate.
     public const int DEF_ATTACKSPEED = 3; // Determines how many combat ticks an attack takes to commence.
-    public const int DEF_REQUIREDACTIONS = 5;
+    public const int DEF_REQUIREDACTIONS = 5; // Debug. Default is 5
     public const float DEF_WORKSPEED = 20;
     public const float DEF_DODGECHANCE = 0.05f;
     public const float DEF_ATTACKRANGE = 100.0f;
@@ -14,6 +14,8 @@ public class Constants
     public const float DEF_MAXDAMAGE = 5.0f;
     public const float DEF_MAXHUNGER = 100;
     public const float DEF_MINHUNGER = -10;
+    public const float DEF_MINCOMMODITIES = -10;
+    public const float DEF_MAXCOMMODITIES = 100;
     public const float DEF_TRADEPROFIT = 0.1f; // The amount of profit a trader makes per sale I.e, when buying an item worth 20, they get it for 18, and when selling, they get 22, the trader.
     public const float COMBATESCAPETIME = 10;
 

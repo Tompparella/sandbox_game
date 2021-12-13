@@ -32,9 +32,14 @@ public class Stats : Resource
 
     private float health;
     public float currentHealth;
+
     public float hunger { get; private set; }
     public float maxHunger { get; private set; }
     public float minHunger { get; private set; }
+
+    public float commodities { get; private set; }
+    public float minCommodities { get; private set; }
+    public float maxCommodities { get; private set; }
 
     public Stats() {
         strength = 0;
@@ -43,15 +48,24 @@ public class Stats : Resource
         dexterity = 0;
         defence = 0;
         labour = 0;
+
         hunger = 50;
+        commodities = 50;
 
         attackSpeed = Constants.DEF_ATTACKSPEED;
+
         health = Constants.DEF_HEALTH;
         currentHealth = health;
+
         maxHunger = Constants.DEF_MAXHUNGER;
         minHunger = Constants.DEF_MINHUNGER;
+
+        minCommodities = Constants.DEF_MINCOMMODITIES;
+        maxCommodities = Constants.DEF_MAXCOMMODITIES;
+
         moveSpeed = Constants.DEF_MAXPEED;
         workSpeed = Constants.DEF_WORKSPEED;
+
         maxDamage = Constants.DEF_MAXDAMAGE;
         minDamage = Constants.DEF_MINDAMAGE;
     }
@@ -86,14 +100,26 @@ public class Stats : Resource
         }
         UpdateStats();
     }
-    public void lowerHunger() {
-        hunger = (hunger - 0.1f > minHunger ? hunger - 0.1f : minHunger);
+    public void LowerHunger() {
+        hunger = (hunger - 0.05f > minHunger ? hunger - 0.05f : minHunger);
         if (hunger < 0) {
             currentHealth -= 0.1f;
         }
     }
-    public void raiseHunger(float nutrition) {
-        hunger += nutrition;
+    public void RaiseHunger(float nutrition) {
+        hunger = (hunger + nutrition <= maxHunger ? hunger + nutrition : maxHunger);
+    }
+
+    public void LowerCommodities() {
+        commodities = (commodities - 0.025f > minCommodities ? commodities - 0.025f : minCommodities);
+        /*                          // Make it so, that when commodities drop under a certain threshold, the character starts losing 'happiness', or a similar resource.
+        if (commodities < 0) {
+            currentHealth -= 0.1f;
+        }
+        */
+    }
+    public void RaiseCommodities(float commodity) {
+        commodities = (commodities + commodity <= maxCommodities ? commodities + commodity : maxCommodities);
     }
 
     public void RaiseLabour() {

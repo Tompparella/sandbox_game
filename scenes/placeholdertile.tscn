@@ -17,20 +17,16 @@
 [ext_resource path="res://assets/resources/WheatField.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/resources/TradeStall.tscn" type="PackedScene" id=16]
 [ext_resource path="res://assets/resources/BreadOven.tscn" type="PackedScene" id=17]
-
-[sub_resource type="Resource" id=3]
-script = ExtResource( 12 )
-currency = 500
-items = [ ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+[ext_resource path="res://resources/items/consumables/ConsumerGoods.tres" type="Resource" id=18]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
-currency = 1000
-items = [ ExtResource( 11 ), ExtResource( 11 ), ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, null, null, null, null, null, null, null ]
+currency = 400
+items = [ ExtResource( 11 ), ExtResource( 11 ), ExtResource( 18 ), ExtResource( 18 ), ExtResource( 18 ), null, null, null, null, null, null, null, null, null, null, null ]
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 12 )
-currency = 60
+currency = 100
 items = [ ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
 
 [node name="Debug" type="Node2D"]
@@ -57,7 +53,6 @@ scale = Vector2( 0.8, 0.8 )
 
 [node name="TradeStall" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 16 )]
 position = Vector2( 216, -312 )
-inventory = SubResource( 3 )
 
 [node name="Tree" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 10 )]
 position = Vector2( 1832, -112 )

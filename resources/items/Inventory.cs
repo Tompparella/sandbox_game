@@ -63,6 +63,13 @@ public class Inventory : Resource
         return null;
     }
 
+    public List<ConsumableItem> GetCommodityItems() {
+        if (items.Any(x => x is ConsumableItem)) {
+            return items.Where(x => x is ConsumableItem).DefaultIfEmpty().Cast<ConsumableItem>().OrderBy(x => x.commodityValue).ToList();
+        }
+        return null;
+    }
+
     public Item PopLastItem() {
         int index = items.IndexOf(items.Last(x => x != null));
         Item item = items[index];

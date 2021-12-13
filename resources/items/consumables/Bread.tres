@@ -9,4 +9,5 @@ itemName = "Bread"
 itemDescription = "It's bread!"
 value = 50
 recipe = ExtResource( 2 )
-nutritionValue = 40.0
+nutritionValue = 50.0
+commodityValue = 0.0
