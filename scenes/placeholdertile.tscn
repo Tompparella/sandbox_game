@@ -59,15 +59,19 @@ position = Vector2( 1832, -112 )
 
 [node name="WheatField" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
 position = Vector2( 1936, 936 )
+refreshTime = 600.0
 
 [node name="WheatField2" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
 position = Vector2( 1720, 552 )
+refreshTime = 600.0
 
 [node name="WheatField3" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
 position = Vector2( 2304, 640 )
+refreshTime = 600.0
 
 [node name="WheatField4" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
 position = Vector2( 2144, 288 )
+refreshTime = 600.0
 
 [node name="Deposit" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]
 position = Vector2( 1224, -896 )
@@ -107,9 +111,7 @@ profession = "miner"
 position = Vector2( 584, 248 )
 profession = "lumberjack"
 
-[node name="Trader" parent="NavigationHandler/MapSort/Characters" groups=[
-"traders",
-] instance=ExtResource( 5 )]
+[node name="Trader" parent="NavigationHandler/MapSort/Characters" groups=["traders"] instance=ExtResource( 5 )]
 position = Vector2( 464, -48 )
 inventory = SubResource( 1 )
 profession = "trader"
