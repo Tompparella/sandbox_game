@@ -1,13 +1,17 @@
-[gd_resource type="Resource" load_steps=3 format=2]
+[gd_resource type="Resource" load_steps=5 format=2]
 
 [ext_resource path="res://resources/items/consumables/ConsumableItem.cs" type="Script" id=1]
 [ext_resource path="res://resources/items/recipes/BreadRecipe.tres" type="Resource" id=2]
+[ext_resource path="res://resources/sprites/assets/items/bread.png" type="Texture" id=3]
+[ext_resource path="res://resources/sprites/assets/items/bread_small.png" type="Texture" id=4]
 
 [resource]
 script = ExtResource( 1 )
 itemName = "Bread"
+texture = ExtResource( 4 )
+worldTexture = ExtResource( 3 )
 itemDescription = "It's bread!"
-value = 50
+value = 35
 recipe = ExtResource( 2 )
 nutritionValue = 50.0
 commodityValue = 0.0

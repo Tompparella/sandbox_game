@@ -27,7 +27,8 @@ public class Constants
     public const string SILVER_DEPOSIT_PORTRAIT = "res://resources/sprites/assets/resources/portrait/ore_deposit_silver_portrait.png";
     public const string FARM_PORTRAIT = "res://resources/sprites/assets/resources/portrait/wheatfield_portrait.png";
     public const string EMPTYFARM_PORTRAIT = "res://resources/sprites/assets/resources/portrait/wheatfield_empty_portrait.png";
-    public const string OVEN_PORTRAIT = "res://resources/sprites/assets/resources/portrait/tree_portrait.png"; // Placeholder
+    public const string OVEN_PORTRAIT = "res://resources/sprites/assets/resources/portrait/bread_oven_portrait.png";
+    public const string WOODCRAFT_PORTRAIT = "res://resources/sprites/assets/resources/portrait/woodcraft_portrait.png";
 
 
     public const string TREETRUNK_TEXTURE = "res://resources/sprites/assets/resources/full/tree_trunk.png";
@@ -38,6 +39,7 @@ public class Constants
     public const string FARM_TEXTURE = "res://resources/sprites/assets/resources/full/wheatfield.png";
     public const string EMPTYFARM_TEXTURE = "res://resources/sprites/assets/resources/full/wheatfield_empty.png";
     public const string OVEN_TEXTURE = "res://resources/sprites/assets/resources/full/bread_oven.png";
+    public const string WOODCRAFT_TEXTURE = "res://resources/sprites/assets/resources/full/woodcraft.png";
 
 
     public const string IRON_DEPOSIT_INVENTORY = "res://resources/items/resources/IronDepositInventory.tres";
@@ -55,6 +57,7 @@ public class Constants
     public const string TRADER_PROFESSION = "trader";
     public const string FARMER_PROFESSION = "farmer";
     public const string BAKER_PROFESSION = "baker";
+    public const string CRAFTSMAN_PROFESSION = "craftsman";
 
 
     public static readonly string[] ROOTWORDS = new string[] {"yes", "no", "how", "where"};
@@ -75,18 +78,21 @@ public class Constants
     public static readonly string EMPTYDEPOSIT_DESCRIPTION = "It's a huge mass of stone. Any traces of ore have already been exploited";
     public static readonly string TRADESTALL_DESCRIPTION = "The next best thing to supermarkets.";
     public static readonly string OVEN_DESCRIPTION = "A professional culinarian could make something edible here.";
+    public static readonly string WOODCRAFT_DESCRIPTION = "A place where professionals of woodcraft can practice their craft.";
 
     public static readonly string FARM_NAME = "Wheat Field";
     public static readonly string OVEN_NAME = "Bread Oven";
     public static readonly string TREE_NAME = "Tree";
+    public static readonly string WOODCRAFT_NAME = "Craftsman's Retreat";
 
     public static readonly string[] DEPOSITACTIONS = new string[] {"mine", "work"};
     public static readonly string[] LUMBERACTIONS = new string[] {"chop", "work"};
     public static readonly string[] FARMACTIONS = new string[] {"farm", "collect", "harvest", "work"};
     public static readonly string[] TRADEACTIONS = new string[] {"trade", "sell", "buy"};
     public static readonly string[] OVENACTIONS = new string[] {"bake", "cook", "work"};
+    public static readonly string[] CRAFTACTIONS = new string[] {"craft" ,"work"};
 
-    public static readonly string[] PROFESSIONS = new string[] {FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, null};
+    public static readonly string[] PROFESSIONS = new string[] {FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, null};
 
     public const string RESOURCECOLOR = "ffa100";
     public const string CONSUMABLECOLOR = "d1e53b";
@@ -94,5 +100,6 @@ public class Constants
 
     public const string FLOURITEM = "res://resources/items/resources/Flour.tres";
     public const string BREADITEM = "res://resources/items/consumables/Bread.tres";
+    public const string CONSUMERITEM = "res://resources/items/consumables/ConsumerGoods.tres";
 
 }

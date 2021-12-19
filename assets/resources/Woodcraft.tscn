@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://resources/sprites/assets/resources/full/woodcraft.png" type="Texture" id=1]
+[ext_resource path="res://scripts/utilities/resources/Woodcraft.cs" type="Script" id=2]
+
+[node name="Woodcraft" type="Area2D" groups=[
+"resource",
+]]
+position = Vector2( 0, 16 )
+scale = Vector2( 1.3, 1 )
+script = ExtResource( 2 )
+portraitResource = "res://resources/sprites/assets/resources/portrait/woodcraft_portrait.png"
+entityName = "Craftman's Retreat"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( -32, -21.6 )
+polygon = PoolVector2Array( -96, 5.6, -96, -170.4, -40, -274.4, 88, -258.4, 160, -170.4, 160, 5.6, 32, 69.6 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -144 )
+texture = ExtResource( 1 )

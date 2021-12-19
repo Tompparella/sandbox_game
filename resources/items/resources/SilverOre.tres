@@ -10,4 +10,4 @@ itemName = "Silver Ore"
 texture = ExtResource( 3 )
 worldTexture = ExtResource( 2 )
 itemDescription = "An unrefined lump of silver. A professional could smelt this into something useful."
-value = 25
+value = 20

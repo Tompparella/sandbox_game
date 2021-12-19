@@ -10,4 +10,4 @@ itemName = "Wheat"
 texture = ExtResource( 3 )
 worldTexture = ExtResource( 2 )
 itemDescription = "A bushel of dry wheat. It could be ground into something usable."
-value = 15
+value = 12

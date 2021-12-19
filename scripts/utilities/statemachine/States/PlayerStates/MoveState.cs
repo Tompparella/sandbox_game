@@ -21,8 +21,8 @@ public class MoveState : MotionState
 
     protected virtual void MovementLoop(float delta)
     {
-        owner.currentSpeed += owner.currentSpeed < owner.stats.moveSpeed ? owner.acceleration : 0;
-        delta = 1 + delta;
+        owner.currentSpeed += owner.currentSpeed < owner.stats.moveSpeed ? (owner.acceleration * delta) : 0;
+        delta++;
         MoveAlongPath(delta);
     }
 
@@ -43,7 +43,7 @@ public class MoveState : MotionState
             float distanceToLast = startPoint.DistanceTo(owner.movePath.Last());
             if (currentSpeed <= distanceToNext && currentSpeed >= 0.0)
             {
-                owner.Position = startPoint.LinearInterpolate(owner.movePath[0], (currentSpeed / distanceToNext) * delta);
+                owner.Position = startPoint.LinearInterpolate(owner.movePath[0], (currentSpeed / distanceToNext));
                 break;
             }
             currentSpeed -= distanceToNext;

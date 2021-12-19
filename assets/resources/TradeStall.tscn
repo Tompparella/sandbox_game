@@ -7,6 +7,8 @@
 "resource",
 ]]
 script = ExtResource( 2 )
+portraitResource = "res://resources/sprites/assets/resources/portrait/trade_stall_portrait.png"
+entityName = "Trader's Stall"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 position = Vector2( -32, 0 )

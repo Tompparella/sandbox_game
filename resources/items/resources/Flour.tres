@@ -11,5 +11,5 @@ itemName = "Flour"
 texture = ExtResource( 3 )
 worldTexture = ExtResource( 2 )
 itemDescription = "Ground down wheat. Can be processed into all sorts of food."
-value = 35
+value = 25
 recipe = ExtResource( 4 )

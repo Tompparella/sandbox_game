@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -17,14 +17,20 @@
 [ext_resource path="res://assets/resources/WheatField.tscn" type="PackedScene" id=15]
 [ext_resource path="res://assets/resources/TradeStall.tscn" type="PackedScene" id=16]
 [ext_resource path="res://assets/resources/BreadOven.tscn" type="PackedScene" id=17]
-[ext_resource path="res://resources/items/consumables/ConsumerGoods.tres" type="Resource" id=18]
+[ext_resource path="res://resources/items/resources/Lumber.tres" type="Resource" id=18]
+[ext_resource path="res://assets/resources/Woodcraft.tscn" type="PackedScene" id=19]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
-currency = 400
-items = [ ExtResource( 11 ), ExtResource( 11 ), ExtResource( 18 ), ExtResource( 18 ), ExtResource( 18 ), null, null, null, null, null, null, null, null, null, null, null ]
+currency = 60
+items = [ ExtResource( 18 ), ExtResource( 18 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
 
 [sub_resource type="Resource" id=2]
+script = ExtResource( 12 )
+currency = 400
+items = [ ExtResource( 11 ), ExtResource( 11 ), ExtResource( 18 ), ExtResource( 18 ), null, null, null, null, null, null, null, null, null, null, null, null ]
+
+[sub_resource type="Resource" id=3]
 script = ExtResource( 12 )
 currency = 100
 items = [ ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -47,30 +53,27 @@ tile_data = PoolIntArray( -1769478, 0, 5, -1769477, 0, 65537, -1769476, 0, 65537
 
 [node name="Assets" type="YSort" parent="NavigationHandler/MapSort"]
 
-[node name="BreadOven" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 17 )]
-position = Vector2( -912, -536 )
-scale = Vector2( 0.8, 0.8 )
-
 [node name="TradeStall" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 16 )]
-position = Vector2( 216, -312 )
+position = Vector2( 1008, -240 )
 
 [node name="Tree" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 10 )]
-position = Vector2( 1832, -112 )
+position = Vector2( 1856, -120 )
+scale = Vector2( -1, 1 )
 
 [node name="WheatField" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
-position = Vector2( 1936, 936 )
+position = Vector2( 1912, 952 )
 refreshTime = 600.0
 
 [node name="WheatField2" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
-position = Vector2( 1720, 552 )
+position = Vector2( 1656, 600 )
 refreshTime = 600.0
 
 [node name="WheatField3" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
-position = Vector2( 2304, 640 )
+position = Vector2( 3176, 1120 )
 refreshTime = 600.0
 
 [node name="WheatField4" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
-position = Vector2( 2144, 288 )
+position = Vector2( 2448, 616 )
 refreshTime = 600.0
 
 [node name="Deposit" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]
@@ -84,6 +87,15 @@ depositType = "silver"
 [node name="Deposit3" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]
 position = Vector2( 2296, -736 )
 depositType = "iron"
+
+[node name="Woodcraft" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 19 )]
+position = Vector2( 2216, 96 )
+
+[node name="BreadOven" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 17 )]
+position = Vector2( 240, -352 )
+
+[node name="Tree2" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 10 )]
+position = Vector2( 2944, 1384 )
 
 [node name="Characters" type="YSort" parent="NavigationHandler/MapSort"]
 
@@ -103,23 +115,26 @@ profession = "farmer"
 position = Vector2( -344, -104 )
 profession = "miner"
 
-[node name="Miner2" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+[node name="Craftsman" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
 position = Vector2( 392, 648 )
-profession = "miner"
+inventory = SubResource( 1 )
+profession = "craftsman"
 
 [node name="Lumberjack" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
 position = Vector2( 584, 248 )
 profession = "lumberjack"
 
-[node name="Trader" parent="NavigationHandler/MapSort/Characters" groups=["traders"] instance=ExtResource( 5 )]
+[node name="Trader" parent="NavigationHandler/MapSort/Characters" groups=[
+"traders",
+] instance=ExtResource( 5 )]
 position = Vector2( 464, -48 )
-inventory = SubResource( 1 )
+inventory = SubResource( 2 )
 profession = "trader"
 
 [node name="Baker" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
 position = Vector2( 1248, 88 )
 entityName = "Baker"
-inventory = SubResource( 2 )
+inventory = SubResource( 3 )
 profession = "baker"
 
 [node name="Walls" type="TileMap" parent="NavigationHandler/MapSort"]

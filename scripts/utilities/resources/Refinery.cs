@@ -17,7 +17,7 @@ public class Refinery : Resources
     }
     public override bool AddWorker(Character worker)
     {
-        if(worker is Npc && ((Npc)worker).hasTraded && !setWorkItemQueue(worker)){ // Lisää tähän sääntö jolla baker ei jatka turhaa ramppaamista kyökin ja traderin välillä.
+        if(worker is Npc && ((Npc)worker).hasTraded && !setWorkItemQueue(worker)){
             Npc npcWorker = (Npc)worker;
             npcWorker.outOfWork = true;
             npcWorker.outOfWorkTimer.Start();

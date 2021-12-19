@@ -1,15 +1,21 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://resources/sprites/assets/resources/full/tree.png" type="Texture" id=1]
 [ext_resource path="res://scripts/utilities/resources/Lumber.cs" type="Script" id=2]
-[ext_resource path="res://resources/items/resources/LumberInventory.tres" type="Resource" id=3]
+[ext_resource path="res://resources/items/Inventory.cs" type="Script" id=3]
+[ext_resource path="res://resources/items/resources/Lumber.tres" type="Resource" id=4]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 3 )
+currency = 0
+items = [ ExtResource( 4 ), ExtResource( 4 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
 
 [node name="Tree" type="Area2D" groups=[
 "resource",
 ]]
 script = ExtResource( 2 )
 portraitResource = "res://resources/sprites/assets/resources/portrait/tree_portrait.png"
-inventory = ExtResource( 3 )
+inventory = SubResource( 1 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 position = Vector2( -32, 0 )

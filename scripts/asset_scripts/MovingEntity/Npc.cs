@@ -57,6 +57,13 @@ public class Npc : Character
                     area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
                 }
                 break;
+            case Constants.CRAFTSMAN_PROFESSION:
+                if (area is Woodcraft) {
+                    outOfWork = false;
+                    surroundingResources.Add((Resources)area);
+                    area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+                }
+                break;
                 
             default:
                 break;

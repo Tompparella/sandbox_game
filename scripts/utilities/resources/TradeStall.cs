@@ -8,7 +8,12 @@ public class TradeStall : Resources
     public override void _Ready()
     {
         actions = Constants.TRADEACTIONS;
-        dialogue = new ResourceDialogue(this, Constants.LUMBER_DESCRIPTION, actions);
+        dialogue = new ResourceDialogue(this, Constants.TRADESTALL_DESCRIPTION, actions);
+
+        defaultTexture = Constants.OVEN_TEXTURE;
+        defaultPortrait = Constants.OVEN_PORTRAIT;
+        defaultName = Constants.OVEN_NAME;
+        defaultDescription = Constants.TRADESTALL_DESCRIPTION;
 
         exhaustedDescription = Constants.TRADESTALL_DESCRIPTION;
         exhaustedTexture = Constants.TREETRUNK_TEXTURE;
