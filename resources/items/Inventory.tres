@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource( 1 )
-currency = 60
+currency = 15
 items = [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]

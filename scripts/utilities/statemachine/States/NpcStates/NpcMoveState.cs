@@ -39,10 +39,10 @@ public class NpcMoveState : NpcMotionState
     {
         // owner.currentSpeed += owner.currentSpeed < owner.stats.moveSpeed ? owner.acceleration * delta : 0;
         owner.currentSpeed += owner.currentSpeed < owner.stats.moveSpeed ? (owner.acceleration * delta) : 0;
-        MoveAlongPath();
+        MoveAlongPath(delta);
     }
 
-    protected void MoveAlongPath()
+    protected void MoveAlongPath(float delta)
     {
         if (!owner.movePath.Any())
         {
@@ -51,7 +51,7 @@ public class NpcMoveState : NpcMotionState
             EmitSignal(nameof(Finished), "idle");
             return;
         }
-        float currentSpeed = owner.currentSpeed;
+        float currentSpeed = owner.currentSpeed * delta;
         Vector2 startPoint = owner.Position;
         for (int i = 0; i < owner.movePath.Count(); i++)
         {

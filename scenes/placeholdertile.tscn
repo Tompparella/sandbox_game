@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -19,6 +19,8 @@
 [ext_resource path="res://assets/resources/BreadOven.tscn" type="PackedScene" id=17]
 [ext_resource path="res://resources/items/resources/Lumber.tres" type="Resource" id=18]
 [ext_resource path="res://assets/resources/Woodcraft.tscn" type="PackedScene" id=19]
+[ext_resource path="res://assets/resources/Blacksmith.tscn" type="PackedScene" id=20]
+[ext_resource path="res://assets/npc/blacksmith.tscn" type="PackedScene" id=21]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
@@ -97,6 +99,11 @@ position = Vector2( 240, -352 )
 [node name="Tree2" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 10 )]
 position = Vector2( 2944, 1384 )
 
+[node name="Blacksmith" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 20 )]
+position = Vector2( 13, 164 )
+rotation = 3.14159
+scale = Vector2( 1.3, -1 )
+
 [node name="Characters" type="YSort" parent="NavigationHandler/MapSort"]
 
 [node name="Player" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 3 )]
@@ -124,9 +131,7 @@ profession = "craftsman"
 position = Vector2( 584, 248 )
 profession = "lumberjack"
 
-[node name="Trader" parent="NavigationHandler/MapSort/Characters" groups=[
-"traders",
-] instance=ExtResource( 5 )]
+[node name="Trader" parent="NavigationHandler/MapSort/Characters" groups=["traders"] instance=ExtResource( 5 )]
 position = Vector2( 464, -48 )
 inventory = SubResource( 2 )
 profession = "trader"
@@ -136,6 +141,9 @@ position = Vector2( 1248, 88 )
 entityName = "Baker"
 inventory = SubResource( 3 )
 profession = "baker"
+
+[node name="Blacksmith" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 21 )]
+position = Vector2( 332, 208 )
 
 [node name="Walls" type="TileMap" parent="NavigationHandler/MapSort"]
 mode = 1

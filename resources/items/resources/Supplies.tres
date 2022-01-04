@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://resources/items/resources/ResourceItem.cs" type="Script" id=1]
+[ext_resource path="res://resources/sprites/assets/items/flour.png" type="Texture" id=2]
+[ext_resource path="res://resources/sprites/assets/items/flour_small.png" type="Texture" id=3]
+[ext_resource path="res://resources/items/recipes/SuppliesRecipe.tres" type="Resource" id=4]
+
+[resource]
+script = ExtResource( 1 )
+itemName = "Supplies"
+texture = ExtResource( 3 )
+worldTexture = ExtResource( 2 )
+itemDescription = "Supplies to keep blades sharp and armies moving."
+value = 50
+recipe = ExtResource( 4 )

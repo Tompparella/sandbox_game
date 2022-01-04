@@ -22,7 +22,6 @@ public class MoveState : MotionState
     protected virtual void MovementLoop(float delta)
     {
         owner.currentSpeed += owner.currentSpeed < owner.stats.moveSpeed ? (owner.acceleration * delta) : 0;
-        delta++;
         MoveAlongPath(delta);
     }
 
@@ -35,7 +34,7 @@ public class MoveState : MotionState
             EmitSignal(nameof(Finished), "idle");
             return;
         }
-        float currentSpeed = owner.currentSpeed;
+        float currentSpeed = owner.currentSpeed * delta;
         Vector2 startPoint = owner.Position;
         for (int i = 0; i < owner.movePath.Count(); i++)
         {
