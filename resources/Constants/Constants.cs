@@ -81,6 +81,7 @@ public class Constants
     public static readonly string OVEN_DESCRIPTION = "A professional culinarian could make something edible here.";
     public static readonly string WOODCRAFT_DESCRIPTION = "A place where professionals of woodcraft can practice their craft.";
     public static readonly string BLACKSMITH_DESCRIPTION = "Home for the masters of metallurgy.";
+    public static readonly string BARRACKS_DESCRIPTION = "A local safehouse for the soldiers of the settlement.";
 
     public static readonly string FARM_NAME = "Wheat Field";
     public static readonly string OVEN_NAME = "Bread Oven";
@@ -88,6 +89,7 @@ public class Constants
     public static readonly string WOODCRAFT_NAME = "Craftsman's Retreat";
     public static readonly string BLACKSMITH_NAME = "Blacksmith's Shop";
 
+    public static readonly string[] DEF_WORKACTIONS = new string[] { "work" };
     public static readonly string[] DEPOSITACTIONS = new string[] { "mine", "work" };
     public static readonly string[] LUMBERACTIONS = new string[] { "chop", "work" };
     public static readonly string[] FARMACTIONS = new string[] { "farm", "collect", "harvest", "work" };
@@ -106,5 +108,6 @@ public class Constants
     public const string BREADITEM = "res://resources/items/consumables/Bread.tres";
     public const string CONSUMERITEM = "res://resources/items/consumables/ConsumerGoods.tres";
     public const string SUPPLIESITEM = "res://resources/items/resources/Supplies.tres";
+    public const string LOGISTICSITEM = "res://resources/items/logistics/LogisticsItem.tres";
 
 }
