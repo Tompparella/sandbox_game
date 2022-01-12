@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://resources/sprites/assets/resources/full/bread_oven.png" type="Texture" id=1]
+[ext_resource path="res://scripts/utilities/resources/Guardpost.cs" type="Script" id=2]
+[ext_resource path="res://resources/items/Inventory.cs" type="Script" id=3]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 3 )
+currency = 0
+items = [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+
+[node name="Guardpost" type="Area2D" groups=[
+"resource",
+]]
+position = Vector2( 0, 16 )
+script = ExtResource( 2 )
+entityName = "Guardpost"
+inventory = SubResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( -32, -29.6 )
+polygon = PoolVector2Array( -80, 24, -64, -144, 16, -144, 8, -256, 48, -264, 64, -256, 56, -104, 96, -96, 144, -48, 160, -8, 128, 56, -8, 64 )
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 0, 0.227451, 1, 1 )
+position = Vector2( 0, -157.6 )
+texture = ExtResource( 1 )

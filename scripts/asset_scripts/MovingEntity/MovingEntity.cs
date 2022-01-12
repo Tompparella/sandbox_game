@@ -21,6 +21,7 @@ public class MovingEntity : Interactive
         set { movePath = value.ToList(); }
     }
 
+    ///<summary> Sets a move route for a MovingEntity. </summary>
     public void GetMovePath(Vector2 start, Vector2 end, Character caller)
     {
         EmitSignal(nameof(CallForPath), start, end, caller);

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -23,6 +23,8 @@
 [ext_resource path="res://assets/npc/blacksmith.tscn" type="PackedScene" id=21]
 [ext_resource path="res://assets/resources/Barracks.tscn" type="PackedScene" id=22]
 [ext_resource path="res://assets/npc/logistics_officer.tscn" type="PackedScene" id=23]
+[ext_resource path="res://assets/resources/Guardpost.tscn" type="PackedScene" id=24]
+[ext_resource path="res://assets/npc/soldier.tscn" type="PackedScene" id=25]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
@@ -112,6 +114,9 @@ position = Vector2( 896, 840 )
 [node name="WheatField5" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
 position = Vector2( 3176, 1400 )
 
+[node name="Guardpost" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 24 )]
+position = Vector2( 1504, -304 )
+
 [node name="Characters" type="YSort" parent="NavigationHandler/MapSort"]
 
 [node name="Player" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 3 )]
@@ -166,6 +171,9 @@ position = Vector2( 332, 208 )
 [node name="LogisticsOfficer" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 23 )]
 modulate = Color( 1, 0.376471, 0, 1 )
 position = Vector2( 1136, 208 )
+
+[node name="Npc" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 25 )]
+position = Vector2( 1664, 160 )
 
 [node name="Walls" type="TileMap" parent="NavigationHandler/MapSort"]
 mode = 1

@@ -42,7 +42,7 @@ public class NpcMoveState : NpcMotionState
         MoveAlongPath(delta);
     }
 
-    protected void MoveAlongPath(float delta)
+    protected virtual void MoveAlongPath(float delta)
     {
         if (!owner.movePath.Any())
         {

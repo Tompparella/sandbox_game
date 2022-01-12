@@ -88,6 +88,14 @@ public class Npc : Character
 				}
 				break;
 
+			case Constants.SOLDIER_PROFESSION:
+				if (area is Guardpost)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
 			default:
 				break;
 		}

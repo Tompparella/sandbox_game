@@ -60,6 +60,7 @@ public class Constants
     public const string CRAFTSMAN_PROFESSION = "craftsman";
     public const string BLACKSMITH_PROFESSION = "blacksmith";
     public const string LOGISTICSOFFICER_PROFESSION = "logistics_officer";
+    public const string SOLDIER_PROFESSION = "soldier";
 
 
     public static readonly string[] ROOTWORDS = new string[] { "yes", "no", "how", "where" };
@@ -100,7 +101,7 @@ public class Constants
     public static readonly string[] CRAFTACTIONS = new string[] { "craft", "work" };
     public static readonly string[] SMITHACTIONS = new string[] { "smith", "work" };
 
-    public static readonly string[] PROFESSIONS = new string[] { FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, BLACKSMITH_PROFESSION, LOGISTICSOFFICER_PROFESSION, null };
+    public static readonly string[] PROFESSIONS = new string[] { FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, BLACKSMITH_PROFESSION, LOGISTICSOFFICER_PROFESSION, SOLDIER_PROFESSION, null };
 
     public const string RESOURCECOLOR = "ffa100";
     public const string CONSUMABLECOLOR = "d1e53b";

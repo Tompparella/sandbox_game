@@ -12,6 +12,7 @@ public class NpcWorkState : NpcMoveState
     public override void Enter() {
         resource = (Resources)owner.GetInteractive();
         if (resource != null && !resource.GetExhausted() && resource.AddWorker(owner)) {
+            workRange = resource.workRange;
             owner.GetMovePath(owner.GlobalPosition, resource.Position, owner);
         } else {
             EmitSignal(nameof(Finished), "idle");
@@ -67,11 +68,28 @@ public class NpcWorkState : NpcMoveState
         staggered = true;
     }
 
-    protected override void MovementLoop(float delta)
+    protected override void MoveAlongPath(float delta)
     {
-        float distanceToLast = owner.Position.DistanceTo(owner.movePath.LastOrDefault());
-        if (distanceToLast > workRange) {
-            base.MovementLoop(delta);
+        if (!owner.movePath.Any())
+        {
+            //owner.Position = owner.movePath[0];
+            owner.currentSpeed = 0;
+            return;
+        }
+        float currentSpeed = owner.currentSpeed * delta;
+        Vector2 startPoint = owner.Position;
+        for (int i = 0; i < owner.movePath.Count(); i++)
+        {
+            float distanceToNext = startPoint.DistanceTo(owner.movePath[0]);
+            float distanceToLast = startPoint.DistanceTo(owner.movePath.Last());
+            if (currentSpeed <= distanceToNext && currentSpeed >= 0.0)
+            {
+                owner.Position = startPoint.LinearInterpolate(owner.movePath[0], currentSpeed / distanceToNext);
+                break;
+            }
+            currentSpeed -= distanceToNext;
+            startPoint = owner.movePath[0];
+            owner.movePath.RemoveAt(0);
         }
     }
 }
