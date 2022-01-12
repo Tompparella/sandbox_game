@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://resources/items/consumables/ConsumableItem.cs" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+itemName = "Food"
+itemDescription = "Food being processed into something."
+value = 0
+nutritionValue = 1.0
+commodityValue = 0.0

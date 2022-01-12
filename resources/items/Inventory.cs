@@ -45,6 +45,7 @@ public class Inventory : Resource
         return items.Where(x => x == null).Count();
     }
 
+    /// <summary> Returns a boolean on whether inventory contains a desired number of items in dictionary. </summary>
     public bool HasItems(Dictionary<Item,int> requiredItems) {
         
         foreach(KeyValuePair<Item, int> kvp in requiredItems) {
@@ -56,6 +57,13 @@ public class Inventory : Resource
         }
         return true;
     }
+
+    /// <summary> Returns a boolean on whether inventory contains at least x number of a selected item. </summary>
+    public bool HasItem(Item item, int amount = 1) {
+        //GD.Print(items.Where(x => x != null && x.itemName.Equals(item.itemName))?.Count());
+        return items.Where(x => x != null && x.itemName.Equals(item.itemName))?.Count() >= amount;
+    }
+
     public List<ConsumableItem> GetEdibleItems() {
         if (items.Any(x => x is ConsumableItem)) {
             return items.Where(x => x is ConsumableItem).DefaultIfEmpty().Cast<ConsumableItem>().OrderBy(x => x.nutritionValue).ToList();

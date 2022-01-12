@@ -79,6 +79,14 @@ public class Npc : Character
 					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
 				}
 				break;
+			case Constants.LOGISTICSOFFICER_PROFESSION:
+				if (area is Barracks)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
 
 			default:
 				break;
@@ -152,7 +160,7 @@ public class Npc : Character
 					surroundingResources.Remove(i);
 					continue;
 				}
-				if (Position.DistanceTo(i.Position) < shortestDistance)
+				if (Position.DistanceTo(i.Position) < shortestDistance && i.maxWorkers > i.GetWorkerNumber())
 				{
 					currentResource = i;
 					shortestDistance = Position.DistanceTo(currentResource.Position);
@@ -200,6 +208,14 @@ public class Npc : Character
 		}
 	}
 
+	public void ClearFoodFromBuyQueue() {
+		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0);
+	}
+
+	public void ClearCommoditiesFromBuyQueue() {
+		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0);
+	}
+
 	public bool checkBuyQueue()
 	{
 		return neededItems.Any();
@@ -220,6 +236,12 @@ public class Npc : Character
 	{
 		soldItems.Remove(item);
 	}
+
+	public override void PopFromBuyQueue(Item item)
+	{
+		neededItems.Remove(item);
+	}
+
 	public bool GetTrader()
 	{
 		//GD.Print(string.Format("{0} found {1} traders.", this.Name, nearbyTraders.Count()));
@@ -229,6 +251,11 @@ public class Npc : Character
 			return true;
 		}
 		return false;
+	}
+
+	private string GetNeededItemsString() {
+		//GD.Print(string.Join("," ,neededItems.Select(x => x.itemName)));
+		return string.Join(", " ,neededItems.Select(x => x.itemName));
 	}
 
 	private void SelectTrader()
@@ -259,7 +286,7 @@ public class Npc : Character
 		debugInstance.AddStat("Profession", this, "profession", false);
 		debugInstance.AddStat("Surrounding Resources", this, "surroundingResources", false);
 		// debugInstance.AddStat("Nearby Traders", this, "nearbyTraders", false);
-		debugInstance.AddStat("Needed Items", this, "neededItems", false);
+		debugInstance.AddStat("Needed Items", this, "GetNeededItemsString", true);
 		// debugInstance.AddStat("Sold Items", this, "soldItems", false);
 		debugInstance.AddStat("Has Traded", this, "hasTraded", false);
 		debugInstance.AddStat("Out Of Work", this, "outOfWork", false);
@@ -280,7 +307,7 @@ public class Npc : Character
 
 		// Instance the outOfWork timer
 		outOfWorkTimer.OneShot = true;
-		outOfWorkTimer.WaitTime = 10;
+		outOfWorkTimer.WaitTime = 15;
 		outOfWorkTimer.Connect("timeout", this, "toggleOutOfWork");
 		AddChild(outOfWorkTimer);
 

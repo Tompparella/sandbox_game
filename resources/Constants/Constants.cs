@@ -59,6 +59,7 @@ public class Constants
     public const string BAKER_PROFESSION = "baker";
     public const string CRAFTSMAN_PROFESSION = "craftsman";
     public const string BLACKSMITH_PROFESSION = "blacksmith";
+    public const string LOGISTICSOFFICER_PROFESSION = "logistics_officer";
 
 
     public static readonly string[] ROOTWORDS = new string[] { "yes", "no", "how", "where" };
@@ -82,6 +83,7 @@ public class Constants
     public static readonly string WOODCRAFT_DESCRIPTION = "A place where professionals of woodcraft can practice their craft.";
     public static readonly string BLACKSMITH_DESCRIPTION = "Home for the masters of metallurgy.";
     public static readonly string BARRACKS_DESCRIPTION = "A local safehouse for the soldiers of the settlement.";
+    public static readonly string GUARDPOST_DESCRIPTION = "Marks the settlement's soldiers to guard the vicinity, and asserts dominance.";
 
     public static readonly string FARM_NAME = "Wheat Field";
     public static readonly string OVEN_NAME = "Bread Oven";
@@ -98,7 +100,7 @@ public class Constants
     public static readonly string[] CRAFTACTIONS = new string[] { "craft", "work" };
     public static readonly string[] SMITHACTIONS = new string[] { "smith", "work" };
 
-    public static readonly string[] PROFESSIONS = new string[] { FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, BLACKSMITH_PROFESSION, null };
+    public static readonly string[] PROFESSIONS = new string[] { FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, BLACKSMITH_PROFESSION, LOGISTICSOFFICER_PROFESSION, null };
 
     public const string RESOURCECOLOR = "ffa100";
     public const string CONSUMABLECOLOR = "d1e53b";
@@ -106,8 +108,11 @@ public class Constants
 
     public const string FLOURITEM = "res://resources/items/resources/Flour.tres";
     public const string BREADITEM = "res://resources/items/consumables/Bread.tres";
+    public const string RATIONITEM = "res://resources/items/consumables/Ration.tres";
     public const string CONSUMERITEM = "res://resources/items/consumables/ConsumerGoods.tres";
+    public const string RATIONEDGOODSITEM = "res://resources/items/consumables/RationedGoods.tres";
     public const string SUPPLIESITEM = "res://resources/items/resources/Supplies.tres";
     public const string LOGISTICSITEM = "res://resources/items/logistics/LogisticsItem.tres";
+    
 
 }

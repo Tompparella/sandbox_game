@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://resources/items/consumables/ConsumableItem.cs" type="Script" id=1]
+[ext_resource path="res://resources/items/recipes/RationRecipe.tres" type="Resource" id=2]
+[ext_resource path="res://resources/sprites/assets/items/bread.png" type="Texture" id=3]
+[ext_resource path="res://resources/sprites/assets/items/bread_small.png" type="Texture" id=4]
+
+[resource]
+script = ExtResource( 1 )
+itemName = "Ration"
+texture = ExtResource( 4 )
+worldTexture = ExtResource( 3 )
+itemDescription = "A soldier's daily ration of food."
+value = 0
+recipe = ExtResource( 2 )
+nutritionValue = 1.0
+commodityValue = 0.0

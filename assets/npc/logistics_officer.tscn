@@ -11,12 +11,12 @@
 [ext_resource path="res://scripts/utilities/statemachine/States/NpcStates/NpcWorkState.cs" type="Script" id=9]
 [ext_resource path="res://scripts/utilities/statemachine/States/NpcStates/NpcTradeState.cs" type="Script" id=10]
 [ext_resource path="res://resources/items/Inventory.cs" type="Script" id=11]
-[ext_resource path="res://resources/items/resources/IronOre.tres" type="Resource" id=12]
+[ext_resource path="res://resources/items/resources/Supplies.tres" type="Resource" id=12]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 11 )
-currency = 60
-items = [ ExtResource( 12 ), ExtResource( 12 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+currency = 0
+items = [ ExtResource( 12 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
 
 [node name="Npc" type="Area2D" groups=[
 "character",
@@ -24,9 +24,9 @@ items = [ ExtResource( 12 ), ExtResource( 12 ), null, null, null, null, null, nu
 position = Vector2( 0, 16 )
 scale = Vector2( 0.8, 0.8 )
 script = ExtResource( 2 )
-entityName = "Blacksmith"
+entityName = "Logistics Officer"
 inventory = SubResource( 1 )
-profession = "blacksmith"
+profession = "logistics_officer"
 
 [node name="Sprite" type="Sprite" parent="."]
 modulate = Color( 0.529412, 0.811765, 1, 1 )

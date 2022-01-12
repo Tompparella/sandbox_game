@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -21,6 +21,8 @@
 [ext_resource path="res://assets/resources/Woodcraft.tscn" type="PackedScene" id=19]
 [ext_resource path="res://assets/resources/Blacksmith.tscn" type="PackedScene" id=20]
 [ext_resource path="res://assets/npc/blacksmith.tscn" type="PackedScene" id=21]
+[ext_resource path="res://assets/resources/Barracks.tscn" type="PackedScene" id=22]
+[ext_resource path="res://assets/npc/logistics_officer.tscn" type="PackedScene" id=23]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
@@ -63,19 +65,19 @@ position = Vector2( 1856, -120 )
 scale = Vector2( -1, 1 )
 
 [node name="WheatField" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
-position = Vector2( 1912, 952 )
+position = Vector2( 1760, 920 )
 refreshTime = 600.0
 
 [node name="WheatField2" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
-position = Vector2( 1656, 600 )
+position = Vector2( 2088, 936 )
 refreshTime = 600.0
 
 [node name="WheatField3" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
-position = Vector2( 3176, 1120 )
+position = Vector2( 3160, 1120 )
 refreshTime = 600.0
 
 [node name="WheatField4" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
-position = Vector2( 2448, 616 )
+position = Vector2( 2456, 744 )
 refreshTime = 600.0
 
 [node name="Deposit" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]
@@ -103,7 +105,12 @@ position = Vector2( 2944, 1384 )
 position = Vector2( 13, 164 )
 rotation = 3.14159
 scale = Vector2( 1.3, -1 )
-entityName = "Blacksmith's Shop"
+
+[node name="Barracks" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 22 )]
+position = Vector2( 896, 840 )
+
+[node name="WheatField5" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
+position = Vector2( 3176, 1400 )
 
 [node name="Characters" type="YSort" parent="NavigationHandler/MapSort"]
 
@@ -112,39 +119,53 @@ position = Vector2( 840, 24 )
 entityName = "Tompparella"
 
 [node name="Farmer" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+modulate = Color( 0.968627, 1, 0, 1 )
 position = Vector2( -448, 608 )
 profession = "farmer"
 
 [node name="Farmer2" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+modulate = Color( 0.992157, 1, 0, 1 )
 position = Vector2( -136, -208 )
 profession = "farmer"
 
 [node name="Miner" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+modulate = Color( 0.584314, 0.584314, 0.584314, 1 )
 position = Vector2( -344, -104 )
 profession = "miner"
 
 [node name="Craftsman" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+modulate = Color( 0.584314, 0.317647, 0, 1 )
 position = Vector2( 392, 648 )
 inventory = SubResource( 1 )
 profession = "craftsman"
 
 [node name="Lumberjack" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+modulate = Color( 1, 0.654902, 0.258824, 1 )
 position = Vector2( 584, 248 )
 profession = "lumberjack"
 
-[node name="Trader" parent="NavigationHandler/MapSort/Characters" groups=["traders"] instance=ExtResource( 5 )]
+[node name="Trader" parent="NavigationHandler/MapSort/Characters" groups=[
+"traders",
+] instance=ExtResource( 5 )]
+modulate = Color( 0.32549, 1, 0.937255, 1 )
 position = Vector2( 464, -48 )
 inventory = SubResource( 2 )
 profession = "trader"
 
 [node name="Baker" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+modulate = Color( 0.752941, 0.705882, 0, 1 )
 position = Vector2( 1248, 88 )
 entityName = "Baker"
 inventory = SubResource( 3 )
 profession = "baker"
 
 [node name="Blacksmith" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 21 )]
+modulate = Color( 0.301961, 0.301961, 0.301961, 1 )
 position = Vector2( 332, 208 )
+
+[node name="LogisticsOfficer" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 23 )]
+modulate = Color( 1, 0.376471, 0, 1 )
+position = Vector2( 1136, 208 )
 
 [node name="Walls" type="TileMap" parent="NavigationHandler/MapSort"]
 mode = 1
@@ -172,6 +193,10 @@ smoothing_enabled = true
 smoothing_speed = 6.0
 
 [node name="DialogueManager" parent="InterfaceManager" instance=ExtResource( 6 )]
+margin_left = -40.0
+margin_top = 8.0
+margin_right = -40.0
+margin_bottom = 8.0
 
 [node name="ActionMenu" parent="InterfaceManager" instance=ExtResource( 9 )]
 margin_right = 0.0

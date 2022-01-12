@@ -39,7 +39,7 @@ public class DebugInstance : Label
 
     public void AddStat(string _statName, Godot.Object _objectRef, string _statRef, bool _isMethod) {
         stats.Add(new Stat(_statName, _objectRef, _statRef, _isMethod));
-        GD.Print(_statName, " exists: ",_objectRef != null && IsInstanceValid(_objectRef));
+        //GD.Print(_statName, " exists: ",_objectRef != null && IsInstanceValid(_objectRef));
     }
     public void AddStat(string _statName, string _miscellaneous, string _statRef, bool _isMethod) { // Needs a separate function for engine information.
         switch (_miscellaneous)

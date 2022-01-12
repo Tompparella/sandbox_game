@@ -66,15 +66,21 @@ public class NpcTradeState : NpcMoveState
         {
             if (item is ConsumableItem){
                 if (((ConsumableItem)item).commodityValue > 0) {
-                    tradeInstance.BuyConsumableItem("commodity");
-                    tradeSuccess = true;
+                    if (tradeInstance.BuyConsumableItem("commodity")) {
+                        tradeSuccess = true;
+                        ((Npc)owner).ClearCommoditiesFromBuyQueue();
+                    }
+
                 } else if (((ConsumableItem)item).nutritionValue > 0) {
-                    tradeInstance.BuyConsumableItem("food");
-                    tradeSuccess = true;
+                    if (tradeInstance.BuyConsumableItem("food")) {
+                        tradeSuccess = true;
+                        ((Npc)owner).ClearFoodFromBuyQueue();
+                    }
                 }
             }
             else if (tradeInstance.BuyItem(item)) {
                 tradeSuccess = true;
+                ((Npc)owner).PopFromBuyQueue(item);
             }
         }
         return tradeSuccess;

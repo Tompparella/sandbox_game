@@ -7,6 +7,7 @@ public class LogisticsItem : Item
 	public LogisticsItem(float _supplyValue = 0)
 	{
 		supplyValue = _supplyValue;
+		itemName = itemName.Equals("") ? "Logistics" : itemName;
 	}
 	public LogisticsItem()
 	{

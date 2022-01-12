@@ -11,5 +11,5 @@ itemName = "Supplies"
 texture = ExtResource( 3 )
 worldTexture = ExtResource( 2 )
 itemDescription = "Supplies to keep blades sharp and armies moving."
-value = 50
+value = 60
 recipe = ExtResource( 4 )

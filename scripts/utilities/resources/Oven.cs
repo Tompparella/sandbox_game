@@ -12,6 +12,8 @@ public class Oven : Refinery
             (Item)GD.Load(Constants.FLOURITEM),
         };
 
+        maxWorkers = 2;
+
         requiredActions = (int)Math.Round(requiredActions * 0.75);   // Here we want the requiredActions to be the higher rounded value of the default value.
         actions = Constants.OVENACTIONS;
         dialogue = new ResourceDialogue(this, Constants.OVEN_DESCRIPTION, actions);

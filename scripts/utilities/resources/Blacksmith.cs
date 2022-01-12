@@ -8,10 +8,9 @@ public class Blacksmith : Refinery
 	public override void _Ready()
 	{
 		/*
-		Tää toimii sillesti että blacksmith tuottaa aseita sun muuta jne., mutta ensisijaisesti tarpeeksi 'material supplies' resurssia, jota 'barracks' rakennus vaatii.
-		Barracksin tarve supply-resurssille riippuu sotilaiden määrästä, ja jos tarvetta ei tyydytetä, sotilaiden aseet/haarniskat alkavat 'ruostua', ja nämä saavat debuffeja.
-		Blacksmith myös tuottaa tietyn määrän aseita ja haarniskoita, joita voidaan myydä joko barracksille (jolloin nämä menevät sotilaille), muille hahmoille (esim. farmer, miner),
-		tai muille asutuksille (global trade). Blacksmith- resurssia työstää 'blacksmith' ammatin omaava Npc.
+		Blacksmith creates supplies, armour and weapons, that the 'Barracks' requires.
+		The demand for supplies relates to the amount of soldiers, and if these needs are not met, the soldiers will start to suffer debuffs (rusting, bad morale, etc).
+		Blacksmith also creates a certain amount of weapons and armor, that can be sold to barracks, the open market, or to global trade.
 		*/
 		craftableItems = new List<Item>() {
 			(Item)GD.Load(Constants.SUPPLIESITEM),

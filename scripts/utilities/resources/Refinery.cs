@@ -48,7 +48,7 @@ public class Refinery : Resources
         }
     }
 
-    public bool setWorkItemQueue(Character worker)
+    public virtual bool setWorkItemQueue(Character worker)
     { // Returns false if there's not enough resource items.
         // In descending priority order, 
         foreach (Item i in craftableItems)

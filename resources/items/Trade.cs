@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 
+/// <summary> Used for handling trade instances between inventories. T.ex. trading items for currency, transferring currency, etc. </summary>
 public class Trade
 {
     private Inventory buyer, seller;
@@ -77,5 +78,15 @@ public class Trade
             //GD.Print(string.Format("Selling {0}: No item or currency in inventory.", item.itemName));
         }
         return false;
+    }
+
+    /// <summary>Transfers x amount of currency from instance's buyer to the seller.</summary>
+    public void TransferCurrency(int amount) {
+        if (buyer.currency >= amount) {
+            buyer.currency -= amount;
+            seller.currency += amount;
+        } else {
+            GD.Print(String.Format("Not enough currency while transferring. Tried to transfer {0} from inventory 1 ({}) to inventory 2 ({})", amount, buyer.currency, seller.currency));
+        }
     }
 }

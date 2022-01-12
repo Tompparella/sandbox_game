@@ -30,11 +30,15 @@ public class Resources : Interactive
     protected string exhaustedDescription;
     protected bool isExhausted = false;
     protected List<Character> workers = new List<Character>();
+    public int maxWorkers  { get; protected set; } = 3; // Default maximum amount of workers a resource can have.
     protected string defaultInventory; // The inventory that will be loaded upon refreshing the resource.
 
     private Timer refreshTimer = new Timer();
 
 
+    public int GetWorkerNumber() {
+        return workers.Count();
+    }
     public List<Character> GetWorkers() {
         return workers;
     }
