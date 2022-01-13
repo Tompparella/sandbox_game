@@ -6,6 +6,8 @@ public class Inventory : Resource
 {
     [Signal]
     public delegate void OnItemAdd();
+    [Signal]
+    public delegate void OnItemRemoved(Item item);
     [Export]
     public int currency;
     [Export]
@@ -30,6 +32,7 @@ public class Inventory : Resource
             if (index != -1) {
                 items[index] = null;
             }
+            EmitSignal(nameof(OnItemRemoved), item);
         }
     }
 

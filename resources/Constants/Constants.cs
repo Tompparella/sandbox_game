@@ -62,6 +62,7 @@ public class Constants
     public const string LOGISTICSOFFICER_PROFESSION = "logistics_officer";
     public const string SOLDIER_PROFESSION = "soldier";
 
+    public const string TRADER_GROUP = "traders";
 
     public static readonly string[] ROOTWORDS = new string[] { "yes", "no", "how", "where" };
     public static readonly string[] SUPPORTWORDS = new string[] { "find", "are", "chop", "work", "mine", "farm", "collect", "harvest" };

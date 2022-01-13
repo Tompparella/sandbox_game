@@ -47,7 +47,7 @@ public class Resources : Interactive
         workers.Add(worker);
         return true;
     }
-    public void RemoveWorker(Character worker) {
+    public virtual void RemoveWorker(Character worker) {
         workers.Remove(worker);
     }
     public bool GetExhausted() {
@@ -114,7 +114,7 @@ public class Resources : Interactive
         // Instance the refreshTimer
         refreshTimer.OneShot = true;
         refreshTimer.WaitTime = refreshTime;
-        refreshTimer.Connect("timeout", this, "RefreshResource");
+        refreshTimer.Connect("timeout", this, nameof(RefreshResource));
         AddChild(refreshTimer);
         
         base._Ready();

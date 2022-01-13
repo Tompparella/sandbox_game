@@ -143,7 +143,7 @@ public class Barracks : Refinery
 
     private void ItemAdded(Item item)
     {
-        if (item is LogisticsItem && supply.supply <= 50)
+        if (item is LogisticsItem && supply.supply <= 100 * funding)
         {
             RefillSupply((LogisticsItem)item);
         }

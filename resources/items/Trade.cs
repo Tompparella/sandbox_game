@@ -86,7 +86,7 @@ public class Trade
             buyer.currency -= amount;
             seller.currency += amount;
         } else {
-            GD.Print(String.Format("Not enough currency while transferring. Tried to transfer {0} from inventory 1 ({}) to inventory 2 ({})", amount, buyer.currency, seller.currency));
+            GD.Print(String.Format("Not enough currency while transferring. Tried to transfer {0} from inventory 1 ({1}) to inventory 2 ({2})", amount, buyer.currency, seller.currency));
         }
     }
 }

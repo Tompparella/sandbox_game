@@ -66,6 +66,15 @@ public class Character : MovingEntity
         targets.RemoveAt(0);
     }
 
+    public bool checkBuyQueue()
+	{
+		return neededItems.Any();
+	}
+	public List<Item> GetBuyQueue()
+	{
+		return neededItems;
+	}
+
     // Combat functions
 
     public void TakeAttack(Attack attack) {

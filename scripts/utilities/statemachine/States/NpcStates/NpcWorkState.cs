@@ -33,7 +33,7 @@ public class NpcWorkState : NpcMoveState
         {
             if (staggered) {
                 TickLoop(delta);
-            } else if (owner.Position.DistanceTo(resource.Position) < workRange) {
+            } else if (owner.Position.DistanceTo(resource.Position) <= workRange) {
                 WorkTarget();
                 return;
             }

@@ -13,7 +13,7 @@
 [ext_resource path="res://resources/items/Inventory.cs" type="Script" id=11]
 [ext_resource path="res://resources/stats/Stats.cs" type="Script" id=12]
 
-[sub_resource type="Resource" id=3]
+[sub_resource type="Resource" id=1]
 script = ExtResource( 11 )
 currency = 0
 items = [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
@@ -35,7 +35,7 @@ position = Vector2( 0, 16 )
 scale = Vector2( 0.8, 0.8 )
 script = ExtResource( 2 )
 entityName = "Soldier"
-inventory = SubResource( 3 )
+inventory = SubResource( 1 )
 stats = SubResource( 2 )
 profession = "soldier"
 

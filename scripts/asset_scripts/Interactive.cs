@@ -17,16 +17,22 @@ public class Interactive : Area2D
     public string type;
     [Export]
     public Inventory inventory = new Inventory();
+    public Inventory tradeInventory;    // The inventory used for trading. On professional traders (trader, logistics officer) it's set to be the working resource's inventory (tradestall, barracks).
 
     public override void _Ready()
     {
         if (inventory == null) {
             inventory = new Inventory();
         }
-        inventory.Connect("OnItemAdd", this, "CheckNeeds");
+        inventory.Connect("OnItemAdd", this, nameof(CheckNeeds));
+        inventory.Connect("OnItemRemoved", this, nameof(ItemRemoved));
+        tradeInventory = inventory;
     }
 
     public virtual void CheckNeeds() {
+    }
+
+    public virtual void ItemRemoved(Item item) {
     }
 
 }

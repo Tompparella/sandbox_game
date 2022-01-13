@@ -14,7 +14,7 @@ public class NpcTradeState : NpcMoveState
     public override void Exit()
     {
         Npc npcOwner = ((Npc)owner);
-        if (!npcOwner.WorkableResourcesExist()) {      // If the Npc is out of work, put a timer for 1 minutes to enter work state again.
+        if (!npcOwner.WorkableResourcesExist()) {      // If the Npc is out of work, put a timer for x seconds to enter work state again.
             ((Npc)owner).outOfWork = true;
             npcOwner.outOfWorkTimer.Start();
         }
@@ -35,7 +35,7 @@ public class NpcTradeState : NpcMoveState
 
     private void TradeInventory() {
         bool tradeSuccess = false;
-        Trade tradeInstance = new Trade(owner.inventory, owner.GetInteractive().inventory); // Buyer = Owner, Seller = Trader
+        Trade tradeInstance = new Trade(owner.tradeInventory, owner.GetInteractive().tradeInventory); // Buyer = Owner, Seller = Trader
         Npc npcOwner = ((Npc)owner);
         tradeSuccess = SellProduceItems(tradeInstance);
         npcOwner.CheckNeeds();

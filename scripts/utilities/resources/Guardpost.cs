@@ -24,6 +24,8 @@ public class Guardpost : Resources
         exhaustedName = "Tree Trunk";
         exhaustedPortrait = Constants.TREETRUNK_PORTRAIT;
 
+        createDebugInstance(); // Comment out for production.
+
         base._Ready();
     }
 
@@ -32,7 +34,7 @@ public class Guardpost : Resources
         rand.Randomize();
         try
         {
-            int radius = (int)workRange;
+            int radius = (int)Math.Sqrt(Math.Pow(workRange, 2) / 2);    // Workrange is the maximum hypotenuse
             worker.GetMovePath(worker.GlobalPosition, GlobalPosition + new Vector2(rand.RandiRange(-radius, radius), rand.RandiRange(-radius, radius)), worker); // Go for a patrol. This should be improved.
         }
         catch (System.Exception)
@@ -48,6 +50,21 @@ public class Guardpost : Resources
             worker.inventory.currency++;
         }
     }
+
+    private float GetGuardDistance() {
+        if (workers.Any()) {
+            return workers[0].Position.DistanceTo(Position);
+        }
+        return -1;
+    }
+    private void createDebugInstance() // Keep track of distances etc. during development.
+	{
+		PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");
+		DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();
+		AddChild(debugInstance);
+		debugInstance.AddStat("Guard Distance", this, "GetGuardDistance", true);
+		debugInstance.AddStat("Work Range", this, "workRange", false);
+	}
 /*
     public override void _OnMouseOver() {
     }

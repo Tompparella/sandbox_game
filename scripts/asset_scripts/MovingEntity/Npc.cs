@@ -99,8 +99,9 @@ public class Npc : Character
 			default:
 				break;
 		}
-		if (area.IsInGroup("traders"))
+		if (area.IsInGroup(Constants.TRADER_GROUP))
 		{
+			
 			nearbyTraders.Add((Npc)area);
 		}
 	}
@@ -217,21 +218,15 @@ public class Npc : Character
 	}
 
 	public void ClearFoodFromBuyQueue() {
+		GD.Print("Npc '{}' cleared fooditems", entityName);
 		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0);
 	}
 
 	public void ClearCommoditiesFromBuyQueue() {
+		GD.Print("Npc '{}' cleared commodities", entityName);
 		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0);
 	}
 
-	public bool checkBuyQueue()
-	{
-		return neededItems.Any();
-	}
-	public List<Item> GetBuyQueue()
-	{
-		return neededItems;
-	}
 	public override List<Item> GetSellQueue()
 	{
 		return soldItems;

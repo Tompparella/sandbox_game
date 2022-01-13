@@ -14,10 +14,12 @@
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 11 )
-currency = 500
+currency = 60
 items = [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
 
-[node name="Npc" type="Area2D" groups=["character"]]
+[node name="Npc" type="Area2D" groups=[
+"character",
+]]
 position = Vector2( 0, 16 )
 scale = Vector2( 0.8, 0.8 )
 script = ExtResource( 2 )
