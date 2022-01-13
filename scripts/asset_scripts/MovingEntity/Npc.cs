@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Npc : Character
 {
 	public List<Resources> surroundingResources { get; private set; } = new List<Resources>();
-	public List<Npc> nearbyTraders { get; private set; } = new List<Npc>();
+	public List<Character> nearbyTraders { get; private set; } = new List<Character>();
 	public List<Item> soldItems { get; private set; } = new List<Item>();
 
 	[Export]
@@ -94,15 +94,16 @@ public class Npc : Character
 					outOfWork = false;
 					surroundingResources.Add((Resources)area);
 					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				} else if (area.IsInGroup(Constants.LOGISTICS_GROUP)) {
+					nearbyTraders.Add((Character)area);
 				}
-				break;
+				return;
 			default:
 				break;
 		}
 		if (area.IsInGroup(Constants.TRADER_GROUP))
 		{
-			
-			nearbyTraders.Add((Npc)area);
+			nearbyTraders.Add((Character)area);
 		}
 	}
 
@@ -218,7 +219,7 @@ public class Npc : Character
 	}
 
 	public void ClearFoodFromBuyQueue() {
-		GD.Print("Npc '{}' cleared fooditems", entityName);
+		GD.Print(string.Format("Npc '{0}' cleared fooditems", entityName));
 		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0);
 	}
 
@@ -256,16 +257,23 @@ public class Npc : Character
 		return false;
 	}
 
+	// These are used mainly for debugging.
 	private string GetNeededItemsString() {
 		//GD.Print(string.Join("," ,neededItems.Select(x => x.itemName)));
 		return string.Join(", " ,neededItems.Select(x => x.itemName));
 	}
+	private string GetNearbyTradersString() {
+		return string.Join(", " ,nearbyTraders.Select(x => x.entityName));
+	}
+	private string GetSurroundingResourcesString() {
+		return string.Join(", " ,surroundingResources.Select(x => x.entityName));
+	}
 
 	private void SelectTrader()
 	{
-		Npc trader = null;
+		Character trader = null;
 		float shortestDistance = float.MaxValue;
-		foreach (Npc i in nearbyTraders)
+		foreach (Character i in nearbyTraders)
 		{
 			if ((trader == null || Position.DistanceTo(i.Position) < shortestDistance))
 			{
@@ -287,11 +295,11 @@ public class Npc : Character
 		DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();
 		AddChild(debugInstance);
 		debugInstance.AddStat("Profession", this, "profession", false);
-		debugInstance.AddStat("Surrounding Resources", this, "surroundingResources", false);
-		// debugInstance.AddStat("Nearby Traders", this, "nearbyTraders", false);
+		debugInstance.AddStat("Surrounding Resources", this, "GetSurroundingResourcesString", true);
+		debugInstance.AddStat("Nearby Traders", this, "GetNearbyTradersString", true);
 		debugInstance.AddStat("Needed Items", this, "GetNeededItemsString", true);
 		// debugInstance.AddStat("Sold Items", this, "soldItems", false);
-		debugInstance.AddStat("Has Traded", this, "hasTraded", false);
+		//debugInstance.AddStat("Has Traded", this, "hasTraded", false);
 		debugInstance.AddStat("Out Of Work", this, "outOfWork", false);
 		debugInstance.AddStat("Hunger", this, "GetHungerValue", true);
 		debugInstance.AddStat("Commodities", this, "GetCommoditiesValue", true);

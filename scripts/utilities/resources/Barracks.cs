@@ -12,6 +12,10 @@ public class Barracks : Refinery
     private int storedCommodityAmount = 1;  // Barracks always attempts to keep at least this number of commodities in store.
     private float funding = 0.75f;          // The amount of funding the state is giving to this barracks. Affects the amount of subsidized supplies.
 
+    private Timer tradeTimer = new Timer();
+    private int tradeTime = 60;             // Time stayed trading in seconds.
+    private bool trading = false;
+
     public override void _Ready()
     {
         craftableItems = new List<Item>() {
@@ -22,6 +26,7 @@ public class Barracks : Refinery
         // This is still badly unfinished.
         supply = supply == null ? new Supply() : supply;
 
+        maxWorkers = 1;
 
         requiredActions = (int)Math.Round(requiredActions * 0.5); // The logistics officer only repurposes existing items for military use, which doesn't take much effort.
         actions = Constants.DEF_WORKACTIONS;
@@ -37,7 +42,12 @@ public class Barracks : Refinery
         exhaustedName = "Tree Trunk";
         exhaustedPortrait = Constants.TREETRUNK_PORTRAIT;
 
-        createDebugInstance(); // Comment out for production.
+        createDebugInstance();  // Comment out for production.
+
+        tradeTimer.OneShot = true;   // Instancing the tradeTimer
+        tradeTimer.WaitTime = tradeTime;
+        tradeTimer.Connect("timeout", this, nameof(TradingOff));
+        AddChild(tradeTimer);
 
         base._Ready();
     }
@@ -58,6 +68,71 @@ public class Barracks : Refinery
     The logistics officer will create special 'ration' food items for the soldiers. These are free for the soldiers to use.
     Ration's nutrition value depends on what food item it was made from.
     */
+
+    public override bool AddWorker(Character worker) {
+        if (worker is Npc && ((Npc)worker).hasTraded && !setWorkItemQueue(worker))
+        {
+            SetToTrade(worker);
+        }
+        workers.Add(worker);
+        return true;
+    }
+    public override void RemoveWorker(Character worker) {
+        if (trading) {
+            worker.RemoveFromGroup(Constants.LOGISTICS_GROUP);
+            worker.tradeInventory = worker.inventory;
+            worker.Monitorable = false;
+            worker.Monitorable = true;
+        }
+        trading = false;
+        base.RemoveWorker(worker);
+    }
+
+    private void SetToTrade(Character worker) {
+        /*
+        If the Logistics Officer hasn't got any better things to do, it will start to trade,
+        providing soldiers with free munitions and goods.
+        */
+        worker.AddToGroup(Constants.LOGISTICS_GROUP);
+        worker.tradeInventory = inventory;
+        worker.Monitorable = false; // This is done because we want soldiers to notice this worker as a logistics unit.
+        worker.Monitorable = true;
+        trading = true;
+        tradeTimer.Start();
+    }
+
+    private void TradingOff() {
+        if (workers.Any()) {
+            Character worker = workers.First();
+            worker.RemoveFromGroup(Constants.LOGISTICS_GROUP);
+            worker.tradeInventory = worker.inventory;
+            worker.Monitorable = false;
+            worker.Monitorable = true;
+        }
+        trading = false;
+    }
+
+    public override void workAction(Character worker)
+    {
+        if (!trading) {
+            if (!workItemQueue.Any())
+            {
+                if (!setWorkItemQueue(worker))
+                {
+                    GD.Print(String.Format("Nothing to work on refinery {0}", this.Name));
+                    worker.SetInteractive(); // Leave work state if no longer resources to continue crafting.
+                    return;
+                };
+                GD.Print(String.Format("Refinery {0} now working on item {1}", this.Name, workItemQueue[0].itemName));
+            }
+            currentActions++;
+            //GD.Print(worker.Name, currentActions);
+            if (currentActions >= requiredActions)
+            {
+                GiveResource(worker);
+            }
+        }
+    }
 
     public override bool setWorkItemQueue(Character worker)
     {

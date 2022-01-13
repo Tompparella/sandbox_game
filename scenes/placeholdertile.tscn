@@ -109,7 +109,7 @@ rotation = 3.14159
 scale = Vector2( 1.3, -1 )
 
 [node name="Barracks" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 22 )]
-position = Vector2( 896, 840 )
+position = Vector2( 848, 832 )
 
 [node name="WheatField5" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 15 )]
 position = Vector2( 3176, 1400 )
