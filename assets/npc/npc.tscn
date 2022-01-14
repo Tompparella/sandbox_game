@@ -11,7 +11,9 @@
 [ext_resource path="res://scripts/utilities/statemachine/States/NpcStates/NpcWorkState.cs" type="Script" id=9]
 [ext_resource path="res://scripts/utilities/statemachine/States/NpcStates/NpcTradeState.cs" type="Script" id=10]
 
-[node name="Npc" type="Area2D" groups=["character"]]
+[node name="Npc" type="Area2D" groups=[
+"character",
+]]
 position = Vector2( 0, 16 )
 scale = Vector2( 0.8, 0.8 )
 script = ExtResource( 2 )

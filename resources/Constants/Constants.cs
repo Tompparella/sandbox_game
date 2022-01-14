@@ -65,6 +65,9 @@ public class Constants
 
     public const string TRADER_GROUP = "traders";
     public const string LOGISTICS_GROUP = "logistics";
+    public const string RESOURCES_GROUP = "resource";
+    public const string SETTLEMENT_GROUP = "settlement";
+    public const string CHARACTER_GROUP = "character";
 
     public static readonly string[] ROOTWORDS = new string[] { "yes", "no", "how", "where" };
     public static readonly string[] SUPPORTWORDS = new string[] { "find", "are", "chop", "work", "mine", "farm", "collect", "harvest" };

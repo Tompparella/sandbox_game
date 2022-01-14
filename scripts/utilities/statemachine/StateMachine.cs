@@ -28,10 +28,11 @@ public class StateMachine : Node
         Initialize(StartState);
     }
 
-    private void Initialize(State startState) {
+    async private void Initialize(State startState) {
         SetActive(true);
         stateStack.Insert(0, startState);
         CurrentState = stateStack[0];
+        await ToSignal(GetTree().CreateTimer(0.01f), "timeout");    // Waits for children to finish loading correctly. VERY sketchy. Needs to be reworked. If yield-method from GDscript, this could be done with that.
         CurrentState.Enter();
     }
 

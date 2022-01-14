@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -25,6 +25,7 @@
 [ext_resource path="res://assets/npc/logistics_officer.tscn" type="PackedScene" id=23]
 [ext_resource path="res://assets/resources/Guardpost.tscn" type="PackedScene" id=24]
 [ext_resource path="res://assets/npc/soldier.tscn" type="PackedScene" id=25]
+[ext_resource path="res://assets/world/settlement.tscn" type="PackedScene" id=26]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
@@ -43,6 +44,14 @@ items = [ ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, nu
 
 [node name="Debug" type="Node2D"]
 script = ExtResource( 8 )
+
+[node name="World" type="Node" parent="."]
+
+[node name="Settlements" type="Node" parent="World"]
+
+[node name="TestSettlement" parent="World/Settlements" instance=ExtResource( 26 )]
+position = Vector2( 1200, 32 )
+scale = Vector2( 46.4703, 37.3973 )
 
 [node name="NavigationHandler" type="Navigation2D" parent="."]
 script = ExtResource( 4 )

@@ -13,7 +13,7 @@ public class Npc : Character
 	public string profession { get; private set; }
 
 	public bool hasTraded = true;
-	public bool outOfWork = true; // If there's nothing for the Npc to do, idle.
+	public bool outOfWork = false; // If there's nothing for the Npc to do, idle.
 
 	public Timer outOfWorkTimer = new Timer();
 
@@ -121,6 +121,9 @@ public class Npc : Character
 				area.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
 			}
 			surroundingResources.Remove((Resources)area);
+		} else if (nearbyTraders.Contains(area))
+		{
+			nearbyTraders.Remove((Character)area);
 		}
 	}
 	private void SurroundingRemoved(Interactive resource)
@@ -132,6 +135,7 @@ public class Npc : Character
 		resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
 		surroundingResources.Remove((Resources)resource);
 	}
+
 	private void toggleOutOfWork()
 	{
 		GD.Print(String.Format("{0}: Started outOfWorkTimer", Name));
@@ -224,7 +228,7 @@ public class Npc : Character
 	}
 
 	public void ClearCommoditiesFromBuyQueue() {
-		GD.Print("Npc '{}' cleared commodities", entityName);
+		GD.Print(string.Format("Npc '{0}' cleared commodities", entityName));
 		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0);
 	}
 

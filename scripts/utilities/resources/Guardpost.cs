@@ -6,6 +6,7 @@ using System.Linq;
 public class Guardpost : Resources
 {
     RandomNumberGenerator rand = new RandomNumberGenerator();
+
     public override void _Ready()
     {
         actions = Constants.DEF_WORKACTIONS;
@@ -49,15 +50,16 @@ public class Guardpost : Resources
         if (!isExhausted) {
             worker.inventory.currency++;
         }
+        worker.CheckNeeds();
     }
 
-    private float GetGuardDistance() {
+    private float GetGuardDistance() {  // For debugging
         if (workers.Any()) {
             return workers[0].Position.DistanceTo(Position);
         }
         return -1;
     }
-    private void createDebugInstance() // Keep track of distances etc. during development.
+    private void createDebugInstance()  // Keep track of distances etc. during development.
 	{
 		PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");
 		DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();

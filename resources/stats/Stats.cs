@@ -49,8 +49,8 @@ public class Stats : Resource
         defence = 0;
         labour = 0;
 
-        hunger = 60;
-        commodities = 55;
+        hunger = 50;
+        commodities = 50;
 
         attackSpeed = Constants.DEF_ATTACKSPEED;
 
