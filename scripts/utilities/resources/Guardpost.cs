@@ -59,6 +59,7 @@ public class Guardpost : Resources
         }
         return -1;
     }
+
     private void createDebugInstance()  // Keep track of distances etc. during development.
 	{
 		PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");

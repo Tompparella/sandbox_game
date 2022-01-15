@@ -34,11 +34,11 @@ public class Refinery : Resources
         {
             if (!setWorkItemQueue(worker))
             {
-                GD.Print(String.Format("Nothing to work on refinery {0}", this.Name));
+                //GD.Print(String.Format("Nothing to work on refinery {0}", this.Name));
                 worker.SetInteractive(); // Leave work state if no longer resources to continue crafting.
                 return;
             };
-            GD.Print(String.Format("Refinery {0} now working on item {1}", this.Name, workItemQueue[0].itemName));
+            //GD.Print(String.Format("Refinery {0} now working on item {1}", this.Name, workItemQueue[0].itemName));
         }
         currentActions++;
         //GD.Print(worker.Name, currentActions);
@@ -89,7 +89,7 @@ public class Refinery : Resources
         if (!worker.inventory.IsFull())
         {
             Item workItem = workItemQueue[0];
-            GD.Print("Currently given item:", workItem.itemName);
+            //GD.Print("Currently given item:", workItem.itemName);
             if (inventory.HasItems(workItem?.recipe.GetRecipeDictionary()))
             {
                 foreach (KeyValuePair<Item, int> kvp in workItem.recipe.GetRecipeDictionary())

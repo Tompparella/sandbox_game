@@ -5,8 +5,17 @@ using System.Linq;
 
 public class Barracks : Refinery
 {
+    [Signal]
+    public delegate void Replenished(int edibleItems, int commodityItems);
+
     private Supply supply;
     private List<Npc> soldiers = new List<Npc>();
+
+    private List<Guardpost> guardPosts = new List<Guardpost>();
+    public void AddGuardPost(Guardpost guardpost) {
+        guardPosts.Add(guardpost);
+    }
+
     private int logisticsPayment = 100;     // Amount of currency given to logistics officers when sent out to purchase goods for the barracks.
     private int storedFoodAmount = 3;       // Barracks always attempts to keep at least this number of food in store.
     private int storedCommodityAmount = 1;  // Barracks always attempts to keep at least this number of commodities in store.
@@ -23,7 +32,7 @@ public class Barracks : Refinery
             (Item)GD.Load(Constants.RATIONITEM),
             (Item)GD.Load(Constants.RATIONEDGOODSITEM),
         };
-        // This is still badly unfinished.
+
         supply = supply == null ? new Supply() : supply;
 
         maxWorkers = 1;
@@ -50,6 +59,10 @@ public class Barracks : Refinery
         AddChild(tradeTimer);
 
         base._Ready();
+    }
+
+    public void Initialize() {
+        guardPosts?.ForEach(x => Connect(nameof(Replenished), x, "OnBarracksReplenished"));
     }
 
     /*
@@ -95,9 +108,15 @@ public class Barracks : Refinery
         */
         worker.AddToGroup(Constants.LOGISTICS_GROUP);
         worker.tradeInventory = inventory;
-        worker.Monitorable = false; // This is done because we want soldiers to notice this worker as a logistics unit.
+        worker.Monitorable = false;             // This is done because we want soldiers to notice this worker as a logistics unit.
         worker.Monitorable = true;
         trading = true;
+
+        int edibleItems = inventory.GetEdibleItemCount();
+        int commodityItems = inventory.GetCommodityItemCount();
+        if (edibleItems > 0 || commodityItems > 0) {
+            EmitSignal(nameof(Replenished), edibleItems, commodityItems);
+        }
         tradeTimer.Start();
     }
 
@@ -119,11 +138,11 @@ public class Barracks : Refinery
             {
                 if (!setWorkItemQueue(worker))
                 {
-                    GD.Print(String.Format("Nothing to work on refinery {0}", this.Name));
+                    //GD.Print(String.Format("Nothing to work on refinery {0}", this.Name));
                     worker.SetInteractive(); // Leave work state if no longer resources to continue crafting.
                     return;
                 };
-                GD.Print(String.Format("Refinery {0} now working on item {1}", this.Name, workItemQueue[0].itemName));
+                //GD.Print(String.Format("Refinery {0} now working on item {1}", this.Name, workItemQueue[0].itemName));
             }
             currentActions++;
             //GD.Print(worker.Name, currentActions);
@@ -238,6 +257,10 @@ public class Barracks : Refinery
         return supply.supply;
     }
 
+    private string GetGuardPostsString() {
+        return string.Join(", " ,guardPosts.Select(x => x.entityName));
+    }
+
     private void createDebugInstance() // Keep track of supply etc. during development.
 	{
 		PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");
@@ -245,6 +268,7 @@ public class Barracks : Refinery
 		AddChild(debugInstance);
 		debugInstance.AddStat("Soldiers", this, "soldiers", false);
 		debugInstance.AddStat("Supply", this, "GetSupply", true);
+        debugInstance.AddStat("Guardposts", this, "GetGuardPostsString", true);
 		debugInstance.AddStat("Logistics Payment", this, "logisticsPayment", false);
 	}
 }

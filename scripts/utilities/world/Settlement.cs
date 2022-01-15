@@ -15,6 +15,7 @@ public class Settlement : Area2D {
     public void Initiate()  // Called from gamemanager to initiate the factions information.
     {
         Godot.Collections.Array areaEntities = GetOverlappingAreas();
+        List<Guardpost> guardPosts = new List<Guardpost>();     // We'll find the settlement guardposts here and assign them to barracks evenly.
 
         foreach (Area2D area in areaEntities)
         {
@@ -23,13 +24,37 @@ public class Settlement : Area2D {
                 case Barracks barracks:
                     settlementBarracks.Add(barracks);
                     GD.Print(string.Format("{0} added to settlement info", barracks.entityName));
+                    barracks.Initialize();
                     break;
                 case TradeStall tradeStall:
                     settlementTradestalls.Add(tradeStall);
                     GD.Print(string.Format("{0} added to settlement info", tradeStall.entityName));
                     break;
+                case Guardpost guardPost:
+                    guardPosts.Add(guardPost);
+                    GD.Print(string.Format("{0} found.", guardPost.entityName));
+                    break;
                 default:
                     break;
+            }
+        }
+        AssignGuardPostsToBarracks(guardPosts);
+    }
+
+    private void AssignGuardPostsToBarracks(List<Guardpost> guardPosts) {
+        if (guardPosts.Any() && settlementBarracks.Any()) {
+            int guardPostsPerBarracks = guardPosts.Count() / settlementBarracks.Count();
+            foreach (Barracks barracks in settlementBarracks)
+            {
+                for (int i = 0; i < guardPostsPerBarracks; i++) {
+                    if (guardPosts.Any()) {
+                        barracks.AddGuardPost(guardPosts.First());
+                        guardPosts.RemoveAt(0);
+                    }
+                }
+            }
+            if (guardPosts.Any()) {     // If there's still unassigned guardposts, assign those to the first barracks in the list.
+                guardPosts.ForEach(x => settlementBarracks.First().AddGuardPost(x));
             }
         }
     }

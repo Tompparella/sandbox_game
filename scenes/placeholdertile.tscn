@@ -50,6 +50,7 @@ script = ExtResource( 8 )
 [node name="Settlements" type="Node" parent="World"]
 
 [node name="TestSettlement" parent="World/Settlements" instance=ExtResource( 26 )]
+visible = false
 position = Vector2( 1200, 32 )
 scale = Vector2( 46.4703, 37.3973 )
 

@@ -68,17 +68,25 @@ public class Inventory : Resource
     }
 
     public List<ConsumableItem> GetEdibleItems() {
-        if (items.Any(x => x is ConsumableItem)) {
-            return items.Where(x => x is ConsumableItem).DefaultIfEmpty().Cast<ConsumableItem>().OrderBy(x => x.nutritionValue).ToList();
+        if (items.Any(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0)) {
+            return items.Where(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0).DefaultIfEmpty().Cast<ConsumableItem>().OrderBy(x => x.nutritionValue).ToList();
         }
         return null;
     }
 
+    public int GetEdibleItemCount() {
+        return GetEdibleItems() != null ? GetEdibleItems().Count() : 0;
+    }
+
     public List<ConsumableItem> GetCommodityItems() {
-        if (items.Any(x => x is ConsumableItem)) {
-            return items.Where(x => x is ConsumableItem).DefaultIfEmpty().Cast<ConsumableItem>().OrderBy(x => x.commodityValue).ToList();
-        }
+        if (items.Any(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0)) {
+            return items.Where(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0).DefaultIfEmpty().Cast<ConsumableItem>().OrderBy(x => x.commodityValue).ToList();
+        }    
         return null;
+    }
+
+    public int GetCommodityItemCount() {
+        return GetCommodityItems() != null ? GetEdibleItems().Count() : 0;
     }
 
     public Item PopLastItem() {

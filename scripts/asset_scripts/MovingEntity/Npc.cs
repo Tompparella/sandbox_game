@@ -138,7 +138,7 @@ public class Npc : Character
 
 	private void toggleOutOfWork()
 	{
-		GD.Print(String.Format("{0}: Started outOfWorkTimer", Name));
+		//GD.Print(String.Format("{0}: Started outOfWorkTimer", Name));
 
 		CheckNeeds();
 		if (GetBuyQueue().Any())
@@ -223,12 +223,12 @@ public class Npc : Character
 	}
 
 	public void ClearFoodFromBuyQueue() {
-		GD.Print(string.Format("Npc '{0}' cleared fooditems", entityName));
+		//GD.Print(string.Format("Npc '{0}' cleared fooditems", entityName));
 		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0);
 	}
 
 	public void ClearCommoditiesFromBuyQueue() {
-		GD.Print(string.Format("Npc '{0}' cleared commodities", entityName));
+		//GD.Print(string.Format("Npc '{0}' cleared commodities", entityName));
 		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0);
 	}
 

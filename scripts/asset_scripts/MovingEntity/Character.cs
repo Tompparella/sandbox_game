@@ -101,7 +101,7 @@ public class Character : MovingEntity
             if (itemsInQueue < kvp.Value) {
                 for (int i = itemsInQueue; i < kvp.Value; i++) {
                     neededItems.Add(kvp.Key);
-                    GD.Print(string.Format("'{0}' added item '{1}' to buy queue.", Name, kvp.Key.itemName));
+                    //GD.Print(string.Format("'{0}' added item '{1}' to buy queue.", Name, kvp.Key.itemName));
                 }
                 itemsAdded = true;
             }
