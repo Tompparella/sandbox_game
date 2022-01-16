@@ -15,6 +15,7 @@ public class Settlement : Area2D {
     public void Initiate()  // Called from gamemanager to initiate the factions information.
     {
         Godot.Collections.Array areaEntities = GetOverlappingAreas();
+
         List<Guardpost> guardPosts = new List<Guardpost>();     // We'll find the settlement guardposts here and assign them to barracks evenly.
 
         foreach (Area2D area in areaEntities)
@@ -24,7 +25,6 @@ public class Settlement : Area2D {
                 case Barracks barracks:
                     settlementBarracks.Add(barracks);
                     GD.Print(string.Format("{0} added to settlement info", barracks.entityName));
-                    barracks.Initialize();
                     break;
                 case TradeStall tradeStall:
                     settlementTradestalls.Add(tradeStall);
@@ -48,13 +48,15 @@ public class Settlement : Area2D {
             {
                 for (int i = 0; i < guardPostsPerBarracks; i++) {
                     if (guardPosts.Any()) {
-                        barracks.AddGuardPost(guardPosts.First());
+                        Guardpost currentPost = guardPosts.First();
+                        barracks.AddGuardPost(currentPost);
                         guardPosts.RemoveAt(0);
                     }
                 }
-            }
-            if (guardPosts.Any()) {     // If there's still unassigned guardposts, assign those to the first barracks in the list.
-                guardPosts.ForEach(x => settlementBarracks.First().AddGuardPost(x));
+                if (barracks.Equals(settlementBarracks.Last()) && guardPosts.Any()) {
+                    guardPosts.ForEach(x => barracks.AddGuardPost(x));    // If there's still unassigned guardposts, assign those to the last barracks in the list.
+                }
+                barracks.Initialize();
             }
         }
     }

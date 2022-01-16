@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -26,6 +26,7 @@
 [ext_resource path="res://assets/resources/Guardpost.tscn" type="PackedScene" id=24]
 [ext_resource path="res://assets/npc/soldier.tscn" type="PackedScene" id=25]
 [ext_resource path="res://assets/world/settlement.tscn" type="PackedScene" id=26]
+[ext_resource path="res://resources/stats/Stats.cs" type="Script" id=27]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
@@ -41,6 +42,48 @@ items = [ null, null, null, null, null, null, null, null, null, null, null, null
 script = ExtResource( 12 )
 currency = 100
 items = [ ExtResource( 11 ), ExtResource( 11 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+
+[sub_resource type="Resource" id=4]
+script = ExtResource( 12 )
+currency = 0
+items = [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+
+[sub_resource type="Resource" id=5]
+script = ExtResource( 27 )
+strength = 25
+vitality = 25
+dexterity = 25
+defence = 25
+agility = 25
+labour = 0
+
+[sub_resource type="Resource" id=6]
+script = ExtResource( 12 )
+currency = 0
+items = [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+
+[sub_resource type="Resource" id=7]
+script = ExtResource( 27 )
+strength = 25
+vitality = 25
+dexterity = 25
+defence = 25
+agility = 25
+labour = 0
+
+[sub_resource type="Resource" id=8]
+script = ExtResource( 12 )
+currency = 0
+items = [ null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null ]
+
+[sub_resource type="Resource" id=9]
+script = ExtResource( 27 )
+strength = 25
+vitality = 25
+dexterity = 25
+defence = 25
+agility = 25
+labour = 0
 
 [node name="Debug" type="Node2D"]
 script = ExtResource( 8 )
@@ -186,8 +229,19 @@ position = Vector2( 332, 208 )
 modulate = Color( 1, 0.376471, 0, 1 )
 position = Vector2( 1136, 208 )
 
-[node name="Npc" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 25 )]
+[node name="Soldier1" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 25 )]
 position = Vector2( 1664, 160 )
+inventory = SubResource( 4 )
+stats = SubResource( 5 )
+
+[node name="Soldier2" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 25 )]
+position = Vector2( 264, -104 )
+inventory = SubResource( 6 )
+stats = SubResource( 7 )
+
+[node name="Soldier3" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 25 )]
+inventory = SubResource( 8 )
+stats = SubResource( 9 )
 
 [node name="Walls" type="TileMap" parent="NavigationHandler/MapSort"]
 mode = 1

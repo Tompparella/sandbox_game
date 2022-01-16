@@ -6,8 +6,8 @@ public class Constants
     public const float DEF_ACCELERATION = 500;
     public const float TICK = 0.4f; // Determines how many seconds one tick takes to activate.
     public const int DEF_ATTACKSPEED = 3; // Determines how many combat ticks an attack takes to commence.
-    //public const int DEF_REQUIREDACTIONS = 5; // Default is 5
-    public const int DEF_REQUIREDACTIONS = 0; // Debug.
+    public const int DEF_REQUIREDACTIONS = 5; // Default is 5
+    //public const int DEF_REQUIREDACTIONS = 0; // Debug.
     public const float DEF_WORKSPEED = 20;
     public const float DEF_DODGECHANCE = 0.05f;
     public const float DEF_ATTACKRANGE = 100.0f;
@@ -64,6 +64,7 @@ public class Constants
     public const string SOLDIER_PROFESSION = "soldier";
 
     public const string TRADER_GROUP = "traders";
+    public const string SOLDIER_GROUP = "soldier";
     public const string LOGISTICS_GROUP = "logistics";
     public const string RESOURCES_GROUP = "resource";
     public const string SETTLEMENT_GROUP = "settlement";

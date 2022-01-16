@@ -86,7 +86,7 @@ public class Inventory : Resource
     }
 
     public int GetCommodityItemCount() {
-        return GetCommodityItems() != null ? GetEdibleItems().Count() : 0;
+        return GetCommodityItems() != null ? GetCommodityItems().Count() : 0;
     }
 
     public Item PopLastItem() {

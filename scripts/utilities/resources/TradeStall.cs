@@ -65,7 +65,7 @@ public class TradeStall : Resources
         of the item. Tax should be static.
         */
         if (workers.Any()) {
-            float salary = soldItem.value * traderProfit;
+            float salary = soldItem.value * traderProfit >= 1 ? soldItem.value * traderProfit : 1;   // Minimum profit per trade for the trader is 1 currency.
             Trade trade = new Trade(inventory, workers.First().inventory);
             trade.TransferCurrency((int)salary);
             GD.Print(string.Format("A trader earned {0} currency from a trade.",(int)salary));

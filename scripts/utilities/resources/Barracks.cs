@@ -6,10 +6,9 @@ using System.Linq;
 public class Barracks : Refinery
 {
     [Signal]
-    public delegate void Replenished(int edibleItems, int commodityItems);
+    public delegate void Replenished(int foodAmount, int commodityAmount);
 
     private Supply supply;
-    private List<Npc> soldiers = new List<Npc>();
 
     private List<Guardpost> guardPosts = new List<Guardpost>();
     public void AddGuardPost(Guardpost guardpost) {
@@ -62,7 +61,11 @@ public class Barracks : Refinery
     }
 
     public void Initialize() {
-        guardPosts?.ForEach(x => Connect(nameof(Replenished), x, "OnBarracksReplenished"));
+        guardPosts?.ForEach(x => {
+            Connect(nameof(Replenished), x, nameof(x.SupplySoldiers));
+            x.Connect("SupplyUsed", this, nameof(ReduceSupply));
+        });
+        //GD.Print(string.Format("Barracks GuardPosts: {0}", guardPosts));
     }
 
     /*
@@ -114,7 +117,7 @@ public class Barracks : Refinery
 
         int edibleItems = inventory.GetEdibleItemCount();
         int commodityItems = inventory.GetCommodityItemCount();
-        if (edibleItems > 0 || commodityItems > 0) {
+        if (edibleItems > 0 || commodityItems > 0) {    // This could be done so that soldiers get called to resupply based on the number of supplies/goods available (Not all soldiers should be called at the same time).
             EmitSignal(nameof(Replenished), edibleItems, commodityItems);
         }
         tradeTimer.Start();
@@ -243,22 +246,30 @@ public class Barracks : Refinery
         }
     }
 
+    private void ReduceSupply() {
+        supply.DecreaseSupply();
+    }
     private void RefillSupply(LogisticsItem supplyItem)
     {
-        supply.supply += supplyItem.supplyValue;
-        if (!Enumerable.Range(0, 100).Contains((int)supply.supply))
-        {
-            supply.supply = supply.supply < 0 ? 0 : 100; // If supply is out of bounds, set it to be either 0 or 100 depending on whether it's over or below the limits.
-        }
+        supply.AddSupply(supplyItem.supplyValue);
         inventory.RemoveItem(supplyItem);
     }
 
+    private List<Character> GetSoldiers() {
+        List<Character> soldiers = new List<Character>();
+        guardPosts?.ForEach(x => soldiers.AddRange(x.GetWorkers()));
+        return soldiers;
+    }
+
+    // Debugging
     private float GetSupply() {
         return supply.supply;
     }
-
     private string GetGuardPostsString() {
         return string.Join(", " ,guardPosts.Select(x => x.entityName));
+    }
+    private string GetSoldiersString() {
+        return string.Join(", " ,GetSoldiers().Select(x => x.entityName));
     }
 
     private void createDebugInstance() // Keep track of supply etc. during development.
@@ -266,7 +277,7 @@ public class Barracks : Refinery
 		PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");
 		DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();
 		AddChild(debugInstance);
-		debugInstance.AddStat("Soldiers", this, "soldiers", false);
+		debugInstance.AddStat("Soldiers", this, "GetSoldiersString", true);
 		debugInstance.AddStat("Supply", this, "GetSupply", true);
         debugInstance.AddStat("Guardposts", this, "GetGuardPostsString", true);
 		debugInstance.AddStat("Logistics Payment", this, "logisticsPayment", false);

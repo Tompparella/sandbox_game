@@ -5,6 +5,9 @@ using System.Linq;
 
 public class Guardpost : Resources
 {
+    [Signal]
+    public delegate void SupplyUsed();
+
     RandomNumberGenerator rand = new RandomNumberGenerator();
 
     public override void _Ready()
@@ -49,8 +52,29 @@ public class Guardpost : Resources
     public override void GiveResource(Character worker) { // Something exciting here, such as granting exp instead of currency.
         if (!isExhausted) {
             worker.inventory.currency++;
+            EmitSignal(nameof(SupplyUsed));
         }
-        worker.CheckNeeds();
+    }
+
+    public void SupplySoldiers(int foodAmount, int commodityAmount) {
+        List<Npc> soldiers = GetWorkers().Where(x => x is Npc).Cast<Npc>().ToList();
+        bool supplyFood, supplyCommodities;
+        foreach (Npc soldier in soldiers)
+        {
+            supplyFood = soldier.GetHungerValue() < Constants.DEF_MAXHUNGER / 2 && foodAmount > 0;
+            supplyCommodities = soldier.GetCommoditiesValue() < Constants.DEF_MAXCOMMODITIES / 2 && commodityAmount > 0;
+
+            if (supplyFood || supplyCommodities) {
+                foodAmount = supplyFood ? foodAmount - 1 : foodAmount;
+                commodityAmount = supplyCommodities ? commodityAmount - 1 : commodityAmount;
+                soldier.CheckNeeds();
+                soldier.SetInteractive();
+            }
+
+            if (foodAmount <= 0 && commodityAmount <= 0) {
+                return;
+            }
+        }
     }
 
     private float GetGuardDistance() {  // For debugging

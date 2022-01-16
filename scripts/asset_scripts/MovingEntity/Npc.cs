@@ -136,7 +136,7 @@ public class Npc : Character
 		surroundingResources.Remove((Resources)resource);
 	}
 
-	private void toggleOutOfWork()
+	public void ToggleOutOfWork()
 	{
 		//GD.Print(String.Format("{0}: Started outOfWorkTimer", Name));
 
@@ -323,7 +323,7 @@ public class Npc : Character
 		// Instance the outOfWork timer
 		outOfWorkTimer.OneShot = true;
 		outOfWorkTimer.WaitTime = 15;
-		outOfWorkTimer.Connect("timeout", this, "toggleOutOfWork");
+		outOfWorkTimer.Connect("timeout", this, "ToggleOutOfWork");
 		AddChild(outOfWorkTimer);
 
 		base._Ready();
