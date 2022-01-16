@@ -62,6 +62,7 @@ public class Constants
     public const string BLACKSMITH_PROFESSION = "blacksmith";
     public const string LOGISTICSOFFICER_PROFESSION = "logistics_officer";
     public const string SOLDIER_PROFESSION = "soldier";
+    public const string HUNTER_PROFESSION = "hunter";
 
     public const string TRADER_GROUP = "traders";
     public const string SOLDIER_GROUP = "soldier";
@@ -92,12 +93,14 @@ public class Constants
     public static readonly string BLACKSMITH_DESCRIPTION = "Home for the masters of metallurgy.";
     public static readonly string BARRACKS_DESCRIPTION = "A local safehouse for the soldiers of the settlement.";
     public static readonly string GUARDPOST_DESCRIPTION = "Marks the settlement's soldiers to guard the vicinity, and asserts dominance.";
+    public static readonly string CAMP_DESCRIPTION = "Someone has made camp here. Friend or foe, who knows.";
 
     public static readonly string FARM_NAME = "Wheat Field";
     public static readonly string OVEN_NAME = "Bread Oven";
     public static readonly string TREE_NAME = "Tree";
     public static readonly string WOODCRAFT_NAME = "Craftsman's Retreat";
     public static readonly string BLACKSMITH_NAME = "Blacksmith's Shop";
+    public static readonly string CAMP_NAME = "Woodland Camp";
 
     public static readonly string[] DEF_WORKACTIONS = new string[] { "work" };
     public static readonly string[] DEPOSITACTIONS = new string[] { "mine", "work" };
@@ -108,7 +111,7 @@ public class Constants
     public static readonly string[] CRAFTACTIONS = new string[] { "craft", "work" };
     public static readonly string[] SMITHACTIONS = new string[] { "smith", "work" };
 
-    public static readonly string[] PROFESSIONS = new string[] { FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, BLACKSMITH_PROFESSION, LOGISTICSOFFICER_PROFESSION, SOLDIER_PROFESSION, null };
+    public static readonly string[] PROFESSIONS = new string[] { FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, BLACKSMITH_PROFESSION, LOGISTICSOFFICER_PROFESSION, SOLDIER_PROFESSION, HUNTER_PROFESSION, null };
 
     public const string RESOURCECOLOR = "ffa100";
     public const string CONSUMABLECOLOR = "d1e53b";

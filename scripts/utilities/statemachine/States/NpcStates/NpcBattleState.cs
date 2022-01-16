@@ -71,7 +71,7 @@ public class NpcBattleState : NpcMoveState
         // Here the attack is supposed to be fetched from a dictionary with weighing.
         Attack attack = new Attack(owner);
         // Play attack animation at speed x
-        owner.GetTarget().TakeAttack(attack);
+        owner.GetTarget()?.TakeAttack(attack);
         staggered = true;
     }
 

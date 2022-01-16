@@ -99,6 +99,11 @@ public class Npc : Character
 				}
 				return;
 			default:
+				if (area is Camp) {
+					outOfWork = false;
+					surroundingResources.Add(area as Resources);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
 				break;
 		}
 		if (area.IsInGroup(Constants.TRADER_GROUP))

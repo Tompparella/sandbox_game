@@ -130,7 +130,7 @@ public class DialogueManager : Control
         switch (response) {
             case null:
                 break;
-            case "work":
+            case "work":    // Placeholder
                 EmitSignal(nameof(CallAction), "work");
                 break;
             default:
