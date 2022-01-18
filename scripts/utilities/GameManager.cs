@@ -42,7 +42,7 @@ public class GameManager : Node
 		settlements = sceneTree.GetNodesInGroup(Constants.SETTLEMENT_GROUP); // Placeholder. Should be handled by faction.
 		foreach (Settlement settlement in settlements)
 		{
-			settlement.Initiate();
+			settlement.Initialize();
 		}
 		GD.Print("GameManager Initialization Completed.");
 	}

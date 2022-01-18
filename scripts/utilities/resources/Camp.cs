@@ -21,7 +21,7 @@ public class Camp : Refinery
         actions = Constants.DEF_WORKACTIONS;
         dialogue = new ResourceDialogue(this, Constants.CAMP_DESCRIPTION, actions);
 
-        workRange = 10 * Constants.DEF_ATTACKRANGE; // Basically the hunting area.
+        workRange = 20 * Constants.DEF_ATTACKRANGE; // Basically the hunting area.
 
         defaultTexture = Constants.OVEN_TEXTURE;
         defaultPortrait = Constants.OVEN_PORTRAIT;

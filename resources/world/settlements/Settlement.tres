@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=4 format=2]
+
+[ext_resource path="res://scripts/utilities/world/SettlementInfo.cs" type="Script" id=1]
+
+[sub_resource type="CSharpScript" id=1]
+
+[sub_resource type="Resource" id=2]
+script = SubResource( 1 )
+
+[resource]
+script = ExtResource( 1 )
+settlementName = "Settlement"
+settlementFaction = SubResource( 2 )

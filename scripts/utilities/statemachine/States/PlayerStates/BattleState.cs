@@ -13,8 +13,13 @@ public class BattleState : MoveState
     private bool staggered = false;
 
     public override void Enter() {
-        if (owner.GetTarget() == owner) {
-            GD.Print("Why would I hit myself?");
+        Character target = owner.GetTarget();
+        if (target == null) {
+            EmitSignal(nameof(Finished), "idle");
+            return;
+        }
+        if (target == owner) {
+            GD.Print(string.Format("Player: Why would I hit myself?"));
             EmitSignal(nameof(Finished), "idle");
             return;
         }
@@ -70,7 +75,7 @@ public class BattleState : MoveState
     }
 
     private void AttackTarget() {
-        if (owner.GetTarget().isDead) {
+        if (owner.GetTarget().IsDead()) {
             owner.ClearCurrentTarget();
             if (owner.GetTarget() == null) {
                 EmitSignal("Finished", "idle");

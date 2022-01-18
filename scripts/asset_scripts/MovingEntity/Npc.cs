@@ -9,8 +9,6 @@ public class Npc : Character
 	public List<Character> nearbyTraders { get; private set; } = new List<Character>();
 	public List<Item> soldItems { get; private set; } = new List<Item>();
 
-	[Export]
-	public string profession { get; private set; }
 
 	public bool hasTraded = true;
 	public bool outOfWork = false; // If there's nothing for the Npc to do, idle.
@@ -19,7 +17,7 @@ public class Npc : Character
 
 	public void _OnSurroundingsEntered(Area2D area)
 	{
-		switch (profession)
+		switch (GetProfession())
 		{
 			case Constants.LUMBERJACK_PROFESSION:
 				if (area is Lumber)
@@ -29,7 +27,6 @@ public class Npc : Character
 					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
 				}
 				break;
-
 			case Constants.MINER_PROFESSION:
 				if (area is Deposit)
 				{
@@ -112,6 +109,18 @@ public class Npc : Character
 		}
 	}
 
+	public void _OnProximityEntered(Area2D area) {
+		if (aggressive && area is Character character) {
+			if (IsEnemy(character.GetFaction())) {
+				AddTarget(character);
+				Attack();
+			}
+		}
+	}
+	public void _OnProximityExited(Area2D area) {
+
+	}
+
 	public bool WorkableResourcesExist()
 	{
 		return (surroundingResources.Any());
@@ -166,7 +175,7 @@ public class Npc : Character
 		{
 			return false;
 		}
-		bool foundWork = surroundingResources.Any();
+		bool foundWork = false;
 		Resources currentResource = null;
 		float shortestDistance = float.MaxValue;
 		int leastWorkers = int.MaxValue;
@@ -178,9 +187,12 @@ public class Npc : Character
 				{
 					surroundingResources.Remove(i);
 					continue;
+				} else if (i.maxWorkers <= i.GetWorkerNumber()) {
+					continue;
 				}
 				if (Position.DistanceTo(i.Position) < shortestDistance && i.maxWorkers > i.GetWorkerNumber())
 				{
+					foundWork = true;
 					currentResource = i;
 					shortestDistance = Position.DistanceTo(currentResource.Position);
 					leastWorkers = i.GetWorkers().Count();
@@ -189,6 +201,13 @@ public class Npc : Character
 		}
 		SetInteractive(currentResource);
 		return foundWork;
+	}
+
+	private bool IsEnemy(string factionName) {
+		if (stats.faction != null) {
+			return stats.faction.IsHostile(factionName);
+		}
+		return false;
 	}
 
 	public float GetHungerValue()
@@ -277,6 +296,11 @@ public class Npc : Character
 	private string GetSurroundingResourcesString() {
 		return string.Join(", " ,surroundingResources.Select(x => x.entityName));
 	}
+	/*
+	private string GetHostilesString() {
+		return string.Join(", " ,stats.faction?.hostileFactions);
+	}
+	*/
 
 	private void SelectTrader()
 	{
@@ -303,13 +327,16 @@ public class Npc : Character
 		PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");
 		DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();
 		AddChild(debugInstance);
-		debugInstance.AddStat("Profession", this, "profession", false);
+		//debugInstance.AddStat("Faction", this, "GetFaction", true);
+		//debugInstance.AddStat("Hostile", this, "GetHostilesString", true);
+		//debugInstance.AddStat("Aggressive", this, "aggressive", false);
+		debugInstance.AddStat("Profession", this, "GetProfession", true);
 		debugInstance.AddStat("Surrounding Resources", this, "GetSurroundingResourcesString", true);
 		debugInstance.AddStat("Nearby Traders", this, "GetNearbyTradersString", true);
 		debugInstance.AddStat("Needed Items", this, "GetNeededItemsString", true);
 		// debugInstance.AddStat("Sold Items", this, "soldItems", false);
 		//debugInstance.AddStat("Has Traded", this, "hasTraded", false);
-		debugInstance.AddStat("Out Of Work", this, "outOfWork", false);
+		//debugInstance.AddStat("Out Of Work", this, "outOfWork", false);
 		debugInstance.AddStat("Hunger", this, "GetHungerValue", true);
 		debugInstance.AddStat("Commodities", this, "GetCommoditiesValue", true);
 		debugInstance.AddStat("Current Health", this, "GetCurrentHealth", true);
@@ -317,12 +344,15 @@ public class Npc : Character
 
 	public override void _Ready()
 	{
-		if (profession == null)
+		base._Ready();
+		/*
+		if (GetProfession() == null)
 		{
 			Random r = new Random();
 			int index = r.Next(Constants.PROFESSIONS.Count());
-			profession = Constants.PROFESSIONS[index];
+			SetProfession(Constants.PROFESSIONS[index]);	// Set a random profession. Will be reworked when needed.
 		}
+		*/
 		createDebugInstance(); // For debugging. Comment out to disable.
 
 		// Instance the outOfWork timer
@@ -331,6 +361,5 @@ public class Npc : Character
 		outOfWorkTimer.Connect("timeout", this, "ToggleOutOfWork");
 		AddChild(outOfWorkTimer);
 
-		base._Ready();
 	}
 }

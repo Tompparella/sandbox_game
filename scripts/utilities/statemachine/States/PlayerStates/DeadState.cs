@@ -5,7 +5,7 @@ public class DeadState : State
 {
     
     public override void Enter() {
-        owner.isDead = true;
+        owner.stats.isDead = true;
     }
 
     public override void HandleAttacked()

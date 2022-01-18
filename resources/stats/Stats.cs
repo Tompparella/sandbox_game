@@ -5,6 +5,15 @@ using System.Linq;
 
 public class Stats : Resource
 {
+    // Entity faction
+    [Export]
+    public FactionInfo faction;
+
+    // Utilities
+    [Export]
+	public string profession { get; set; }
+    [Export]
+    public bool isDead;
 
     // Combat stats
     [Export]
@@ -42,6 +51,9 @@ public class Stats : Resource
     public float maxCommodities { get; private set; }
 
     public Stats() {
+        isDead = false;
+        profession = "";
+
         strength = 0;
         vitality = 0;
         agility = 0;

@@ -8,8 +8,6 @@ public class Character : MovingEntity
     // Character specific variables here.
 
     [Export]
-    public bool isDead = false;
-    [Export]
     public Stats stats;
 
     // Signals
@@ -22,12 +20,14 @@ public class Character : MovingEntity
     public delegate void OnCharacterClick(Character character, InputEvent @event);
     [Signal]
     public delegate void Attacked();
-
+    [Signal]
+    public delegate void AttackTarget(string state);
     
     // Utility variables
 
     private List<Character> targets = new List<Character>();
     public List<Item> neededItems { get; private set; } = new List<Item>();
+    public bool aggressive = false;
     private Interactive currentInteractive;
     private PackedScene damageCounter;
 
@@ -74,9 +74,18 @@ public class Character : MovingEntity
 	{
 		return neededItems;
 	}
+    public string GetFaction() {
+        return stats.faction?.factionName;
+    }
+    public void SetFaction(FactionInfo faction) {
+        stats.faction = faction;
+    }
 
     // Combat functions
 
+    public void Attack() {
+        EmitSignal(nameof(AttackTarget), "battle");
+    }
     public void TakeAttack(Attack attack) {
         AddTarget(attack.source);
         Random random = new Random();
@@ -88,7 +97,7 @@ public class Character : MovingEntity
         } else {
             newCounter.init("Dodge");
         }
-        EmitSignal("Attacked");
+        EmitSignal(nameof(Attacked));
         this.AddChild(newCounter);
     }
 
@@ -108,6 +117,15 @@ public class Character : MovingEntity
         }
         //neededItems.ForEach(x => GD.Print(x.itemName));
         return itemsAdded;
+    }
+    public bool IsDead() {
+        return stats.isDead;
+    }
+    public string GetProfession() {
+        return stats?.profession;
+    }
+    public void SetProfession(string profession) {
+        stats.profession = profession;
     }
 
     public override void CheckNeeds() {
@@ -176,10 +194,11 @@ public class Character : MovingEntity
 
     public override void _Ready()
     {
+        base._Ready();
         dialogue = new CharacterDialogue(this);
 
         if (stats == null) {
-            stats = new Stats();
+            stats = (Stats)ResourceLoader.Load(Constants.DEF_STATS).Duplicate();
         } else {
             stats.UpdateStats();
         }
@@ -187,11 +206,13 @@ public class Character : MovingEntity
         portrait = (Texture)ResourceLoader.Load(portraitResource);
         damageCounter = (PackedScene)ResourceLoader.Load("res://assets/combat/damagecounter.tscn");
 
+        if (Constants.AGGRESSIVE_PROFESSIONS.Contains(GetProfession())) {
+            aggressive = true;
+        }
+
         this.Connect("mouse_entered", this, nameof(_OnMouseOver));
         this.Connect("mouse_exited", this, nameof(_OnMouseExit));
         this.Connect("input_event", this, nameof(_OnClickEvent));
-
-        base._Ready();
     }
 
     // Input functions

@@ -4,9 +4,11 @@
 
 [resource]
 script = ExtResource( 1 )
+profession = ""
 strength = 0
 vitality = 0
 dexterity = 0
 defence = 0
 agility = 0
 labour = 0
+isDead = false

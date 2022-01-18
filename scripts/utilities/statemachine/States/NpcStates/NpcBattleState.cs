@@ -12,8 +12,13 @@ public class NpcBattleState : NpcMoveState
     private bool staggered = false;
 
     public override void Enter() {
-        if (owner.GetTarget() == owner) {
-            GD.Print("Why would I hit myself?");
+        Character target = owner.GetTarget();
+        if (target == null) {
+            EmitSignal(nameof(Finished), "idle");
+            return;
+        }
+        else if (target == owner) {
+            GD.Print(string.Format("{0}: Why would I hit myself?", owner.entityName));
             EmitSignal(nameof(Finished), "idle");
             return;
         }
@@ -61,7 +66,7 @@ public class NpcBattleState : NpcMoveState
     }
 
     private void AttackTarget() {
-        if (owner.GetTarget().isDead) {
+        if (owner.GetTarget().IsDead()) {
             owner.ClearCurrentTarget();
             if (owner.GetTarget() == null) {
                 EmitSignal("Finished", "idle");

@@ -43,10 +43,12 @@ public class Constants
     public const string WOODCRAFT_TEXTURE = "res://resources/sprites/assets/resources/full/woodcraft.png";
 
 
+    public const string DEF_INVENTORY = "res://resources/items/Inventory.tres";
     public const string IRON_DEPOSIT_INVENTORY = "res://resources/items/resources/IronDepositInventory.tres";
     public const string SILVER_DEPOSIT_INVENTORY = "res://resources/items/resources/SilverDepositInventory.tres";
     public const string LUMBER_INVENTORY = "res://resources/items/resources/LumberInventory.tres";
     public const string WHEATFIELD_INVENTORY = "res://resources/items/resources/WheatFieldInventory.tres";
+
 
     public const int WHEATPRICE = 15;
     public const int IRONPRICE = 20;
@@ -63,6 +65,7 @@ public class Constants
     public const string LOGISTICSOFFICER_PROFESSION = "logistics_officer";
     public const string SOLDIER_PROFESSION = "soldier";
     public const string HUNTER_PROFESSION = "hunter";
+    public const string BANDIT_PROFESSION = "bandit";
 
     public const string TRADER_GROUP = "traders";
     public const string SOLDIER_GROUP = "soldier";
@@ -102,6 +105,9 @@ public class Constants
     public static readonly string BLACKSMITH_NAME = "Blacksmith's Shop";
     public static readonly string CAMP_NAME = "Woodland Camp";
 
+    public static readonly string[] FACTIONS = { "Test Faction" };
+    public static readonly string[] OUTLAWS = { "Bandits" };
+
     public static readonly string[] DEF_WORKACTIONS = new string[] { "work" };
     public static readonly string[] DEPOSITACTIONS = new string[] { "mine", "work" };
     public static readonly string[] LUMBERACTIONS = new string[] { "chop", "work" };
@@ -112,10 +118,13 @@ public class Constants
     public static readonly string[] SMITHACTIONS = new string[] { "smith", "work" };
 
     public static readonly string[] PROFESSIONS = new string[] { FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, BLACKSMITH_PROFESSION, LOGISTICSOFFICER_PROFESSION, SOLDIER_PROFESSION, HUNTER_PROFESSION, null };
+    public static readonly string[] AGGRESSIVE_PROFESSIONS = new string[] { LOGISTICSOFFICER_PROFESSION, SOLDIER_PROFESSION, HUNTER_PROFESSION, BANDIT_PROFESSION };
 
     public const string RESOURCECOLOR = "ffa100";
     public const string CONSUMABLECOLOR = "d1e53b";
     public const string EMPTYCOLOR = "ffffff";
+
+    public const string DEF_STATS = "res://resources/stats/Stats.tres";
 
     public const string FLOURITEM = "res://resources/items/resources/Flour.tres";
     public const string BREADITEM = "res://resources/items/consumables/Bread.tres";
