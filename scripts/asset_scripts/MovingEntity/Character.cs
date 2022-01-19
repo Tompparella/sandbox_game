@@ -19,13 +19,13 @@ public class Character : MovingEntity
     [Signal]
     public delegate void OnCharacterClick(Character character, InputEvent @event);
     [Signal]
-    public delegate void Attacked();
+    public delegate void AttackSignal();
     [Signal]
-    public delegate void AttackTarget(string state);
+    public delegate void UnderAttack(Character attacker);
     
     // Utility variables
 
-    private List<Character> targets = new List<Character>();
+    private Dictionary<Character,float> targets = new Dictionary<Character, float>(); // The float represents aggro
     public List<Item> neededItems { get; private set; } = new List<Item>();
     public bool aggressive = false;
     private Interactive currentInteractive;
@@ -41,8 +41,8 @@ public class Character : MovingEntity
     }
     
     public void AddTarget(Character target) {
-        if (!targets.Contains(target)) {
-            targets.Add(target);
+        if (!targets.ContainsKey(target)) {
+            targets.Add(target, 1.0f);
         }
     }
 
@@ -52,18 +52,27 @@ public class Character : MovingEntity
 
     public void SetTarget(Character target) {
         targets.Clear();
-        targets.Add(target);
+        AddTarget(target);
     }
 
     public Character GetTarget() {
-        if (targets.Any()) {
-            return targets[0];
+        if (targets.Any()) {    // Select target with highest aggro.
+            Character target = targets.OrderByDescending(x => x.Value).FirstOrDefault().Key;
+            if (IsInstanceValid(target)) {
+                return target;
+            } else {
+                targets.Remove(target);
+                return GetTarget();
+            }
         }
         return null;
     }
 
     public void ClearCurrentTarget() {
-        targets.RemoveAt(0);
+        Character target = GetTarget();
+        if (target != null) {
+            targets.Remove(target);
+        }
     }
 
     public bool checkBuyQueue()
@@ -83,21 +92,25 @@ public class Character : MovingEntity
 
     // Combat functions
 
-    public void Attack() {
-        EmitSignal(nameof(AttackTarget), "battle");
+    public void AttackTarget(Character target) {
+        AddTarget(target);
+        EmitSignal(nameof(AttackSignal));
     }
     public void TakeAttack(Attack attack) {
         AddTarget(attack.source);
+        EmitSignal(nameof(UnderAttack), attack.source);
+        // Increase aggro
+        targets[attack.source] += attack.damage;
         Random random = new Random();
         DamageCounter newCounter = (DamageCounter)damageCounter.Instance();
         if (random.NextDouble() >= stats.dodge) {
             stats.currentHealth -= attack.damage * (1 - 0.01f * stats.defence);
-            GD.Print(Name, ":", stats.currentHealth);
+            GD.Print(entityName, ":", stats.currentHealth);
             newCounter.init(attack.damage.ToString());
         } else {
             newCounter.init("Dodge");
         }
-        EmitSignal(nameof(Attacked));
+        EmitSignal(nameof(AttackSignal));
         this.AddChild(newCounter);
     }
 
@@ -125,6 +138,7 @@ public class Character : MovingEntity
         return stats?.profession;
     }
     public void SetProfession(string profession) {
+        aggressive = Constants.AGGRESSIVE_PROFESSIONS.Contains(profession);
         stats.profession = profession;
     }
 
@@ -150,6 +164,7 @@ public class Character : MovingEntity
     protected void Eat() {
         ConsumableItem bestFood = inventory.GetEdibleItems()?.Last();
         if(bestFood?.nutritionValue > 0) {
+            stats.RaiseHealth(bestFood.healValue);
             stats.RaiseHunger(bestFood.nutritionValue);
             inventory.RemoveItem(bestFood);
         } else {

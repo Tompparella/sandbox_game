@@ -108,6 +108,8 @@ public class Constants
     public static readonly string[] FACTIONS = { "Test Faction" };
     public static readonly string[] OUTLAWS = { "Bandits" };
 
+    public static readonly string BANDIT = "res://assets/npc/bandit.tscn";
+
     public static readonly string[] DEF_WORKACTIONS = new string[] { "work" };
     public static readonly string[] DEPOSITACTIONS = new string[] { "mine", "work" };
     public static readonly string[] LUMBERACTIONS = new string[] { "chop", "work" };

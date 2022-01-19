@@ -24,7 +24,7 @@ public class StateMachine : Node
         foreach (State state in statesMap.Values) {
             state.Connect("Finished", this, nameof(_ChangeState));
         }
-        Owner.Connect("Attacked", this, nameof(_OnAttacked));
+        Owner.Connect("AttackSignal", this, nameof(_OnAttack));
         Initialize(StartState);
     }
 
@@ -59,8 +59,8 @@ public class StateMachine : Node
         CurrentState._OnAnimationFinished(animationName);
     }
 
-    protected virtual void _OnAttacked() {
-        CurrentState.HandleAttacked();
+    protected virtual void _OnAttack() {
+        CurrentState.HandleAttack();
     }
 
     protected virtual void _ChangeState(string stateName) {

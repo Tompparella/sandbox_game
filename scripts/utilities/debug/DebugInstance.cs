@@ -24,11 +24,11 @@ public class DebugInstance : Label
         public float GetFramesPerSecond() {
             return Engine.GetFramesPerSecond();
         }
-        public ulong GetStaticMemoryUsage() {
-            return OS.GetStaticMemoryUsage();
+        public string GetStaticMemoryUsage() {
+            return string.Format("{0} Mb", OS.GetStaticMemoryUsage() / 1000000); // Mb
         }
-        public ulong GetDynamicMemoryUsage() {
-            return OS.GetDynamicMemoryUsage();
+        public string GetDynamicMemoryUsage() {
+            return string.Format("{0} Mb", OS.GetDynamicMemoryUsage() / 1000000); // Mb
         }
         public int GetAllInstances() {
             return tree.GetNodeCount();

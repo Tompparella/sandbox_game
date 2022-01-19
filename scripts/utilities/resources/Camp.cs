@@ -8,8 +8,8 @@ public class Camp : Refinery
     RandomNumberGenerator rand = new RandomNumberGenerator();
 
     private Timer patrolTimer = new Timer();
-    private int patrolTime = 60;             // Time stayed patrolling/hunting in seconds.
-    private bool patrolling = false;
+    protected int patrolTime = 60;             // Time stayed patrolling/hunting in seconds.
+    protected bool patrolling = false;
 
     public override void _Ready()
     {

@@ -174,6 +174,7 @@ public class Barracks : Refinery
                     ConsumableItem originItem = worker.inventory.GetEdibleItems()?.Last();  
                     if (originItem != null) {
                         item.nutritionValue = originItem.nutritionValue;
+                        item.healValue = originItem.healValue;
                         addItemToWorkQueue(i, worker);
                         return true;
                     }
@@ -255,6 +256,10 @@ public class Barracks : Refinery
         inventory.RemoveItem(supplyItem);
     }
 
+    // Notify soldiers of attacker
+    public void AlertSoldiers(Character target) {
+        GetSoldiers()?.ForEach(x => x.AttackTarget(target));
+    }
     private List<Character> GetSoldiers() {
         List<Character> soldiers = new List<Character>();
         guardPosts?.ForEach(x => soldiers.AddRange(x.GetWorkers()));

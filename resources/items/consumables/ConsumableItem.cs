@@ -14,4 +14,6 @@ public class ConsumableItem : Item
     public float nutritionValue { get; set; } = 0;
     [Export]
     public float commodityValue { get; set; } = 0;
+    [Export]
+    public float healValue { get; set; } = 0;
 }

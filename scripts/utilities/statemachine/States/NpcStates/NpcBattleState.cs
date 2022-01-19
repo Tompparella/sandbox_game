@@ -3,7 +3,7 @@ using System.Linq;
 
 public class NpcBattleState : NpcMoveState
 {
-    private float weaponRange = Constants.DEF_ATTACKRANGE; // Placeholder
+    private float weaponRange = Constants.DEF_ATTACKRANGE; // Placeholder.
     private const float tickSpeed = Constants.TICK;
     private float combatEscapeTime = Constants.COMBATESCAPETIME;
     private float combatCooldown = 0;
@@ -22,7 +22,7 @@ public class NpcBattleState : NpcMoveState
             EmitSignal(nameof(Finished), "idle");
             return;
         }
-        owner.GetMovePath(owner.GlobalPosition, owner.GetTarget().Position, owner);
+        owner.GetMovePath(owner.GlobalPosition, target.Position, owner);
     }
 
     public override void Exit()
@@ -32,15 +32,17 @@ public class NpcBattleState : NpcMoveState
 
     public override void Update(float delta)
     {
-        if (staggered) {
-            TickLoop(delta);
-        } else if (owner.Position.DistanceTo(owner.GetTarget().Position) < weaponRange) {
-            AttackTarget();
-            return;
-        } else {
-            CombatEscape(delta);
+        if (owner.GetTarget() != null) {
+            if (staggered) {
+                TickLoop(delta);
+            } else if (owner.Position.DistanceTo(owner.GetTarget().Position) < weaponRange) {
+                AttackTarget();
+                return;
+            } else {
+                CombatEscape(delta);
+            }
+            base.Update(delta);
         }
-        base.Update(delta);
     }
 
     private void TickLoop(float delta) {
@@ -61,7 +63,7 @@ public class NpcBattleState : NpcMoveState
         combatCooldown += delta;
         if (combatCooldown >= combatEscapeTime) {
             combatCooldown = 0;
-            EmitSignal("Finished", "previous");
+            EmitSignal("Finished", "idle");
         }
     }
 
@@ -76,14 +78,14 @@ public class NpcBattleState : NpcMoveState
         // Here the attack is supposed to be fetched from a dictionary with weighing.
         Attack attack = new Attack(owner);
         // Play attack animation at speed x
-        owner.GetTarget()?.TakeAttack(attack);
+        owner.GetTarget().TakeAttack(attack);
         staggered = true;
     }
 
-    public override void HandleAttacked()
+    public override void HandleAttack()
     {
         if (owner.stats.currentHealth <= 0) {
-            base.HandleAttacked();
+            base.HandleAttack();
         } else {
             // Play staggered animation
         }
@@ -91,10 +93,10 @@ public class NpcBattleState : NpcMoveState
 
     protected override void MovementLoop(float delta)
     {
-        float distanceToLast = owner.Position.DistanceTo(owner.movePath.Last());
+        float distanceToLast = owner.movePath.Any() ? owner.Position.DistanceTo(owner.movePath.Last()) : 0;
         if (distanceToLast > weaponRange) {
             base.MovementLoop(delta);
-        } else if (owner.movePath.Last() != owner.GetTarget().Position) {
+        } else if (owner.movePath.Last() != owner.GetTarget()?.Position) {
             owner.GetMovePath(owner.GlobalPosition, owner.GetTarget().Position, owner);
         }
     }

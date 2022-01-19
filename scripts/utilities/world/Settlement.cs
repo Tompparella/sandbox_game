@@ -38,10 +38,12 @@ public class Settlement : Area2D {
                     guardPosts.Add(guardPost);
                     GD.Print(string.Format("{0} found.", guardPost.entityName));
                     break;
+                
                 case Resources resource:
                     resources.Add(resource);
                     GD.Print(string.Format("{0} found as resource", resource.entityName));
                     break;
+                
                 case Npc npc:
                     // Sketchy shit
                     if (string.IsNullOrEmpty(npc.GetProfession())) {
@@ -51,10 +53,19 @@ public class Settlement : Area2D {
                 default:
                     break;
             }
-            if (area is Character character && string.IsNullOrEmpty(character.GetFaction())) {
-                character.SetFaction(settlementInfo.settlementFaction);
+            if (area is Character character) {
+                if (string.IsNullOrEmpty(character.GetFaction())) {
+                     character.SetFaction(settlementInfo.settlementFaction);
+                }
+                if (character.GetFaction().Equals(GetFactionString())) {
+                    character.Connect("UnderAttack", this, nameof(NotifySoldiers));
+                }
             }
         }
+        resources.AddRange(guardPosts);
+        resources.AddRange(settlementBarracks);
+        resources.AddRange(settlementTradestalls);
+
         SetNpcJobs(npcs, resources);
         AssignGuardPostsToBarracks(guardPosts);
     }
@@ -78,51 +89,65 @@ public class Settlement : Area2D {
             }
         }
     }
+    private void NotifySoldiers(Character attacker) {
+        settlementBarracks?.ForEach(x => x.AlertSoldiers(attacker));
+    }
 
     // Used for development. Will be reworked in the future.
     private void SetNpcJobs(List<Npc> npcs, List<Resources> resources) {
-        foreach (Resources resource in resources)
-        {
-            Npc currentNpc = npcs.FirstOrDefault();
-            if (currentNpc == null) {
-                return;
-            }
-            string newProfession = "";
 
-            switch (resource)
+        Dictionary<string,int> jobsAvailable = settlementInfo.jobsAvailable;
+        List<Resources> newResources = new List<Resources>();
+
+        foreach (KeyValuePair<string,int> kvp in jobsAvailable.ToArray())
+        {
+            GD.Print(string.Format("Settlement: Handling job: {0}", kvp.Key));
+            switch (kvp.Key)
             {
-                case WheatField field:
-                    newProfession = Constants.FARMER_PROFESSION;
+                case Constants.TRADER_PROFESSION:
+                    newResources = resources.Where(x => x is TradeStall).ToList();
                     break;
-                case Lumber lumber:
-                    newProfession = Constants.LUMBERJACK_PROFESSION;
+                case Constants.FARMER_PROFESSION:
+                    newResources = resources.Where(x => x is WheatField).ToList();
                     break;
-                case Deposit deposit:
-                    newProfession = Constants.MINER_PROFESSION;
+                case Constants.BAKER_PROFESSION:
+                    newResources = resources.Where(x => x is Oven).ToList();
                     break;
-                case Oven oven:
-                    newProfession = Constants.MINER_PROFESSION;
+                case Constants.LUMBERJACK_PROFESSION:
+                    newResources = resources.Where(x => x is Lumber).ToList();
                     break;
-                case Woodcraft craft:
-                    newProfession = Constants.CRAFTSMAN_PROFESSION;
+                case Constants.CRAFTSMAN_PROFESSION:
+                    newResources = resources.Where(x => x is Woodcraft).ToList();
                     break;
-                case Blacksmith smith:
-                    newProfession = Constants.BLACKSMITH_PROFESSION;
+                case Constants.MINER_PROFESSION:
+                    newResources = resources.Where(x => x is Deposit).ToList();
                     break;
-                case TradeStall trade:
-                    newProfession = Constants.TRADER_PROFESSION;
+                case Constants.BLACKSMITH_PROFESSION:
+                    newResources = resources.Where(x => x is Blacksmith).ToList();
+                    break;
+                case Constants.LOGISTICSOFFICER_PROFESSION:
+                    newResources = resources.Where(x => x is Barracks).ToList();
+                    break;
+                case Constants.SOLDIER_PROFESSION:
+                    newResources = resources.Where(x => x is Guardpost).ToList();
                     break;
                 default:
+                    GD.Print(string.Format("Settlement: Error handling job: {0}", kvp.Key));
                     break;
             }
-            currentNpc.SetProfession(newProfession);
-            currentNpc.surroundingResources.Clear();
-            currentNpc.surroundingResources.Add(resource);
-            currentNpc.SetInteractive();
-            npcs.RemoveAt(0);
-        }
-        if (npcs.Any()) {
-            SetNpcJobs(npcs, resources);
+            for (int i = 0; i < kvp.Value; i++) {
+                Npc currentNpc = npcs.FirstOrDefault();
+                if (currentNpc == null) {
+                    return;
+                }
+                currentNpc.SetProfession(kvp.Key);  // This needs to be done to update the npc's surrounding resources and enter new workstate.
+                currentNpc.ClearSurroundings();
+                currentNpc.AddSurroundings(newResources);
+                currentNpc.SetInteractive();
+                //GD.Print(jobsAvailable[kvp.Key]);
+                jobsAvailable[kvp.Key] -= 1;
+                npcs.RemoveAt(0);
+            }
         }
     }
 

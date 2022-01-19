@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://resources/tilemaps/grasswall.tres" type="TileSet" id=1]
 [ext_resource path="res://resources/tilemaps/grassfloor.tres" type="TileSet" id=2]
@@ -10,6 +10,8 @@
 [ext_resource path="res://scripts/utilities/GameManager.cs" type="Script" id=8]
 [ext_resource path="res://assets/actionMenu.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/resources/Tree.tscn" type="PackedScene" id=10]
+[ext_resource path="res://assets/resources/BanditCamp.tscn" type="PackedScene" id=11]
+[ext_resource path="res://resources/stats/Stats.cs" type="Script" id=12]
 [ext_resource path="res://assets/resources/Deposit.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/debug/DebugInstance.tscn" type="PackedScene" id=14]
 [ext_resource path="res://assets/resources/WheatField.tscn" type="PackedScene" id=15]
@@ -21,10 +23,42 @@
 [ext_resource path="res://assets/resources/Barracks.tscn" type="PackedScene" id=22]
 [ext_resource path="res://assets/resources/Guardpost.tscn" type="PackedScene" id=24]
 [ext_resource path="res://assets/world/settlement.tscn" type="PackedScene" id=26]
-[ext_resource path="res://assets/resources/Camp.tscn" type="PackedScene" id=28]
 [ext_resource path="res://resources/world/settlements/TestSettlement.tres" type="Resource" id=29]
 [ext_resource path="res://assets/world/faction.tscn" type="PackedScene" id=30]
 [ext_resource path="res://resources/world/factions/TestFaction.tres" type="Resource" id=31]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 12 )
+profession = "soldier"
+strength = 100
+vitality = 100
+dexterity = 100
+defence = 100
+agility = 100
+labour = 50
+isDead = false
+
+[sub_resource type="Resource" id=2]
+script = ExtResource( 12 )
+profession = "soldier"
+strength = 100
+vitality = 100
+dexterity = 100
+defence = 100
+agility = 100
+labour = 50
+isDead = false
+
+[sub_resource type="Resource" id=3]
+script = ExtResource( 12 )
+profession = "soldier"
+strength = 100
+vitality = 100
+dexterity = 100
+defence = 100
+agility = 100
+labour = 50
+isDead = false
 
 [node name="Debug" type="Node2D"]
 script = ExtResource( 8 )
@@ -121,11 +155,12 @@ position = Vector2( 3176, 1400 )
 position = Vector2( 1504, -304 )
 scale = Vector2( 1.00436, 1 )
 
-[node name="Camp" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 28 )]
-position = Vector2( 2264, -504 )
-entityName = "Camp"
+[node name="BanditCamp" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 11 )]
+position = Vector2( 3280, -1848 )
 
-[node name="Characters" type="YSort" parent="NavigationHandler/MapSort"]
+[node name="Characters" type="YSort" parent="NavigationHandler/MapSort" groups=[
+"characters_node",
+]]
 
 [node name="Player" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 3 )]
 position = Vector2( 840, 24 )
@@ -133,16 +168,43 @@ entityName = "Tompparella"
 
 [node name="Npc" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
 position = Vector2( 320, 264 )
+entityName = "Johnny"
 
 [node name="Npc2" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Bonnie"
 
 [node name="Npc3" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Timothy"
 
 [node name="Npc4" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Conrad"
 
 [node name="Npc5" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Jakie"
 
 [node name="Npc6" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Nakie"
+
+[node name="Npc7" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Valsec"
+
+[node name="Npc8" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Jonathan"
+
+[node name="Npc9" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Mikey"
+
+[node name="Npc10" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Douglas"
+stats = SubResource( 1 )
+
+[node name="Npc11" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Gabriel"
+stats = SubResource( 2 )
+
+[node name="Npc12" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 5 )]
+entityName = "Celebrimbor"
+stats = SubResource( 3 )
 
 [node name="Walls" type="TileMap" parent="NavigationHandler/MapSort"]
 mode = 1

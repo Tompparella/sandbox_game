@@ -5,9 +5,7 @@ using System.Linq;
 
 public class GameManager : Node
 {
-	private Godot.Collections.Array characters;
-	private Godot.Collections.Array resources;
-	private Godot.Collections.Array settlements;	// This will be replaced with factions, that in turn keep count of settlements.
+	private Godot.Collections.Array characters, resources, settlements;	// This will be replaced with factions, that in turn keep count of settlements.
 	private InterfaceManager interfaceManager;
 	public override void _Ready()
 	{
@@ -25,9 +23,7 @@ public class GameManager : Node
 		characters = sceneTree.GetNodesInGroup(Constants.CHARACTER_GROUP);
 		foreach (Node character in characters)
 		{
-			character.Connect("OnMouseOver", this, nameof(OpenCharacterDialog));
-			character.Connect("OnMouseExit", this, nameof(CloseDialogBox));
-			character.Connect("OnCharacterClick", this, nameof(HandleClickEvent));
+			ConnectNewCharacter(character);
 		}
 
 		// Resources initiation
@@ -44,7 +40,21 @@ public class GameManager : Node
 		{
 			settlement.Initialize();
 		}
+
+		// Spawner initiation
+		Godot.Collections.Array spawners = sceneTree.GetNodesInGroup("spawner");
+		foreach (Node spawner in spawners)
+        {
+            spawner.Connect("SpawnEntity", this, nameof(ConnectNewCharacter));
+        }
+
 		GD.Print("GameManager Initialization Completed.");
+	}
+
+	private void ConnectNewCharacter(Node character) {
+		character.Connect("OnMouseOver", this, nameof(OpenCharacterDialog));
+		character.Connect("OnMouseExit", this, nameof(CloseDialogBox));
+		character.Connect("OnCharacterClick", this, nameof(HandleClickEvent));
 	}
 
 	private void OpenCharacterDialog(Character source) {

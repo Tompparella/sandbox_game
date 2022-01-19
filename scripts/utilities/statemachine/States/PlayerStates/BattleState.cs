@@ -23,7 +23,7 @@ public class BattleState : MoveState
             EmitSignal(nameof(Finished), "idle");
             return;
         }
-        owner.GetMovePath(owner.GlobalPosition, owner.GetTarget().Position, owner);
+        owner.GetMovePath(owner.GlobalPosition, target.Position, owner);
     }
 
     public override void HandleInput(InputEvent @event)
@@ -89,10 +89,10 @@ public class BattleState : MoveState
         staggered = true;
     }
 
-    public override void HandleAttacked()
+    public override void HandleAttack()
     {
         if (owner.stats.currentHealth <= 0) {
-            base.HandleAttacked();
+            base.HandleAttack();
         } else {
             // Play staggered animation
         }
@@ -100,10 +100,10 @@ public class BattleState : MoveState
 
     protected override void MovementLoop(float delta)
     {
-        float distanceToLast = owner.Position.DistanceTo(owner.movePath.Last());
+        float distanceToLast = owner.movePath.Any() ? owner.Position.DistanceTo(owner.movePath.Last()) : 0;
         if (distanceToLast > weaponRange) {
             base.MovementLoop(delta);
-        } else if (owner.movePath.Last() != owner.GetTarget().Position) {
+        } else if (owner.movePath.Last() != owner.GetTarget()?.Position) {
             owner.GetMovePath(owner.GlobalPosition, owner.GetTarget().Position, owner);
         }
     }

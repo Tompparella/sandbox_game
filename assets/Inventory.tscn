@@ -35,7 +35,6 @@ script = ExtResource( 3 )
 
 [node name="ItemTexture" type="TextureRect" parent="Panel"]
 margin_right = 32.0
-margin_bottom = 32.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false

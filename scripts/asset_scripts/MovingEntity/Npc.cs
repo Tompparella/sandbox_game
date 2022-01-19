@@ -112,13 +112,11 @@ public class Npc : Character
 	public void _OnProximityEntered(Area2D area) {
 		if (aggressive && area is Character character) {
 			if (IsEnemy(character.GetFaction())) {
-				AddTarget(character);
-				Attack();
+				AttackTarget(character);
 			}
 		}
 	}
 	public void _OnProximityExited(Area2D area) {
-
 	}
 
 	public bool WorkableResourcesExist()
@@ -140,6 +138,14 @@ public class Npc : Character
 			nearbyTraders.Remove((Character)area);
 		}
 	}
+
+	public void ClearSurroundings() {
+		surroundingResources.ToList().ForEach(x => _OnSurroundingsExited(x));
+	}
+	public void AddSurroundings(List<Resources> newSurroundings) {
+		newSurroundings.ForEach(x => _OnSurroundingsEntered(x));
+	}
+
 	private void SurroundingRemoved(Interactive resource)
 	{
 		if (!WorkableResourcesExist())
@@ -282,6 +288,7 @@ public class Npc : Character
 			SelectTrader();
 			return true;
 		}
+		hasTraded = true;
 		return false;
 	}
 
@@ -296,11 +303,13 @@ public class Npc : Character
 	private string GetSurroundingResourcesString() {
 		return string.Join(", " ,surroundingResources.Select(x => x.entityName));
 	}
-	/*
 	private string GetHostilesString() {
-		return string.Join(", " ,stats.faction?.hostileFactions);
+		if (stats.faction != null) {
+			return string.Join(", " ,stats.faction?.hostileFactions);
+		} else {
+			return "";
+		}
 	}
-	*/
 
 	private void SelectTrader()
 	{
@@ -327,9 +336,9 @@ public class Npc : Character
 		PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");
 		DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();
 		AddChild(debugInstance);
-		//debugInstance.AddStat("Faction", this, "GetFaction", true);
-		//debugInstance.AddStat("Hostile", this, "GetHostilesString", true);
-		//debugInstance.AddStat("Aggressive", this, "aggressive", false);
+		debugInstance.AddStat("Faction", this, "GetFaction", true);
+		debugInstance.AddStat("Hostile", this, "GetHostilesString", true);
+		debugInstance.AddStat("Aggressive", this, "aggressive", false);
 		debugInstance.AddStat("Profession", this, "GetProfession", true);
 		debugInstance.AddStat("Surrounding Resources", this, "GetSurroundingResourcesString", true);
 		debugInstance.AddStat("Nearby Traders", this, "GetNearbyTradersString", true);

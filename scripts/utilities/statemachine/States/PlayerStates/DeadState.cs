@@ -8,7 +8,7 @@ public class DeadState : State
         owner.stats.isDead = true;
     }
 
-    public override void HandleAttacked()
+    public override void HandleAttack()
     {
     }
 

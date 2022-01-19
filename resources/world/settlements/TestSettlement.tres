@@ -7,3 +7,14 @@
 script = ExtResource( 1 )
 settlementName = "Test Settlement"
 settlementFaction = ExtResource( 2 )
+jobsAvailable = {
+"baker": 1,
+"blacksmith": 1,
+"craftsman": 1,
+"farmer": 2,
+"logistics_officer": 1,
+"lumberjack": 1,
+"miner": 1,
+"soldier": 3,
+"trader": 1
+}

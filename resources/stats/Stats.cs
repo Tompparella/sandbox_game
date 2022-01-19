@@ -143,6 +143,10 @@ public class Stats : Resource
         agility++;
         moveSpeed = Constants.DEF_MAXPEED * (1 + 0.01f * agility);
     }
+    public void RaiseHealth(float heal) {
+        currentHealth += heal;
+        currentHealth = currentHealth > health ? health : currentHealth;
+    }
 
     public void UpdateStats() {
         attackSpeed = Constants.DEF_ATTACKSPEED * (1 - 0.005f * dexterity);

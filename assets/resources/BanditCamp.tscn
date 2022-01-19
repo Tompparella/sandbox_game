@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://resources/sprites/assets/resources/full/tree.png" type="Texture" id=1]
+[ext_resource path="res://scripts/utilities/resources/BanditCamp.cs" type="Script" id=2]
+
+[node name="BanditCamp" type="Area2D" groups=[
+"resource",
+"spawner",
+]]
+script = ExtResource( 2 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( -32, 0 )
+polygon = PoolVector2Array( 24, 8, 40, 24, 96, 0, 72, -32, 64, -32, 56, -64, 56, -136, 80, -128, 120, -136, 136, -168, 136, -192, 144, -208, 144, -240, 128, -256, 112, -256, 112, -272, 96, -288, 88, -296, 72, -304, 48, -312, 8, -312, -16, -304, -32, -296, -40, -288, -48, -272, -56, -272, -72, -264, -80, -256, -88, -240, -88, -208, -72, -192, -64, -184, -72, -168, -56, -152, -40, -144, -16, -136, -16, -128, 8, -128, 8, -80, 0, -32, -16, -24, -16, -16, -48, 0, -16, 0, -16, 16, 0, 24 )
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 0.827451, 0, 1, 1 )
+position = Vector2( 0, -128 )
+texture = ExtResource( 1 )

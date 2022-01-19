@@ -17,7 +17,6 @@ public class NpcStateMachine : StateMachine
             { "work", (State)GetNode("Work")},
             { "trade", (State)GetNode("Trade")}
         };
-        parent.Connect("AttackTarget", this, nameof(_ChangeState));
         base._Ready();
     }
     /*

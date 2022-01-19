@@ -8,8 +8,10 @@ public class InventorySlot : Panel {
     public override void _Ready()
     {
         inventory = (InventoryDisplay)GetParent();
+        
         Connect("mouse_entered", this, nameof(_OnMouseOver));
         Connect("mouse_exited", this, nameof(_OnMouseExit));
+        
         tooltip = (Tooltip)packedTooltip.Instance();
         AddChild(tooltip);
     }
