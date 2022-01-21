@@ -7,6 +7,7 @@ public class Lumber : Resources
 {
     public override void _Ready()
     {
+        workerProfession = Constants.LUMBERJACK_PROFESSION;
         actions = Constants.LUMBERACTIONS;
         dialogue = new ResourceDialogue(this, Constants.LUMBER_DESCRIPTION, actions);
         entityName = Constants.TREE_NAME;

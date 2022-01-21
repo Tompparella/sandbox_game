@@ -7,6 +7,7 @@ public class Oven : Refinery
 {
     public override void _Ready()
     {
+        workerProfession = Constants.BAKER_PROFESSION;
         craftableItems = new List<Item>() {
             (Item)GD.Load(Constants.BREADITEM),
             (Item)GD.Load(Constants.FLOURITEM),

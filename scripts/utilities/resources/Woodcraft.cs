@@ -7,6 +7,7 @@ public class Woodcraft : Refinery
 {
 	public override void _Ready()
 	{
+		workerProfession = Constants.CRAFTSMAN_PROFESSION;
 		craftableItems = new List<Item>() {
 			(Item)GD.Load(Constants.CONSUMERITEM),
 		};

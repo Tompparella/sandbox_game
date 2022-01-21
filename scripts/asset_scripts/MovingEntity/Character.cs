@@ -18,10 +18,17 @@ public class Character : MovingEntity
     public delegate void OnMouseExit(Character character);
     [Signal]
     public delegate void OnCharacterClick(Character character, InputEvent @event);
+
     [Signal]
     public delegate void AttackSignal();
     [Signal]
     public delegate void UnderAttack(Character attacker);
+    [Signal]
+    public delegate void Refresh(Character attacker);
+    [Signal]
+    public delegate void Dead(Character attacker);
+
+    
     
     // Utility variables
 
@@ -99,12 +106,12 @@ public class Character : MovingEntity
     public void TakeAttack(Attack attack) {
         AddTarget(attack.source);
         EmitSignal(nameof(UnderAttack), attack.source);
-        // Increase aggro
-        targets[attack.source] += attack.damage;
         Random random = new Random();
         DamageCounter newCounter = (DamageCounter)damageCounter.Instance();
         if (random.NextDouble() >= stats.dodge) {
-            float takenDamage = attack.damage * (1 - 0.005f * stats.defence);
+            int takenDamage = (int)(attack.damage * (1 - 0.005f * stats.defence));
+            // Increase aggro
+            targets[attack.source] += takenDamage;
             stats.currentHealth -= takenDamage;
             GD.Print(entityName, ":", stats.currentHealth);
             newCounter.init(takenDamage.ToString());
@@ -216,6 +223,7 @@ public class Character : MovingEntity
         if (stats == null) {
             stats = (Stats)ResourceLoader.Load(Constants.DEF_STATS).Duplicate();
         } else {
+            stats = (Stats)stats.Duplicate(); // Makes each stats a unique instance. TODO: When implementing savegame, this has to be redone.
             stats.UpdateStats();
         }
 

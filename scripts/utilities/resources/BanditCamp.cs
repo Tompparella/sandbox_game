@@ -13,17 +13,18 @@ public class BanditCamp : Camp
 
     public override void _Ready()
     {
+        workerProfession = Constants.BANDIT_PROFESSION;
         packedBandit = (PackedScene)GD.Load(Constants.BANDIT);
         charactersNode = GetNode("../../Characters");
         spawnTimer.OneShot = true;   // Instancing the spawnTimer
-        spawnTimer.WaitTime = 180;
+        spawnTimer.WaitTime = 15;
         spawnTimer.Connect("timeout", this, nameof(SpawnBandit));
         AddChild(spawnTimer);
         spawnTimer.Start();
         base._Ready();
     }
     private void SpawnBandit() {
-		Npc banditInstance = (Npc)packedBandit.Instance();
+		Npc banditInstance = (Npc)packedBandit.Instance().Duplicate();
         banditInstance.Position = Position;
         banditInstance.entityName = "Bad Boy Bandit";
 		charactersNode.AddChild(banditInstance);

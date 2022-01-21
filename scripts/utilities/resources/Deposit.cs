@@ -9,6 +9,7 @@ public class Deposit : Resources
     private string depositType;
     public override void _Ready()
     {
+        workerProfession = Constants.MINER_PROFESSION;
         sprite = (Sprite)GetNode("Sprite");
         
         actions = Constants.DEPOSITACTIONS;

@@ -12,6 +12,7 @@ public class Guardpost : Resources
 
     public override void _Ready()
     {
+        workerProfession = Constants.SOLDIER_PROFESSION;
         actions = Constants.DEF_WORKACTIONS;
         dialogue = new ResourceDialogue(this, Constants.GUARDPOST_DESCRIPTION, actions);
 

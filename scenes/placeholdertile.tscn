@@ -30,33 +30,33 @@
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
 profession = "soldier"
-strength = 25
-vitality = 25
-dexterity = 25
-defence = 25
-agility = 25
+strength = 100
+vitality = 100
+dexterity = 100
+defence = 100
+agility = 100
 labour = 50
 isDead = false
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 12 )
 profession = "soldier"
-strength = 25
-vitality = 25
-dexterity = 25
-defence = 25
-agility = 25
+strength = 100
+vitality = 100
+dexterity = 100
+defence = 100
+agility = 100
 labour = 50
 isDead = false
 
 [sub_resource type="Resource" id=3]
 script = ExtResource( 12 )
 profession = "soldier"
-strength = 25
-vitality = 25
-dexterity = 25
-defence = 25
-agility = 25
+strength = 100
+vitality = 100
+dexterity = 100
+defence = 100
+agility = 100
 labour = 50
 isDead = false
 
@@ -124,11 +124,11 @@ position = Vector2( 1216, -896 )
 depositType = "iron"
 
 [node name="Deposit2" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]
-position = Vector2( 2872, -368 )
+position = Vector2( 2800, -1872 )
 depositType = "silver"
 
 [node name="Deposit3" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]
-position = Vector2( 2296, -736 )
+position = Vector2( 2008, -1856 )
 depositType = "iron"
 
 [node name="Woodcraft" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 19 )]
@@ -156,7 +156,7 @@ position = Vector2( 1504, -304 )
 scale = Vector2( 1.00436, 1 )
 
 [node name="BanditCamp" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 11 )]
-position = Vector2( 3280, -1848 )
+position = Vector2( 2800, -256 )
 
 [node name="Characters" type="YSort" parent="NavigationHandler/MapSort" groups=[
 "characters_node",

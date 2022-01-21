@@ -9,7 +9,7 @@ public class Inventory : Resource
     [Signal]
     public delegate void OnItemRemoved(Item item);
     [Export]
-    public int currency;
+    public int currency = 0;
     [Export]
     public List<Item> items = new List<Item> {
         null, null, null, null,

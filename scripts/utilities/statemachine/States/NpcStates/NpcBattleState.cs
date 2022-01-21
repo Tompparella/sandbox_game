@@ -27,6 +27,7 @@ public class NpcBattleState : NpcMoveState
 
     public override void Exit()
     {
+        combatCooldown = 0;
         base.Exit();
     }
 
@@ -36,6 +37,7 @@ public class NpcBattleState : NpcMoveState
             if (staggered) {
                 TickLoop(delta);
             } else if (owner.Position.DistanceTo(owner.GetTarget().Position) < weaponRange) {
+                combatCooldown = 0;
                 AttackTarget();
                 return;
             } else {
@@ -62,7 +64,6 @@ public class NpcBattleState : NpcMoveState
     private void CombatEscape(float delta) {
         combatCooldown += delta;
         if (combatCooldown >= combatEscapeTime) {
-            combatCooldown = 0;
             EmitSignal("Finished", "idle");
         }
     }
@@ -84,6 +85,7 @@ public class NpcBattleState : NpcMoveState
 
     public override void HandleAttack()
     {
+        combatCooldown = 0;
         if (owner.stats.currentHealth <= 0) {
             base.HandleAttack();
         } else {

@@ -26,6 +26,7 @@ public class Barracks : Refinery
 
     public override void _Ready()
     {
+        workerProfession = Constants.LOGISTICSOFFICER_PROFESSION;
         craftableItems = new List<Item>() {
             (Item)GD.Load(Constants.LOGISTICSITEM),
             (Item)GD.Load(Constants.RATIONITEM),
@@ -97,8 +98,7 @@ public class Barracks : Refinery
         if (trading) {
             worker.RemoveFromGroup(Constants.LOGISTICS_GROUP);
             worker.tradeInventory = worker.inventory;
-            worker.Monitorable = false;
-            worker.Monitorable = true;
+            worker.EmitSignal("Refresh", worker);
         }
         trading = false;
         base.RemoveWorker(worker);
@@ -111,8 +111,7 @@ public class Barracks : Refinery
         */
         worker.AddToGroup(Constants.LOGISTICS_GROUP);
         worker.tradeInventory = inventory;
-        worker.Monitorable = false;             // This is done because we want soldiers to notice this worker as a logistics unit.
-        worker.Monitorable = true;
+        worker.EmitSignal("Refresh", worker);
         trading = true;
 
         int edibleItems = inventory.GetEdibleItemCount();
@@ -128,8 +127,7 @@ public class Barracks : Refinery
             Character worker = workers.First();
             worker.RemoveFromGroup(Constants.LOGISTICS_GROUP);
             worker.tradeInventory = worker.inventory;
-            worker.Monitorable = false;
-            worker.Monitorable = true;
+            worker.EmitSignal("Refresh", worker);
         }
         trading = false;
     }

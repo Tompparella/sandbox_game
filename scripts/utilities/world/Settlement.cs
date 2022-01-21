@@ -11,16 +11,22 @@ public class Settlement : Area2D {
 
     private List<Barracks> settlementBarracks = new List<Barracks>();
     private List<TradeStall> settlementTradestalls = new List<TradeStall>();
+    private PackedScene packedNpc = (PackedScene)GD.Load(Constants.NPC);
+    private Node charactersNode;
     [Export]
     public SettlementInfo settlementInfo = new SettlementInfo();
+    [Signal]
+    public delegate void SpawnEntity(MovingEntity entity);
 
     public void Initialize()  // Called from gamemanager to initiate the factions information.
     {
         Godot.Collections.Array areaEntities = GetOverlappingAreas();
 
         List<Guardpost> guardPosts = new List<Guardpost>();     // We'll find the settlement guardposts here and assign them to barracks evenly.
-        List<Resources> resources = new List<Resources>();
+        List<Resources> resources = new List<Resources>();      // No use at the moment, but the available jobs could be calculated from available resources.
         List<Npc> npcs = new List<Npc>();
+
+        charactersNode = GetNode("../../../NavigationHandler/MapSort/Characters");
 
         foreach (Area2D area in areaEntities)
         {
@@ -54,20 +60,10 @@ public class Settlement : Area2D {
                     break;
             }
             if (area is Character character) {
-                if (string.IsNullOrEmpty(character.GetFaction())) {
-                     character.SetFaction(settlementInfo.settlementFaction);
-                }
-                if (character.GetFaction().Equals(GetFactionString())) {
-                    character.Connect("UnderAttack", this, nameof(NotifySoldiers));
-                    settlementInfo.WorkerAdded(character.GetProfession());
-                }
+                HandleCharacter(character);
             }
         }
-        resources.AddRange(guardPosts);
-        resources.AddRange(settlementBarracks);
-        resources.AddRange(settlementTradestalls);
-
-        SetNpcJobs(npcs, resources);
+        SetNpcJobs(npcs);
         AssignGuardPostsToBarracks(guardPosts);
     }
 
@@ -93,16 +89,75 @@ public class Settlement : Area2D {
     private void NotifySoldiers(Character attacker) {
         settlementBarracks?.ForEach(x => x.AlertSoldiers(attacker));
     }
+    private void OnVillagerDied(Character villager) {
+        if (settlementInfo.jobsAvailable.ContainsKey(villager.GetProfession())) {
+            settlementInfo.jobsAvailable[villager.GetProfession()] += 1;
+        }
+        SpawnVillager();    // To keep jobs occupied
+    }
+    private void SpawnVillager() {
+		Npc npcInstance = (Npc)packedNpc.Instance().Duplicate();
+        npcInstance.Position = Position;
+        npcInstance.entityName = "Spawned Villager";
+		charactersNode.AddChild(npcInstance);
+        EmitSignal(nameof(SpawnEntity), npcInstance);
+        GD.Print("Spawned a villager");
+        HandleCharacter(npcInstance);
+        SetNpcJobs(new List<Npc>() { npcInstance });    // Give the spawned Npc a profession.
+    }
+    private void HandleCharacter(Character character) {
+        if (string.IsNullOrEmpty(character.GetFaction())) {
+            character.SetFaction(settlementInfo.settlementFaction);
+        }
+        if (character.GetFaction().Equals(GetFactionString())) {
+            character.Connect("Dead", this, nameof(OnVillagerDied));
+            character.Connect("UnderAttack", this, nameof(NotifySoldiers));
+            settlementInfo.WorkerAdded(character.GetProfession());
+        }
+    }
 
     // Used for development. Will be reworked in the future.
-    private void SetNpcJobs(List<Npc> npcs, List<Resources> resources) {
+    private void SetNpcJobs(List<Npc> npcs) {
 
         Dictionary<string,int> jobsAvailable = settlementInfo.jobsAvailable;
-        List<Resources> newResources = new List<Resources>();
 
         foreach (KeyValuePair<string,int> kvp in jobsAvailable.ToArray())
         {
-            GD.Print(string.Format("Settlement: Handling job: {0}", kvp.Key));
+            for (int i = 0; i < kvp.Value; i++) {
+                Npc currentNpc = npcs.FirstOrDefault();
+                if (currentNpc == null) {
+                    return;
+                }
+                currentNpc.SetProfession(kvp.Key);  // This needs to be done to update the npc's surrounding resources and enter new workstate.
+                currentNpc.SetInteractive();
+                //GD.Print(jobsAvailable[kvp.Key]);
+                settlementInfo.WorkerAdded(kvp.Key);
+                npcs.RemoveAt(0);
+                GD.Print(string.Format("Settlement: Handed job {0} to Npc: {1}", kvp.Key, currentNpc.entityName));
+            }
+        }
+    }
+
+    // Debugging
+    private string GetFactionString() {
+        return settlementInfo.settlementFaction.factionName;
+    }
+    private string GetHostileFactionsString() {
+        return string.Join(", " ,settlementInfo.settlementFaction.hostileFactions);
+    }
+
+    private void createDebugInstance()  // Keep track of faction, etc. during development.
+	{
+		PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");
+		DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();
+		AddChild(debugInstance);
+		debugInstance.AddStat("Faction", this, "GetFactionString", true);
+		debugInstance.AddStat("Hostile Factions", this, "GetHostileFactionsString", true);
+	}
+}
+
+
+/*
             switch (kvp.Key)
             {
                 case Constants.TRADER_PROFESSION:
@@ -136,36 +191,4 @@ public class Settlement : Area2D {
                     GD.Print(string.Format("Settlement: Error handling job: {0}", kvp.Key));
                     break;
             }
-            for (int i = 0; i < kvp.Value; i++) {
-                Npc currentNpc = npcs.FirstOrDefault();
-                if (currentNpc == null) {
-                    return;
-                }
-                currentNpc.SetProfession(kvp.Key);  // This needs to be done to update the npc's surrounding resources and enter new workstate.
-                currentNpc.ClearSurroundings();
-                currentNpc.AddSurroundings(newResources);
-                currentNpc.SetInteractive();
-                //GD.Print(jobsAvailable[kvp.Key]);
-                settlementInfo.WorkerAdded(kvp.Key);
-                npcs.RemoveAt(0);
-            }
-        }
-    }
-
-    // Debugging
-    private string GetFactionString() {
-        return settlementInfo.settlementFaction.factionName;
-    }
-    private string GetHostileFactionsString() {
-        return string.Join(", " ,settlementInfo.settlementFaction.hostileFactions);
-    }
-
-    private void createDebugInstance()  // Keep track of faction, etc. during development.
-	{
-		PackedScene packedDebug = (PackedScene)ResourceLoader.Load("res://assets/debug/DebugInstance.tscn");
-		DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();
-		AddChild(debugInstance);
-		debugInstance.AddStat("Faction", this, "GetFactionString", true);
-		debugInstance.AddStat("Hostile Factions", this, "GetHostileFactionsString", true);
-	}
-}
+            */

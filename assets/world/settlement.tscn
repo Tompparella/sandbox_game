@@ -4,6 +4,7 @@
 
 [node name="Settlement" type="Area2D" groups=[
 "settlement",
+"spawner",
 ]]
 script = ExtResource( 1 )
 

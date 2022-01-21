@@ -23,7 +23,8 @@ public class Interactive : Area2D
     {
         if (inventory == null) {
             inventory = (Inventory)ResourceLoader.Load(Constants.DEF_INVENTORY).Duplicate();
-            inventory.currency = 60;
+        } else {
+            inventory = (Inventory)inventory.Duplicate(); // Creates a unique instance of inventory. TODO: When implementing savegame, this has to be redone.
         }
         inventory.Connect("OnItemAdd", this, nameof(CheckNeeds));
         inventory.Connect("OnItemRemoved", this, nameof(ItemRemoved));

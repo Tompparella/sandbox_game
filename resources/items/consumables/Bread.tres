@@ -15,4 +15,4 @@ value = 35
 recipe = ExtResource( 2 )
 nutritionValue = 50.0
 commodityValue = 0.0
-healValue = 15.0
+healValue = 20.0

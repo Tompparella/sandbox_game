@@ -7,6 +7,7 @@ public class NpcDeadState : State
     public override void Enter() {
         GD.Print(string.Format("{0} has died", owner.entityName));
         owner.stats.isDead = true;
+        owner.EmitSignal("Dead", owner);
         queueFreeTimer.OneShot = true;
 		queueFreeTimer.WaitTime = 5;
 		queueFreeTimer.Connect("timeout", this, "RemoveNpc");

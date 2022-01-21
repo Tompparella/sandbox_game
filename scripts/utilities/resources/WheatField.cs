@@ -7,6 +7,7 @@ public class WheatField : Resources
 {
     public override void _Ready()
     {
+        workerProfession = Constants.FARMER_PROFESSION;
         actions = Constants.FARMACTIONS;
         dialogue = new ResourceDialogue(this, Constants.FARM_DESCRIPTION, actions);
         entityName = "Wheat Field";

@@ -12,6 +12,7 @@ public class Blacksmith : Refinery
 		The demand for supplies relates to the amount of soldiers, and if these needs are not met, the soldiers will start to suffer debuffs (rusting, bad morale, etc).
 		Blacksmith also creates a certain amount of weapons and armor, that can be sold to barracks, the open market, or to global trade.
 		*/
+		workerProfession = Constants.BLACKSMITH_PROFESSION;
 		craftableItems = new List<Item>() {
 			(Item)GD.Load(Constants.SUPPLIESITEM),
 		};

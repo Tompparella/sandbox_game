@@ -17,95 +17,51 @@ public class Npc : Character
 
 	public void _OnSurroundingsEntered(Area2D area)
 	{
-		switch (GetProfession())
-		{
-			case Constants.LUMBERJACK_PROFESSION:
-				if (area is Lumber)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+		switch(area) {
+			case Resources resource:
+				if (resource.workerProfession.Equals(GetProfession())) {
+				outOfWork = false;
 				}
-				break;
-			case Constants.MINER_PROFESSION:
-				if (area is Deposit)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				surroundingResources.Add(resource);
+				area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+			break;
+			case Character character:
+				character.Connect("Refresh", this, nameof(_RefreshSurroundingCharacter));
+				if (GetProfession().Equals(Constants.SOLDIER_PROFESSION)) {
+					if (character.IsInGroup(Constants.LOGISTICS_GROUP)) {
+						nearbyTraders.Add(character);
+					}
+				} else if (character.IsInGroup(Constants.TRADER_GROUP)) {
+					nearbyTraders.Add(character);
 				}
-				break;
-
-			case Constants.FARMER_PROFESSION:
-				if (area is WheatField)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.TRADER_PROFESSION:
-				if (area is TradeStall)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.BAKER_PROFESSION:
-				if (area is Oven)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.CRAFTSMAN_PROFESSION:
-				if (area is Woodcraft)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.BLACKSMITH_PROFESSION:
-				if (area is Blacksmith)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.LOGISTICSOFFICER_PROFESSION:
-				if (area is Barracks)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-
-			case Constants.SOLDIER_PROFESSION:
-				if (area is Guardpost)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				} else if (area.IsInGroup(Constants.LOGISTICS_GROUP)) {
-					nearbyTraders.Add((Character)area);
-				}
-				return;
-			default:
-				if (area is Camp) {
-					outOfWork = false;
-					surroundingResources.Add(area as Resources);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
+			break;
 		}
-		if (area.IsInGroup(Constants.TRADER_GROUP))
+	}
+	public void _OnSurroundingsExited(Area2D area)
+	{
+		switch (area)
 		{
-			nearbyTraders.Add((Character)area);
+			case Resources resource:
+				if (surroundingResources.Contains(resource))
+				{
+					if (resource.IsConnected("OnRemoval", this, nameof(SurroundingRemoved)))
+					{
+						resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
+					}
+					surroundingResources.Remove(resource);
+				}
+			break;
+			case Character character:
+				if (nearbyTraders.Contains(character))
+				{
+					nearbyTraders.Remove(character);
+				}
+				if (character.IsConnected("Refresh", this, nameof(_RefreshSurroundingCharacter))) {
+					character.Disconnect("Refresh", this, nameof(_RefreshSurroundingCharacter));
+				}
+				break;
+			default:
+			break;
 		}
 	}
 
@@ -119,32 +75,33 @@ public class Npc : Character
 	public void _OnProximityExited(Area2D area) {
 	}
 
-	public bool WorkableResourcesExist()
-	{
-		return (surroundingResources.Any());
-	}
+	public void _RefreshSurroundingCharacter(Character character) {
 
-	public void _OnSurroundingsExited(Area2D area)
-	{
-		if (surroundingResources.Contains(area))
-		{
-			if (area.IsConnected("OnRemoval", this, nameof(SurroundingRemoved)))
-			{
-				area.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
+		if (nearbyTraders.Contains(character)) {
+			nearbyTraders.Remove(character);
+		}
+		if (GetProfession().Equals(Constants.SOLDIER_PROFESSION)) {
+			if (character.IsInGroup(Constants.LOGISTICS_GROUP)) {
+				nearbyTraders.Add(character);
 			}
-			surroundingResources.Remove((Resources)area);
-		} else if (nearbyTraders.Contains(area))
-		{
-			nearbyTraders.Remove((Character)area);
+		} else if (character.IsInGroup(Constants.TRADER_GROUP)) {
+			nearbyTraders.Add(character);
 		}
 	}
 
+	public bool WorkableResourcesExist()
+	{
+		return (surroundingResources.Any(x => x.workerProfession.Equals(GetProfession())));
+	}
+
+	/*
 	public void ClearSurroundings() {
 		surroundingResources.ToList().ForEach(x => _OnSurroundingsExited(x));
 	}
 	public void AddSurroundings(List<Resources> newSurroundings) {
 		newSurroundings.ForEach(x => _OnSurroundingsEntered(x));
 	}
+	*/
 
 	private void SurroundingRemoved(Interactive resource)
 	{
@@ -185,9 +142,9 @@ public class Npc : Character
 		Resources currentResource = null;
 		float shortestDistance = float.MaxValue;
 		int leastWorkers = int.MaxValue;
-		foreach (Resources i in surroundingResources.ToList())
+		foreach (Resources i in GetSurroundingWorkableResources())
 		{
-			if ((currentResource == null || i.GetWorkers().Count() <= leastWorkers))
+			if ((currentResource == null || i.GetWorkerNumber() <= leastWorkers))
 			{
 				if (!IsInstanceValid(i) || i.GetExhausted())
 				{
@@ -207,6 +164,9 @@ public class Npc : Character
 		}
 		SetInteractive(currentResource);
 		return foundWork;
+	}
+	private List<Resources> GetSurroundingWorkableResources() {
+		return surroundingResources.Where(x => x.workerProfession.Equals(GetProfession())).ToList();
 	}
 
 	private bool IsEnemy(string factionName) {
@@ -300,8 +260,8 @@ public class Npc : Character
 	private string GetNearbyTradersString() {
 		return string.Join(", " ,nearbyTraders.Select(x => x.entityName));
 	}
-	private string GetSurroundingResourcesString() {
-		return string.Join(", " ,surroundingResources.Select(x => x.entityName));
+	private string GetSurroundingWorkableResourcesString() {
+		return string.Join(", " ,GetSurroundingWorkableResources().Select(x => x.entityName));
 	}
 	private string GetHostilesString() {
 		if (stats.faction != null) {
@@ -340,7 +300,7 @@ public class Npc : Character
 		debugInstance.AddStat("Hostile", this, "GetHostilesString", true);
 		debugInstance.AddStat("Aggressive", this, "aggressive", false);
 		debugInstance.AddStat("Profession", this, "GetProfession", true);
-		debugInstance.AddStat("Surrounding Resources", this, "GetSurroundingResourcesString", true);
+		debugInstance.AddStat("Surrounding Resources", this, "GetSurroundingWorkableResourcesString", true);
 		debugInstance.AddStat("Nearby Traders", this, "GetNearbyTradersString", true);
 		debugInstance.AddStat("Needed Items", this, "GetNeededItemsString", true);
 		// debugInstance.AddStat("Sold Items", this, "soldItems", false);
@@ -354,14 +314,7 @@ public class Npc : Character
 	public override void _Ready()
 	{
 		base._Ready();
-		/*
-		if (GetProfession() == null)
-		{
-			Random r = new Random();
-			int index = r.Next(Constants.PROFESSIONS.Count());
-			SetProfession(Constants.PROFESSIONS[index]);	// Set a random profession. Will be reworked when needed.
-		}
-		*/
+
 		createDebugInstance(); // For debugging. Comment out to disable.
 
 		// Instance the outOfWork timer
@@ -372,3 +325,92 @@ public class Npc : Character
 
 	}
 }
+
+/*
+switch (GetProfession())
+		{
+			case Constants.LUMBERJACK_PROFESSION:
+				if (area is Lumber)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
+			case Constants.MINER_PROFESSION:
+				if (area is Deposit)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
+
+			case Constants.FARMER_PROFESSION:
+				if (area is WheatField)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
+			case Constants.TRADER_PROFESSION:
+				if (area is TradeStall)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
+			case Constants.BAKER_PROFESSION:
+				if (area is Oven)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
+			case Constants.CRAFTSMAN_PROFESSION:
+				if (area is Woodcraft)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
+			case Constants.BLACKSMITH_PROFESSION:
+				if (area is Blacksmith)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
+			case Constants.LOGISTICSOFFICER_PROFESSION:
+				if (area is Barracks)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
+
+			case Constants.SOLDIER_PROFESSION:
+				if (area is Guardpost)
+				{
+					outOfWork = false;
+					surroundingResources.Add((Resources)area);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				} else if (area.IsInGroup(Constants.LOGISTICS_GROUP)) {
+					nearbyTraders.Add((Character)area);
+				}
+				return;
+			default:
+				if (area is Camp) {
+					outOfWork = false;
+					surroundingResources.Add(area as Resources);
+					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+				}
+				break;
+		}
+		*/

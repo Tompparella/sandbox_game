@@ -9,6 +9,7 @@ public class TradeStall : Resources
 
     public override void _Ready()
     {
+        workerProfession = Constants.TRADER_PROFESSION;
         actions = Constants.TRADEACTIONS;
         dialogue = new ResourceDialogue(this, Constants.TRADESTALL_DESCRIPTION, actions);
 
@@ -30,16 +31,14 @@ public class TradeStall : Resources
     public override bool AddWorker(Character worker) {      // Upon entering, make it so that the trader used the stall's inventory while trading.
         worker.AddToGroup(Constants.TRADER_GROUP);
         worker.tradeInventory = inventory;
-        worker.Monitorable = false;                         // This is done because we want other entities to notice this worker as a trader.
-        worker.Monitorable = true;
+        worker.EmitSignal("Refresh", worker);
         return base.AddWorker(worker);
     }
 
     public override void RemoveWorker(Character worker) {   // Upon exiting, return default inventory as the traded inventory.
         worker.RemoveFromGroup(Constants.TRADER_GROUP);
         worker.tradeInventory = worker.inventory;
-        worker.Monitorable = false;
-        worker.Monitorable = true;
+        worker.EmitSignal("Refresh", worker);
         base.RemoveWorker(worker);
     }
 

@@ -10,6 +10,7 @@ public class Resources : Interactive
     public delegate void OnMouseOver(Resource resource);
     [Signal]
     public delegate void OnMouseExit();
+    public string workerProfession { get; protected set; } = Constants.DEF_PROFESSION;
 
     protected int requiredActions = Constants.DEF_REQUIREDACTIONS;
     protected int currentActions = 0;
