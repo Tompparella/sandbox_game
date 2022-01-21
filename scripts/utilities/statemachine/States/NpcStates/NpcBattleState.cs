@@ -94,10 +94,12 @@ public class NpcBattleState : NpcMoveState
     protected override void MovementLoop(float delta)
     {
         float distanceToLast = owner.movePath.Any() ? owner.Position.DistanceTo(owner.movePath.Last()) : 0;
-        if (distanceToLast > weaponRange) {
-            base.MovementLoop(delta);
-        } else if (owner.movePath.Last() != owner.GetTarget()?.Position) {
-            owner.GetMovePath(owner.GlobalPosition, owner.GetTarget().Position, owner);
+        if (distanceToLast > 0) {
+            if (distanceToLast > weaponRange) {
+                base.MovementLoop(delta);
+            } else if (owner.movePath.Last() != owner.GetTarget().Position) {
+                owner.GetMovePath(owner.GlobalPosition, owner.GetTarget().Position, owner);
+            }   
         }
     }
 }

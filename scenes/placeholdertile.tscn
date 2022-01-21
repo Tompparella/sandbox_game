@@ -30,33 +30,33 @@
 [sub_resource type="Resource" id=1]
 script = ExtResource( 12 )
 profession = "soldier"
-strength = 100
-vitality = 100
-dexterity = 100
-defence = 100
-agility = 100
+strength = 25
+vitality = 25
+dexterity = 25
+defence = 25
+agility = 25
 labour = 50
 isDead = false
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 12 )
 profession = "soldier"
-strength = 100
-vitality = 100
-dexterity = 100
-defence = 100
-agility = 100
+strength = 25
+vitality = 25
+dexterity = 25
+defence = 25
+agility = 25
 labour = 50
 isDead = false
 
 [sub_resource type="Resource" id=3]
 script = ExtResource( 12 )
 profession = "soldier"
-strength = 100
-vitality = 100
-dexterity = 100
-defence = 100
-agility = 100
+strength = 25
+vitality = 25
+dexterity = 25
+defence = 25
+agility = 25
 labour = 50
 isDead = false
 
@@ -120,7 +120,7 @@ position = Vector2( 2456, 744 )
 refreshTime = 600.0
 
 [node name="Deposit" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]
-position = Vector2( 1224, -896 )
+position = Vector2( 1216, -896 )
 depositType = "iron"
 
 [node name="Deposit2" parent="NavigationHandler/MapSort/Assets" instance=ExtResource( 13 )]

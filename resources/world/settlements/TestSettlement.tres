@@ -5,8 +5,6 @@
 
 [resource]
 script = ExtResource( 1 )
-settlementName = "Test Settlement"
-settlementFaction = ExtResource( 2 )
 jobsAvailable = {
 "baker": 1,
 "blacksmith": 1,
@@ -18,3 +16,5 @@ jobsAvailable = {
 "soldier": 3,
 "trader": 1
 }
+settlementName = "Test Settlement"
+settlementFaction = ExtResource( 2 )

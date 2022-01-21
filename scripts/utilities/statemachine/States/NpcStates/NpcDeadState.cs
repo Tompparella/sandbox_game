@@ -5,6 +5,7 @@ public class NpcDeadState : State
 {
     private Timer queueFreeTimer = new Timer();
     public override void Enter() {
+        GD.Print(string.Format("{0} has died", owner.entityName));
         owner.stats.isDead = true;
         queueFreeTimer.OneShot = true;
 		queueFreeTimer.WaitTime = 5;

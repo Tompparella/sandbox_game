@@ -18,7 +18,7 @@ public class Constants
     public const float DEF_MINCOMMODITIES = -10;
     public const float DEF_MAXCOMMODITIES = 100;
     public const float DEF_TRADEPROFIT = 0.1f; // The amount of profit a trader makes per sale I.e, when buying an item worth 20, they get it for 18, and when selling, they get 22, the trader.
-    public const float COMBATESCAPETIME = 10;
+    public const float COMBATESCAPETIME = 20;
 
     public const string DEF_PORTRAIT = "res://resources/sprites/placeholderCharacter/placeholder_portrait.png";
     public const string TREETRUNK_PORTRAIT = "res://resources/sprites/assets/resources/portrait/tree_trunk_portrait.png";

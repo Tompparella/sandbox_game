@@ -59,6 +59,7 @@ public class Settlement : Area2D {
                 }
                 if (character.GetFaction().Equals(GetFactionString())) {
                     character.Connect("UnderAttack", this, nameof(NotifySoldiers));
+                    settlementInfo.WorkerAdded(character.GetProfession());
                 }
             }
         }
@@ -145,7 +146,7 @@ public class Settlement : Area2D {
                 currentNpc.AddSurroundings(newResources);
                 currentNpc.SetInteractive();
                 //GD.Print(jobsAvailable[kvp.Key]);
-                jobsAvailable[kvp.Key] -= 1;
+                settlementInfo.WorkerAdded(kvp.Key);
                 npcs.RemoveAt(0);
             }
         }

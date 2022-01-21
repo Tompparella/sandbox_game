@@ -104,9 +104,10 @@ public class Character : MovingEntity
         Random random = new Random();
         DamageCounter newCounter = (DamageCounter)damageCounter.Instance();
         if (random.NextDouble() >= stats.dodge) {
-            stats.currentHealth -= attack.damage * (1 - 0.01f * stats.defence);
+            float takenDamage = attack.damage * (1 - 0.005f * stats.defence);
+            stats.currentHealth -= takenDamage;
             GD.Print(entityName, ":", stats.currentHealth);
-            newCounter.init(attack.damage.ToString());
+            newCounter.init(takenDamage.ToString());
         } else {
             newCounter.init("Dodge");
         }

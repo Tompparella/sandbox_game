@@ -13,11 +13,10 @@ public class BanditCamp : Camp
 
     public override void _Ready()
     {
-        patrolTime = 5;
         packedBandit = (PackedScene)GD.Load(Constants.BANDIT);
         charactersNode = GetNode("../../Characters");
         spawnTimer.OneShot = true;   // Instancing the spawnTimer
-        spawnTimer.WaitTime = patrolTime;
+        spawnTimer.WaitTime = 180;
         spawnTimer.Connect("timeout", this, nameof(SpawnBandit));
         AddChild(spawnTimer);
         spawnTimer.Start();
@@ -26,6 +25,7 @@ public class BanditCamp : Camp
     private void SpawnBandit() {
 		Npc banditInstance = (Npc)packedBandit.Instance();
         banditInstance.Position = Position;
+        banditInstance.entityName = "Bad Boy Bandit";
 		charactersNode.AddChild(banditInstance);
         EmitSignal(nameof(SpawnEntity), banditInstance);
         GD.Print("Spawned a bandit");
