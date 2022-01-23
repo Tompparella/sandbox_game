@@ -11,9 +11,10 @@ public class BattleState : MoveState
     private float tickDelta = 0;
     private int ticks = 0;
     private bool staggered = false;
+    private Character target;
 
     public override void Enter() {
-        Character target = owner.GetTarget();
+        target = owner.GetTarget();
         if (target == null) {
             EmitSignal(nameof(Finished), "idle");
             return;
@@ -40,15 +41,21 @@ public class BattleState : MoveState
 
     public override void Update(float delta)
     {
-        if (staggered) {
-            TickLoop(delta);
-        } else if (owner.Position.DistanceTo(owner.GetTarget().Position) < weaponRange) {
-            AttackTarget();
-            return;
-        } else {
-            CombatEscape(delta);
+        target = owner.GetTarget();
+        if (target != null) {
+            if (staggered) {
+                TickLoop(delta);
+            } else if (owner.Position.DistanceTo(target.Position) <= weaponRange) {
+                AttackTarget();
+                return;
+            } else {
+                CombatEscape(delta);
+            }
+            base.Update(delta);
         }
-        base.Update(delta);
+         else {
+            EmitSignal(nameof(Finished), "idle");
+        }
     }
 
     private void TickLoop(float delta) {
@@ -75,7 +82,7 @@ public class BattleState : MoveState
     }
 
     private void AttackTarget() {
-        if (owner.GetTarget().IsDead()) {
+        if (target.IsDead()) {
             owner.ClearCurrentTarget();
             if (owner.GetTarget() == null) {
                 EmitSignal("Finished", "idle");
@@ -85,7 +92,7 @@ public class BattleState : MoveState
         // Here the attack is supposed to be fetched from a dictionary with weighing.
         Attack attack = new Attack(owner);
         // Play attack animation at speed x
-        owner.GetTarget().TakeAttack(attack);
+        target.TakeAttack(attack);
         staggered = true;
     }
 
@@ -104,8 +111,9 @@ public class BattleState : MoveState
         if (distanceToLast > 0) {
             if (distanceToLast > weaponRange) {
                 base.MovementLoop(delta);
-            } else if (owner.movePath.Last() != owner.GetTarget()?.Position) {
-                owner.GetMovePath(owner.GlobalPosition, owner.GetTarget().Position, owner);
+            } 
+            else if (owner.movePath.Last() != target.Position) {
+                owner.GetMovePath(owner.GlobalPosition, target.Position, owner);
             }
         }
     }

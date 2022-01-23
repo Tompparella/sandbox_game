@@ -12,18 +12,25 @@ public class Settlement : Area2D {
     private List<Barracks> settlementBarracks = new List<Barracks>();
     private List<TradeStall> settlementTradestalls = new List<TradeStall>();
     private PackedScene packedNpc = (PackedScene)GD.Load(Constants.NPC);
+    private Dictionary<string, int> itemDemandChange = new Dictionary<string, int>();
+    private int priceUpdateTime = 120;
+    private Timer updatePricesTimer = new Timer();
     private Node charactersNode;
+    
     [Export]
     public SettlementInfo settlementInfo = new SettlementInfo();
     [Signal]
     public delegate void SpawnEntity(MovingEntity entity);
+    [Signal]
+    public delegate void UpdatePrices(Dictionary<string,int> itemDemand);
 
     public void Initialize()  // Called from gamemanager to initiate the factions information.
     {
+        GD.Print(string.Format("Initializing settlement {0}...", settlementInfo.settlementName));
         Godot.Collections.Array areaEntities = GetOverlappingAreas();
 
         List<Guardpost> guardPosts = new List<Guardpost>();     // We'll find the settlement guardposts here and assign them to barracks evenly.
-        List<Resources> resources = new List<Resources>();      // No use at the moment, but the available jobs could be calculated from available resources.
+        //List<Resources> resources = new List<Resources>();      // No use at the moment, but the available jobs could be calculated from available resources.
         List<Npc> npcs = new List<Npc>();
 
         charactersNode = GetNode("../../../NavigationHandler/MapSort/Characters");
@@ -34,22 +41,25 @@ public class Settlement : Area2D {
             {
                 case Barracks barracks:
                     settlementBarracks.Add(barracks);
-                    GD.Print(string.Format("{0} added to settlement info", barracks.entityName));
+                    //GD.Print(string.Format("{0} added to settlement info", barracks.entityName));
                     break;
                 case TradeStall tradeStall:
+                    tradeStall.Connect("OnItemSold", this, nameof(OnTraderItemSold));
+                    tradeStall.Connect("OnItemBought", this, nameof(OnTraderItemBought));
+                    Connect(nameof(UpdatePrices), tradeStall, "UpdatePrices");
                     settlementTradestalls.Add(tradeStall);
-                    GD.Print(string.Format("{0} added to settlement info", tradeStall.entityName));
+                    //GD.Print(string.Format("{0} added to settlement info", tradeStall.entityName));
                     break;
                 case Guardpost guardPost:
                     guardPosts.Add(guardPost);
-                    GD.Print(string.Format("{0} found.", guardPost.entityName));
+                    //GD.Print(string.Format("{0} found.", guardPost.entityName));
                     break;
-                
+                /*
                 case Resources resource:
                     resources.Add(resource);
                     GD.Print(string.Format("{0} found as resource", resource.entityName));
                     break;
-                
+                */
                 case Npc npc:
                     // Sketchy shit
                     if (string.IsNullOrEmpty(npc.GetProfession())) {
@@ -65,6 +75,8 @@ public class Settlement : Area2D {
         }
         SetNpcJobs(npcs);
         AssignGuardPostsToBarracks(guardPosts);
+        InitializeTimer();
+        GD.Print(string.Format("Settlement {0} initialization complete!", settlementInfo.settlementName));
     }
 
     private void AssignGuardPostsToBarracks(List<Guardpost> guardPosts) {
@@ -85,6 +97,12 @@ public class Settlement : Area2D {
                 barracks.Initialize();
             }
         }
+    }
+    private void InitializeTimer() {
+		updatePricesTimer.WaitTime = priceUpdateTime;
+		updatePricesTimer.Connect("timeout", this, nameof(UpdateItemDemand));
+		AddChild(updatePricesTimer);
+        updatePricesTimer.Start();
     }
     private void NotifySoldiers(Character attacker) {
         settlementBarracks?.ForEach(x => x.AlertSoldiers(attacker));
@@ -112,8 +130,46 @@ public class Settlement : Area2D {
         if (character.GetFaction().Equals(GetFactionString())) {
             character.Connect("Dead", this, nameof(OnVillagerDied));
             character.Connect("UnderAttack", this, nameof(NotifySoldiers));
+            character.Connect("OnItemWanted", this, nameof(OnTraderItemWanted));
             settlementInfo.WorkerAdded(character.GetProfession());
         }
+    }
+
+    // Trade handling. Controls item prices based on need and supply.
+    /// <summary> When an Npc needs an item to buy, the price of the item increases locally. </summary>
+    private void OnTraderItemWanted(Item item) {
+        if (itemDemandChange.ContainsKey(item.itemName)) {
+            itemDemandChange[item.itemName] += 1;
+        } else {
+            itemDemandChange.Add(item.itemName, 1);
+        }
+    }
+    /// <summary> When the trader sells an item, the value of the item increases in steps </summary>
+    private void OnTraderItemSold(Item item) {
+        string itemName = item is ConsumableItem cItem ? (cItem.nutritionValue > 0 ? Constants.DEF_FOODNAME : cItem.commodityValue > 0 ? Constants.DEF_COMMODITYNAME : Constants.DEF_CONSUMABLENAME) : item.itemName;
+        if (itemDemandChange.ContainsKey(itemName)) {
+            itemDemandChange[itemName] += 1;
+        } else {
+            itemDemandChange.Add(itemName, 1);
+        }
+    }
+    /// <summary> When the trader buys an item, the value the item decreases in steps. </summary>
+    private void OnTraderItemBought(Item item) {
+        string itemName = item is ConsumableItem cItem ? (cItem.nutritionValue > 0 ? Constants.DEF_FOODNAME : cItem.commodityValue > 0 ? Constants.DEF_COMMODITYNAME : Constants.DEF_CONSUMABLENAME) : item.itemName;
+        if (itemDemandChange.ContainsKey(itemName)) {
+            itemDemandChange[itemName] -= 1;
+        } else {
+            itemDemandChange.Add(itemName, -1);
+        }
+    }
+    private void UpdateItemDemand() {
+        foreach (KeyValuePair<string, int> kvp in itemDemandChange)
+        {
+            settlementInfo.UpdateItemDemand(kvp);
+        }
+        itemDemandChange.Clear();
+        EmitSignal(nameof(UpdatePrices), settlementInfo.itemDemand);
+        GD.Print(string.Format("Settlement {0}: Prices Updated", settlementInfo.settlementName));
     }
 
     // Used for development. Will be reworked in the future.
@@ -133,7 +189,7 @@ public class Settlement : Area2D {
                 //GD.Print(jobsAvailable[kvp.Key]);
                 settlementInfo.WorkerAdded(kvp.Key);
                 npcs.RemoveAt(0);
-                GD.Print(string.Format("Settlement: Handed job {0} to Npc: {1}", kvp.Key, currentNpc.entityName));
+                //GD.Print(string.Format("Settlement: Handed job {0} to Npc: {1}", kvp.Key, currentNpc.entityName));
             }
         }
     }
@@ -155,40 +211,3 @@ public class Settlement : Area2D {
 		debugInstance.AddStat("Hostile Factions", this, "GetHostileFactionsString", true);
 	}
 }
-
-
-/*
-            switch (kvp.Key)
-            {
-                case Constants.TRADER_PROFESSION:
-                    newResources = resources.Where(x => x is TradeStall).ToList();
-                    break;
-                case Constants.FARMER_PROFESSION:
-                    newResources = resources.Where(x => x is WheatField).ToList();
-                    break;
-                case Constants.BAKER_PROFESSION:
-                    newResources = resources.Where(x => x is Oven).ToList();
-                    break;
-                case Constants.LUMBERJACK_PROFESSION:
-                    newResources = resources.Where(x => x is Lumber).ToList();
-                    break;
-                case Constants.CRAFTSMAN_PROFESSION:
-                    newResources = resources.Where(x => x is Woodcraft).ToList();
-                    break;
-                case Constants.MINER_PROFESSION:
-                    newResources = resources.Where(x => x is Deposit).ToList();
-                    break;
-                case Constants.BLACKSMITH_PROFESSION:
-                    newResources = resources.Where(x => x is Blacksmith).ToList();
-                    break;
-                case Constants.LOGISTICSOFFICER_PROFESSION:
-                    newResources = resources.Where(x => x is Barracks).ToList();
-                    break;
-                case Constants.SOLDIER_PROFESSION:
-                    newResources = resources.Where(x => x is Guardpost).ToList();
-                    break;
-                default:
-                    GD.Print(string.Format("Settlement: Error handling job: {0}", kvp.Key));
-                    break;
-            }
-            */

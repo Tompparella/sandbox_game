@@ -31,7 +31,7 @@ public class Interactive : Area2D
         tradeInventory = inventory;
     }
 
-    public virtual void CheckNeeds() {
+    public virtual void CheckNeeds(Item item = null) {
     }
 
     public virtual void ItemRemoved(Item item) {

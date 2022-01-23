@@ -8,8 +8,4 @@ public class FactionInfo : Resource {
     public List<string> hostileFactions;
     [Export]
     public string factionName = "Faction";
-
-    public bool IsHostile(string factionName) {
-        return hostileFactions.Contains(factionName);
-    }
 }

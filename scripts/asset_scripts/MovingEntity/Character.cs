@@ -24,6 +24,8 @@ public class Character : MovingEntity
     [Signal]
     public delegate void UnderAttack(Character attacker);
     [Signal]
+    public delegate void OnItemWanted(Item item);
+    [Signal]
     public delegate void Refresh(Character attacker);
     [Signal]
     public delegate void Dead(Character attacker);
@@ -131,6 +133,7 @@ public class Character : MovingEntity
             if (itemsInQueue < kvp.Value) {
                 for (int i = itemsInQueue; i < kvp.Value; i++) {
                     neededItems.Add(kvp.Key);
+                    EmitSignal("OnItemWanted", kvp.Key);
                     //GD.Print(string.Format("'{0}' added item '{1}' to buy queue.", Name, kvp.Key.itemName));
                 }
                 itemsAdded = true;
@@ -150,7 +153,7 @@ public class Character : MovingEntity
         stats.profession = profession;
     }
 
-    public override void CheckNeeds() {
+    public override void CheckNeeds(Item item = null) {
 
         if (stats.hunger < stats.maxHunger/2) {
             Eat();

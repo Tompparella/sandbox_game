@@ -7,7 +7,8 @@
 script = ExtResource( 1 )
 itemName = "Consumer Goods"
 itemDescription = "Everyday commodities ranging from spoons and pencils to buckets and rope."
-value = 45
+value = 40
 recipe = ExtResource( 2 )
 nutritionValue = 0.0
 commodityValue = 60.0
+healValue = 0.0

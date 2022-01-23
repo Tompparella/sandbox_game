@@ -6,7 +6,7 @@ using System.Linq;
 public class Barracks : Refinery
 {
     [Signal]
-    public delegate void Replenished(int foodAmount, int commodityAmount);
+    public delegate void Replenished(int foodAmount, int commodityAmount, Character logisticsOfficer);
 
     private Supply supply;
 
@@ -117,7 +117,7 @@ public class Barracks : Refinery
         int edibleItems = inventory.GetEdibleItemCount();
         int commodityItems = inventory.GetCommodityItemCount();
         if (edibleItems > 0 || commodityItems > 0) {    // This could be done so that soldiers get called to resupply based on the number of supplies/goods available (Not all soldiers should be called at the same time).
-            EmitSignal(nameof(Replenished), edibleItems, commodityItems);
+            EmitSignal(nameof(Replenished), edibleItems, commodityItems, worker);
         }
         tradeTimer.Start();
     }

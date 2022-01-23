@@ -6,7 +6,7 @@ public class ConsumableItem : Item
     public ConsumableItem(float _nutritionValue = 0, float _commodityValue = 0) {
         nutritionValue = _nutritionValue;
         commodityValue = _commodityValue;
-        itemName = itemName.Equals("") ? (nutritionValue > 0 ? "Food" : commodityValue > 0 ? "Commodity" : "Consumable") : itemName;
+        itemName = itemName.Equals("") ? (nutritionValue > 0 ? Constants.DEF_FOODNAME : commodityValue > 0 ? Constants.DEF_COMMODITYNAME : Constants.DEF_CONSUMABLENAME) : itemName;
     }
     public ConsumableItem() {
     }

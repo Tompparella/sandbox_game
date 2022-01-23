@@ -23,6 +23,9 @@ public class NpcMotionState : State
         if (needsTickDelta > needsTick) {
             needsTickDelta = 0;
             owner.stats.LowerHunger();
+            if (owner.IsDead()) {
+                EmitSignal(nameof(Finished), "dead");
+            }
             owner.stats.LowerCommodities();
         }
     }

@@ -73,7 +73,9 @@ public class Constants
     public const string LOGISTICS_GROUP = "logistics";
     public const string RESOURCES_GROUP = "resource";
     public const string SETTLEMENT_GROUP = "settlement";
+    public const string FACTION_GROUP = "faction";
     public const string CHARACTER_GROUP = "character";
+    public const string SPAWNER_GROUP = "spawner";
 
     public static readonly string[] ROOTWORDS = new string[] { "yes", "no", "how", "where" };
     public static readonly string[] SUPPORTWORDS = new string[] { "find", "are", "chop", "work", "mine", "farm", "collect", "harvest" };
@@ -105,6 +107,10 @@ public class Constants
     public static readonly string WOODCRAFT_NAME = "Craftsman's Retreat";
     public static readonly string BLACKSMITH_NAME = "Blacksmith's Shop";
     public static readonly string CAMP_NAME = "Woodland Camp";
+
+    public static readonly string DEF_FOODNAME = "Food";
+    public static readonly string DEF_COMMODITYNAME = "Commodity";
+    public static readonly string DEF_CONSUMABLENAME = "Consumable";
 
     public static readonly string[] FACTIONS = { "Test Faction" };
     public static readonly string[] OUTLAWS = { "Bandits" };

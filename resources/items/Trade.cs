@@ -15,7 +15,7 @@ public class Trade
 
     public bool BuyItem(Item item) {
         if (seller.items.Contains(item)) {
-            int value = (int)Math.Round((item.value * (1 + tradeProfit)), 0); // Trader gets a certain profit margin from each trade that's determined by the 'tradeProfit' modifier.
+            int value = (int)Math.Round((item.value * (1 + tradeProfit + seller.GetItemPriceModifier(item))), 0); // Trader gets a certain profit margin from each trade that's determined by the 'tradeProfit' modifier.
             if (buyer.currency >= value && !buyer.IsFull()) {
                 seller.currency += value;
                 buyer.currency -= value;
@@ -50,7 +50,7 @@ public class Trade
                     GD.Print(String.Format("Wrong item type when buying consumable item: {0}", itemType));
                     return false;
             }
-            int value = (int)Math.Round((itemToBuy.value * (1 + tradeProfit)), 0);
+            int value = (int)Math.Round((itemToBuy.value * (1 + tradeProfit + seller.GetItemPriceModifier(itemToBuy))), 0);
             if (buyer.currency >= value && !buyer.IsFull()) {
                 seller.currency += value;
                 buyer.currency -= value;
@@ -66,7 +66,7 @@ public class Trade
 
     public bool SellItem(Item item) {
         if (buyer.items.Contains(item)) {
-            int value = (int)Math.Round((item.value * (1 - tradeProfit)), 0);
+            int value = (int)Math.Round((item.value * (1 - tradeProfit + seller.GetItemPriceModifier(item))), 0);
             if (seller.currency >= value && !seller.IsFull()) {
                 buyer.currency += value;
                 seller.currency -= value;

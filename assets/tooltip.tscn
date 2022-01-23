@@ -6,7 +6,6 @@
 [ext_resource path="res://scripts/utilities/ui/Tooltip.cs" type="Script" id=4]
 
 [node name="Tooltip" type="Popup"]
-visible = true
 margin_right = 152.0
 margin_bottom = 112.0
 script = ExtResource( 4 )
@@ -42,7 +41,7 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/MarginContainer"]
 margin_right = 142.0
-margin_bottom = 111.0
+margin_bottom = 99.0
 mouse_filter = 2
 
 [node name="itemName" type="Label" parent="NinePatchRect/MarginContainer/VBoxContainer"]

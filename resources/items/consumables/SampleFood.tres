@@ -9,3 +9,4 @@ itemDescription = "Food being processed into something."
 value = 0
 nutritionValue = 1.0
 commodityValue = 0.0
+healValue = 0.0

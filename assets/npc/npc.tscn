@@ -15,7 +15,7 @@
 radius = 4500.0
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 1000.0
+radius = 1800.0
 
 [node name="Npc" type="Area2D" groups=[
 "character",
@@ -67,10 +67,13 @@ visible = false
 shape = SubResource( 1 )
 
 [node name="Proximity" type="Area2D" parent="."]
+z_index = 1
+z_as_relative = false
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Proximity"]
 visible = false
+scale = Vector2( 1, 0.981468 )
 shape = SubResource( 2 )
 
 [connection signal="StateChanged" from="StateMachine" to="Panel" method="_OnStateChanged"]

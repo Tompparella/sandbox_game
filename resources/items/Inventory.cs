@@ -5,7 +5,7 @@ using System.Linq;
 public class Inventory : Resource
 {
     [Signal]
-    public delegate void OnItemAdd();
+    public delegate void OnItemAdd(Item item);
     [Signal]
     public delegate void OnItemRemoved(Item item);
     [Export]
@@ -17,6 +17,8 @@ public class Inventory : Resource
         null, null, null, null,
         null, null, null, null
     };
+    public Dictionary<string, float> itemPriceModifiers = new Dictionary<string, float>(); // Modifier that evaluates based on supply and demand. Mainly only used on traders.
+
     public void AddItem(Item item, int amount = 1) {
         for (int i = 0; i < amount; i++) {
             int index = items.IndexOf(null);
@@ -24,7 +26,7 @@ public class Inventory : Resource
                 items[index] = item;
             }
         }
-        EmitSignal(nameof(OnItemAdd));
+        EmitSignal(nameof(OnItemAdd), item);
     }
     public void RemoveItem(Item item, int amount = 1) {
         for (int i = 0; i < amount; i++) {
@@ -89,6 +91,13 @@ public class Inventory : Resource
         return GetCommodityItems() != null ? GetCommodityItems().Count() : 0;
     }
 
+    public float GetItemPriceModifier(Item item) {
+        string itemName = item is ConsumableItem cItem ? (cItem.nutritionValue > 0 ? Constants.DEF_FOODNAME : cItem.commodityValue > 0 ? Constants.DEF_COMMODITYNAME : Constants.DEF_CONSUMABLENAME) : item.itemName;
+        if (itemPriceModifiers.ContainsKey(itemName)) {
+            return itemPriceModifiers[itemName];
+        }
+        return 0;
+    }
     public Item PopLastItem() {
         int index = items.IndexOf(items.Last(x => x != null));
         Item item = items[index];

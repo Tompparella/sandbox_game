@@ -2,11 +2,11 @@ using Godot;
 using System;
 public class Pathfinding : Navigation2D
 {
-    //private Line2D pathLine; // Uncomment for a navigation line.
+    private Line2D pathLine; // Uncomment for a navigation line.
 
     public override void _Ready()
     {
-        //pathLine = (Line2D)GetNode("PathLine");
+        pathLine = (Line2D)GetNode("PathLine");
         Godot.Collections.Array characters, spawners;
         SceneTree tree = GetTree();
         characters = tree.GetNodesInGroup("character");
@@ -27,7 +27,9 @@ public class Pathfinding : Navigation2D
     }
 
     public void FindPath(Vector2 start, Vector2 end, Character caller) {
-        //pathLine.Points = GetSimplePath(start, end);
+        if (caller is Player) {
+            pathLine.Points = GetSimplePath(start, end);
+        }
         try
         {
             caller.MovePath = GetSimplePath(start, end);

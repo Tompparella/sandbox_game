@@ -61,8 +61,8 @@ public class Stats : Resource
         defence = 0;
         labour = 0;
 
-        hunger = 50;
-        commodities = 50;
+        hunger = 75;
+        commodities = 75;
 
         attackSpeed = Constants.DEF_ATTACKSPEED;
 
@@ -116,6 +116,7 @@ public class Stats : Resource
         hunger = (hunger - 0.05f > minHunger ? hunger - 0.05f : minHunger);
         if (hunger < 0) {
             currentHealth -= 0.1f;
+            isDead = currentHealth <= 0;
         }
     }
     public void RaiseHunger(float nutrition) {

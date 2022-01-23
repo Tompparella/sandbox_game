@@ -17,7 +17,7 @@ public class Guardpost : Resources
         dialogue = new ResourceDialogue(this, Constants.GUARDPOST_DESCRIPTION, actions);
 
         requiredActions = (int)Math.Round(requiredActions * 0.25);
-        workRange = 10 * Constants.DEF_ATTACKRANGE; // Basically the patrolling area.
+        workRange = 20 * Constants.DEF_ATTACKRANGE; // Basically the patrolling area.
 
         defaultTexture = Constants.OVEN_TEXTURE;
         defaultPortrait = Constants.OVEN_PORTRAIT;
@@ -37,16 +37,10 @@ public class Guardpost : Resources
     public override void workAction(Character worker)
     {
         rand.Randomize();
-        try
-        {
-            int radius = (int)Math.Sqrt(Math.Pow(workRange, 2) / 2);    // Workrange is the maximum hypotenuse
-            worker.GetMovePath(worker.GlobalPosition, GlobalPosition + new Vector2(rand.RandiRange(-radius, radius), rand.RandiRange(-radius, radius)), worker); // Go for a patrol. This should be improved.
-        }
-        catch (System.Exception)
-        {
-            GD.Print("Error on Guardpost");
-            throw;
-        }
+
+        int radius = (int)Math.Sqrt(Math.Pow(workRange, 2) / 2);    // Workrange is the maximum hypotenuse
+        worker.GetMovePath(worker.GlobalPosition, GlobalPosition + new Vector2(rand.RandiRange(-radius, radius), rand.RandiRange(-radius, radius)), worker); // Go for a patrol. This should be improved.
+
         base.workAction(worker);
     }
 
@@ -57,7 +51,7 @@ public class Guardpost : Resources
         }
     }
 
-    public void SupplySoldiers(int foodAmount, int commodityAmount) {
+    public void SupplySoldiers(int foodAmount, int commodityAmount, Character logisticsOfficer) {
         List<Npc> soldiers = GetWorkers().Where(x => x is Npc).Cast<Npc>().ToList();
         bool supplyFood, supplyCommodities;
         foreach (Npc soldier in soldiers)
@@ -68,6 +62,9 @@ public class Guardpost : Resources
             if (supplyFood || supplyCommodities) {
                 foodAmount = supplyFood ? foodAmount - 1 : foodAmount;
                 commodityAmount = supplyCommodities ? commodityAmount - 1 : commodityAmount;
+                if (!soldier.GetTrader()) {
+                    soldier.AddNearbyTrader(logisticsOfficer);    // If too far away from logistics officer, add it to the nearby traders.
+                }
                 soldier.CheckNeeds();
                 soldier.SetInteractive();
             }

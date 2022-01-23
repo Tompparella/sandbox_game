@@ -29,10 +29,10 @@ public class Npc : Character
 				character.Connect("Refresh", this, nameof(_RefreshSurroundingCharacter));
 				if (GetProfession().Equals(Constants.SOLDIER_PROFESSION)) {
 					if (character.IsInGroup(Constants.LOGISTICS_GROUP)) {
-						nearbyTraders.Add(character);
+						AddNearbyTrader(character);
 					}
 				} else if (character.IsInGroup(Constants.TRADER_GROUP)) {
-					nearbyTraders.Add(character);
+					AddNearbyTrader(character);
 				}
 			break;
 		}
@@ -52,7 +52,7 @@ public class Npc : Character
 				}
 			break;
 			case Character character:
-				if (nearbyTraders.Contains(character))
+				if (nearbyTraders.Count() > 1 && nearbyTraders.Contains(character))	// Most Npc's always need at least 1 nearby trader. This can be redone.
 				{
 					nearbyTraders.Remove(character);
 				}
@@ -82,7 +82,7 @@ public class Npc : Character
 		}
 		if (GetProfession().Equals(Constants.SOLDIER_PROFESSION)) {
 			if (character.IsInGroup(Constants.LOGISTICS_GROUP)) {
-				nearbyTraders.Add(character);
+				AddNearbyTrader(character);
 			}
 		} else if (character.IsInGroup(Constants.TRADER_GROUP)) {
 			nearbyTraders.Add(character);
@@ -111,6 +111,12 @@ public class Npc : Character
 		}
 		resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
 		surroundingResources.Remove((Resources)resource);
+	}
+
+	public void AddNearbyTrader(Character trader) {
+		if (!nearbyTraders.Contains(trader)) {
+			nearbyTraders.Add(trader);
+		}
 	}
 
 	public void ToggleOutOfWork()
@@ -171,7 +177,7 @@ public class Npc : Character
 
 	private bool IsEnemy(string factionName) {
 		if (stats.faction != null) {
-			return stats.faction.IsHostile(factionName);
+			return stats.faction.hostileFactions.Contains(factionName);
 		}
 		return false;
 	}
@@ -201,14 +207,18 @@ public class Npc : Character
 	{
 		if (!neededItems.Any(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0))
 		{
-			neededItems.Add(new ConsumableItem(_nutritionValue: 1));
+			ConsumableItem foodItem = new ConsumableItem(_nutritionValue: 1);
+			neededItems.Add(foodItem);
+			EmitSignal("OnItemWanted", foodItem);
 		}
 	}
 	public void addCommoditiesToBuyQueue()
 	{
 		if (!neededItems.Any(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0))
 		{
-			neededItems.Add(new ConsumableItem(_commodityValue: 1));
+			ConsumableItem commodityItem = new ConsumableItem(_commodityValue: 1);
+			neededItems.Add(commodityItem);
+			EmitSignal("OnItemWanted", commodityItem);
 		}
 	}
 
@@ -275,7 +285,7 @@ public class Npc : Character
 	{
 		Character trader = null;
 		float shortestDistance = float.MaxValue;
-		foreach (Character i in nearbyTraders)
+		foreach (Character i in nearbyTraders.ToList())
 		{
 			if ((trader == null || Position.DistanceTo(i.Position) < shortestDistance))
 			{
@@ -297,8 +307,8 @@ public class Npc : Character
 		DebugInstance debugInstance = (DebugInstance)packedDebug.Instance();
 		AddChild(debugInstance);
 		debugInstance.AddStat("Faction", this, "GetFaction", true);
-		debugInstance.AddStat("Hostile", this, "GetHostilesString", true);
-		debugInstance.AddStat("Aggressive", this, "aggressive", false);
+		//debugInstance.AddStat("Hostile", this, "GetHostilesString", true);
+		//debugInstance.AddStat("Aggressive", this, "aggressive", false);
 		debugInstance.AddStat("Profession", this, "GetProfession", true);
 		debugInstance.AddStat("Surrounding Resources", this, "GetSurroundingWorkableResourcesString", true);
 		debugInstance.AddStat("Nearby Traders", this, "GetNearbyTradersString", true);
@@ -325,92 +335,3 @@ public class Npc : Character
 
 	}
 }
-
-/*
-switch (GetProfession())
-		{
-			case Constants.LUMBERJACK_PROFESSION:
-				if (area is Lumber)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.MINER_PROFESSION:
-				if (area is Deposit)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-
-			case Constants.FARMER_PROFESSION:
-				if (area is WheatField)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.TRADER_PROFESSION:
-				if (area is TradeStall)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.BAKER_PROFESSION:
-				if (area is Oven)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.CRAFTSMAN_PROFESSION:
-				if (area is Woodcraft)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.BLACKSMITH_PROFESSION:
-				if (area is Blacksmith)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-			case Constants.LOGISTICSOFFICER_PROFESSION:
-				if (area is Barracks)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-
-			case Constants.SOLDIER_PROFESSION:
-				if (area is Guardpost)
-				{
-					outOfWork = false;
-					surroundingResources.Add((Resources)area);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				} else if (area.IsInGroup(Constants.LOGISTICS_GROUP)) {
-					nearbyTraders.Add((Character)area);
-				}
-				return;
-			default:
-				if (area is Camp) {
-					outOfWork = false;
-					surroundingResources.Add(area as Resources);
-					area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
-				}
-				break;
-		}
-		*/

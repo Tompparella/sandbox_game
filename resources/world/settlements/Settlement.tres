@@ -1,13 +1,30 @@
-[gd_resource type="Resource" load_steps=4 format=2]
+[gd_resource type="Resource" load_steps=6 format=2]
 
 [ext_resource path="res://scripts/utilities/world/SettlementInfo.cs" type="Script" id=1]
 
 [sub_resource type="CSharpScript" id=1]
 
+[sub_resource type="CSharpScript" id=3]
+
+[sub_resource type="Resource" id=4]
+script = SubResource( 3 )
+
 [sub_resource type="Resource" id=2]
 script = SubResource( 1 )
+settlementInfo = SubResource( 4 )
 
 [resource]
 script = ExtResource( 1 )
+jobsAvailable = {
+"baker": 1,
+"blacksmith": 1,
+"craftsman": 1,
+"farmer": 2,
+"logistics_officer": 1,
+"lumberjack": 1,
+"miner": 1,
+"soldier": 3,
+"trader": 1
+}
 settlementName = "Settlement"
 settlementFaction = SubResource( 2 )
