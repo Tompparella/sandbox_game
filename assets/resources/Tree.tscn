@@ -13,6 +13,9 @@ items = [ ExtResource( 4 ), ExtResource( 4 ), null, null, null, null, null, null
 [node name="Tree" type="Area2D" groups=[
 "resource",
 ]]
+monitoring = false
+collision_layer = 2
+collision_mask = 0
 script = ExtResource( 2 )
 portraitResource = "res://resources/sprites/assets/resources/portrait/tree_portrait.png"
 inventory = SubResource( 1 )

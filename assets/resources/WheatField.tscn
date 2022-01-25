@@ -7,6 +7,9 @@
 "resource",
 ]]
 position = Vector2( 0, 24 )
+monitoring = false
+collision_layer = 2
+collision_mask = 0
 script = ExtResource( 1 )
 portraitResource = "res://resources/sprites/assets/resources/portrait/wheatfield_portrait.png"
 refreshTime = 360.0

@@ -1,10 +1,11 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class NpcTradeState : NpcMoveState
 {
-
+    private Thread thread = new Thread(); // Trying to play a bit with threads, since TradeInventory can be quite a taxing function to run.
     public override void Enter()
     {
         owner.GetMovePath(owner.Position, owner.GetInteractive().Position, owner);
@@ -14,12 +15,14 @@ public class NpcTradeState : NpcMoveState
     public override void Exit()
     {
         Npc npcOwner = ((Npc)owner);
-        if (!npcOwner.WorkableResourcesExist()) {      // If the Npc is out of work, put a timer for x seconds to enter work state again.
+        npcOwner.hasTraded = true;
+        if (npcOwner.IsInGroup(Constants.CARAVAN_GROUP)) {
+            npcOwner.hasTraded = false;
+        }
+        else if (!npcOwner.WorkableResourcesExist()) {      // If the Npc is out of work, put a timer for x seconds to enter work state again.
             ((Npc)owner).outOfWork = true;
             npcOwner.outOfWorkTimer.Start();
         }
-        ((Npc)owner).hasTraded = true;
-        owner.SetInteractive();
         base.Exit();
     }
     
@@ -28,23 +31,37 @@ public class NpcTradeState : NpcMoveState
         float distanceToLast = owner.Position.DistanceTo(owner.movePath.LastOrDefault());
         if (distanceToLast > Constants.DEF_ATTACKRANGE) {
             base.MovementLoop(delta);
-        } else {
-            TradeInventory();
+        } else if (!thread.IsActive()){
+            thread.Start(this, "TradeInventory", owner.GetInteractive().tradeInventory);
+            thread.CallDeferred("wait_to_finish");
         }
     }
 
-    private void TradeInventory() {
+    public void TradeInventory(Inventory traderInventory) {
         bool tradeSuccess = false;
-        Trade tradeInstance = new Trade(owner.tradeInventory, owner.GetInteractive().tradeInventory); // Buyer = Owner, Seller = Trader
-        Npc npcOwner = ((Npc)owner);
-        tradeSuccess = SellProduceItems(tradeInstance);
-        npcOwner.CheckNeeds();
-        if (npcOwner.checkBuyQueue()) {
-            bool buySuccess = BuyNeededItems(tradeInstance);
-            tradeSuccess = tradeSuccess || buySuccess;
+        Trade tradeInstance = new Trade(owner.tradeInventory, traderInventory); // Buyer = Owner, Seller = Trader
+        Npc npcOwner = owner as Npc;
+        /*
+        Handling for caravans has to be done separately, since they're optimally always on the move.
+        */
+        if (owner.IsInGroup(Constants.CARAVAN_GROUP)) {
+            tradeInstance.HandleCaravanTrade();
+            if (!owner.tradeInventory.IsEmpty()) {
+                owner.EmitSignal("GetProfitableTrader", owner);
+            } else {
+                owner.EmitSignal("ReturnCaravanToDepot", owner);
+            }
+
+        } else {
+            tradeSuccess = SellProduceItems(tradeInstance);
+            npcOwner.CheckNeeds();
+            if (npcOwner.checkBuyQueue()) {
+                bool buySuccess = BuyNeededItems(tradeInstance);
+                tradeSuccess = tradeSuccess || buySuccess;
+            }
+            //npcOwner.hasTraded = tradeSuccess; // At the moment this does nothing since hasTraded is put to true upon exit.
         }
         owner.SetInteractive();
-        npcOwner.hasTraded = tradeSuccess; // At the moment this does nothing since hasTraded is put to true upon exit.
         EmitSignal(nameof(Finished), "idle");
     }
 

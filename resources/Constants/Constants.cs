@@ -59,6 +59,7 @@ public class Constants
     public const string LUMBERJACK_PROFESSION = "lumberjack";
     public const string MINER_PROFESSION = "miner";
     public const string TRADER_PROFESSION = "trader";
+    public const string CARAVAN_PROFESSION = "caravan";
     public const string FARMER_PROFESSION = "farmer";
     public const string BAKER_PROFESSION = "baker";
     public const string CRAFTSMAN_PROFESSION = "craftsman";
@@ -69,6 +70,7 @@ public class Constants
     public const string BANDIT_PROFESSION = "bandit";
 
     public const string TRADER_GROUP = "traders";
+    public const string CARAVAN_GROUP = "caravans";
     public const string SOLDIER_GROUP = "soldier";
     public const string LOGISTICS_GROUP = "logistics";
     public const string RESOURCES_GROUP = "resource";
@@ -94,6 +96,7 @@ public class Constants
     public static readonly string SILVERDEPOSIT_DESCRIPTION = "It's a huge mass of stone with clear traces of silver. It's used in almost all vessels that bear magic.";
     public static readonly string EMPTYDEPOSIT_DESCRIPTION = "It's a huge mass of stone. Any traces of ore have already been exploited";
     public static readonly string TRADESTALL_DESCRIPTION = "The next best thing to supermarkets.";
+    public static readonly string TRADEDEPOT_DESCRIPTION = "A local center of domestic- and foreign trade.";
     public static readonly string OVEN_DESCRIPTION = "A professional culinarian could make something edible here.";
     public static readonly string WOODCRAFT_DESCRIPTION = "A place where professionals of woodcraft can practice their craft.";
     public static readonly string BLACKSMITH_DESCRIPTION = "Home for the masters of metallurgy.";
@@ -127,7 +130,7 @@ public class Constants
     public static readonly string[] CRAFTACTIONS = new string[] { "craft", "work" };
     public static readonly string[] SMITHACTIONS = new string[] { "smith", "work" };
 
-    public static readonly string[] PROFESSIONS = new string[] { FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, BLACKSMITH_PROFESSION, LOGISTICSOFFICER_PROFESSION, SOLDIER_PROFESSION, HUNTER_PROFESSION, null };
+    public static readonly string[] PROFESSIONS = new string[] { FARMER_PROFESSION, MINER_PROFESSION, LUMBERJACK_PROFESSION, CRAFTSMAN_PROFESSION, BLACKSMITH_PROFESSION, LOGISTICSOFFICER_PROFESSION, SOLDIER_PROFESSION, HUNTER_PROFESSION, CARAVAN_PROFESSION, null };
     public static readonly string[] AGGRESSIVE_PROFESSIONS = new string[] { LOGISTICSOFFICER_PROFESSION, SOLDIER_PROFESSION, HUNTER_PROFESSION, BANDIT_PROFESSION };
 
     public const string RESOURCECOLOR = "ffa100";

@@ -10,7 +10,8 @@ public class Settlement : Area2D {
     */
 
     private List<Barracks> settlementBarracks = new List<Barracks>();
-    private List<TradeStall> settlementTradestalls = new List<TradeStall>();
+    public List<TradeStall> settlementTradestalls { get; private set; } = new List<TradeStall>();
+    public List<TradeDepot> settlementTradedepots { get; private set; } = new List<TradeDepot>();
     private PackedScene packedNpc = (PackedScene)GD.Load(Constants.NPC);
     private Dictionary<string, int> itemDemandChange = new Dictionary<string, int>();
     private int priceUpdateTime = 120;
@@ -23,6 +24,10 @@ public class Settlement : Area2D {
     public delegate void SpawnEntity(MovingEntity entity);
     [Signal]
     public delegate void UpdatePrices(Dictionary<string,int> itemDemand);
+    [Signal]
+    public delegate void FindAvailableTradeDepot(TradeStall tradeStall);
+    [Signal]
+    public delegate void ConnectNewCaravan(Npc caravan);
 
     public void Initialize()  // Called from gamemanager to initiate the factions information.
     {
@@ -30,7 +35,7 @@ public class Settlement : Area2D {
         Godot.Collections.Array areaEntities = GetOverlappingAreas();
 
         List<Guardpost> guardPosts = new List<Guardpost>();     // We'll find the settlement guardposts here and assign them to barracks evenly.
-        //List<Resources> resources = new List<Resources>();      // No use at the moment, but the available jobs could be calculated from available resources.
+        //List<Resources> resources = new List<Resources>();    // No use at the moment, but the available jobs could be calculated from available resources.
         List<Npc> npcs = new List<Npc>();
 
         charactersNode = GetNode("../../../NavigationHandler/MapSort/Characters");
@@ -46,9 +51,14 @@ public class Settlement : Area2D {
                 case TradeStall tradeStall:
                     tradeStall.Connect("OnItemSold", this, nameof(OnTraderItemSold));
                     tradeStall.Connect("OnItemBought", this, nameof(OnTraderItemBought));
+                    tradeStall.Connect("BeginTradeMission", this, nameof(BeginTradeMission));
                     Connect(nameof(UpdatePrices), tradeStall, "UpdatePrices");
                     settlementTradestalls.Add(tradeStall);
                     //GD.Print(string.Format("{0} added to settlement info", tradeStall.entityName));
+                    break;
+                case TradeDepot tradeDepot:
+                    tradeDepot.Connect("ConnectNewCaravan", this, nameof(ForwardCaravanConnect));
+                    settlementTradedepots.Add(tradeDepot);
                     break;
                 case Guardpost guardPost:
                     guardPosts.Add(guardPost);
@@ -171,6 +181,34 @@ public class Settlement : Area2D {
         EmitSignal(nameof(UpdatePrices), settlementInfo.itemDemand);
         GD.Print(string.Format("Settlement {0}: Prices Updated", settlementInfo.settlementName));
     }
+    public Dictionary<string, int> GetItemDemand() {
+        return settlementInfo.itemDemand;
+    }
+    private void BeginTradeMission(TradeStall tradeStall) {
+        if (!FindLocalTradeDepot(tradeStall)) {                                         // If a local caravan is found, immediately send it on a trade mission. Otherwise, find one from other faction settlements.
+            EmitSignal(nameof(FindAvailableTradeDepot), tradeStall);
+        }
+    }
+    private void ForwardCaravanConnect(Npc caravan) {
+        EmitSignal(nameof(ConnectNewCaravan), caravan);
+    }
+
+    ///<summary>A function used to set a caravan on a trademission. To simply get a depot, use GetLocalTradeDepot</summary>
+    public bool FindLocalTradeDepot(TradeStall tradeStall) {                            // Returns true or false based on success.
+        foreach (TradeDepot depot in settlementTradedepots)
+        {
+            if (depot.GetWorkers().Any()) {
+                depot.BeginTradeMission(tradeStall);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    ///<summary>Gets a local trade depot for caravans.</summary>
+    public TradeDepot GetLocalTradeDepot() {
+        return settlementTradedepots.FirstOrDefault(x => x.GetWorkerNumber() < x.maxWorkers);
+    }
 
     // Used for development. Will be reworked in the future.
     private void SetNpcJobs(List<Npc> npcs) {
@@ -194,6 +232,9 @@ public class Settlement : Area2D {
         }
     }
 
+    public string GetSettlementName() {
+        return settlementInfo.settlementName;
+    }
     // Debugging
     private string GetFactionString() {
         return settlementInfo.settlementFaction.factionName;

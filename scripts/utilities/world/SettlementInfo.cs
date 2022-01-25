@@ -9,17 +9,18 @@ public class SettlementInfo : Resource {
     [Export]
     public Dictionary<string, int> jobsAvailable { get; private set; } = new Dictionary<string, int>() {
         // Also needs a data  structure that has max worker values, depending on the amount of resources.
-        { Constants.TRADER_PROFESSION,          1   },
-        { Constants.FARMER_PROFESSION,          2   },
-        { Constants.BAKER_PROFESSION,           1   },
-        { Constants.LUMBERJACK_PROFESSION,      1   },
-        { Constants.CRAFTSMAN_PROFESSION,       1   },
-        { Constants.MINER_PROFESSION,           1   },
-        { Constants.BLACKSMITH_PROFESSION,      1   },
-        { Constants.LOGISTICSOFFICER_PROFESSION,1   },
-        { Constants.SOLDIER_PROFESSION,         3   },
+        { Constants.TRADER_PROFESSION,          0   },
+        { Constants.CARAVAN_PROFESSION,         0   },
+        { Constants.FARMER_PROFESSION,          0   },
+        { Constants.BAKER_PROFESSION,           0   },
+        { Constants.LUMBERJACK_PROFESSION,      0   },
+        { Constants.CRAFTSMAN_PROFESSION,       0   },
+        { Constants.MINER_PROFESSION,           0   },
+        { Constants.BLACKSMITH_PROFESSION,      0   },
+        { Constants.LOGISTICSOFFICER_PROFESSION,0   },
+        { Constants.SOLDIER_PROFESSION,         0   },
     };
-
+    [Export]
     public Dictionary<string, int> itemDemand { get; private set; } = new Dictionary<string, int>();
 
     public void WorkerAdded(string profession) {

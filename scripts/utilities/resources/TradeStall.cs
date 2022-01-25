@@ -9,6 +9,8 @@ public class TradeStall : Resources
     public delegate void OnItemSold(Item item);
     [Signal]
     public delegate void OnItemBought(Item item);
+    [Signal]
+    public delegate void BeginTradeMission(TradeStall tradeStall);
     private float traderProfit = 0.05f;
     private float priceChangeStep = 0.025f;
 
@@ -57,8 +59,8 @@ public class TradeStall : Resources
         Since the trader will continuously be in WorkState, check their needs here and buy what they need if needed.
         */
         worker.CheckNeeds();
-        if (worker.checkBuyQueue() && worker is Npc) {
-            BuyTraderNeeds((Npc)worker);
+        if (worker.checkBuyQueue() && worker is Npc npcWorker) {
+            BuyTraderNeeds(npcWorker);
         }
     }
 
@@ -82,8 +84,13 @@ public class TradeStall : Resources
     {
         UpdatePrice(item, false);
         EmitSignal(nameof(OnItemBought), item);
+        if (inventory.IsFull()) {
+            OnInventoryFull();
+        }
     }
-
+    private void OnInventoryFull() {
+        EmitSignal(nameof(BeginTradeMission), this);
+    }
     private void UpdatePrices(Dictionary<string,int> itemDemand) {
         foreach (KeyValuePair<string,int> kvp in itemDemand)
         {
@@ -114,12 +121,12 @@ public class TradeStall : Resources
         {
             if (item is ConsumableItem){
                 if (((ConsumableItem)item).commodityValue > 0) {
-                    if (tradeInstance.BuyConsumableItem("commodity")) {
+                    if (tradeInstance.BuyConsumableItem(Constants.DEF_COMMODITYNAME)) {
                         worker.ClearCommoditiesFromBuyQueue();
                     }
 
                 } else if (((ConsumableItem)item).nutritionValue > 0) {
-                    if (tradeInstance.BuyConsumableItem("food")) {
+                    if (tradeInstance.BuyConsumableItem(Constants.DEF_FOODNAME)) {
                         worker.ClearFoodFromBuyQueue();
                     }
                 }

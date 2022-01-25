@@ -12,7 +12,7 @@
 [ext_resource path="res://scripts/utilities/statemachine/States/NpcStates/NpcTradeState.cs" type="Script" id=10]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 4500.0
+radius = 4000.0
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 1800.0
@@ -22,6 +22,8 @@ radius = 1800.0
 ]]
 position = Vector2( 0, 16 )
 scale = Vector2( 0.8, 0.8 )
+monitoring = false
+collision_mask = 0
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -61,6 +63,8 @@ polygon = PoolVector2Array( 0, 0, 24, -8, 40, -88, 48, -104, 56, -160, 48, -168,
 z_index = 1
 z_as_relative = false
 monitorable = false
+collision_layer = 0
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Surroundings"]
 visible = false
@@ -70,6 +74,7 @@ shape = SubResource( 1 )
 z_index = 1
 z_as_relative = false
 monitorable = false
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Proximity"]
 visible = false

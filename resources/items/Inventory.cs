@@ -49,6 +49,13 @@ public class Inventory : Resource
     public int GetFreeSpace() {
         return items.Where(x => x == null).Count();
     }
+    /// <summary> Returns inventory items without empty (null) values. If empty, returns null. </summary>
+    public IEnumerable<Item> GetFilteredItems() {
+        if (items.Any()) {
+            return items.Where(x => x != null);
+        }
+        return null;
+    }
 
     /// <summary> Returns a boolean on whether inventory contains a desired number of items in dictionary. </summary>
     public bool HasItems(Dictionary<Item,int> requiredItems) {

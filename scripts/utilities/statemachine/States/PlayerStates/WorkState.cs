@@ -20,20 +20,13 @@ public class WorkState : MoveState
 
     public override void Update(float delta)
     {
-        try
-        {
-            if (staggered) {
-                TickLoop(delta);
-            } else if (owner.Position.DistanceTo(resource.Position) < workRange) {
-                WorkTarget();
-                return;
-            }
+        if (staggered) {
+            TickLoop(delta);
+        } else if (owner.Position.DistanceTo(resource.Position) < workRange) {
+            WorkTarget();
+            return;
         }
-        catch (System.Exception e)
-        {
-            GD.Print("Error:", e); // Weird bug still exists. This should help with finding it.
-            throw;
-        }
+
         base.Update(delta);
     }
 

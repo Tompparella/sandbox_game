@@ -8,13 +8,16 @@ script = ExtResource( 1 )
 jobsAvailable = {
 "baker": 1,
 "blacksmith": 1,
+"caravan": 1,
 "craftsman": 1,
 "farmer": 1,
-"logistics_officer": 1,
+"logistics_officer": 0,
 "lumberjack": 1,
 "miner": 1,
-"soldier": 3,
+"soldier": 0,
 "trader": 1
+}
+itemDemand = {
 }
 settlementName = "Main Village"
 settlementFaction = ExtResource( 2 )

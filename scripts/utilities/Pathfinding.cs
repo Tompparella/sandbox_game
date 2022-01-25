@@ -30,14 +30,6 @@ public class Pathfinding : Navigation2D
         if (caller is Player) {
             pathLine.Points = GetSimplePath(start, end);
         }
-        try
-        {
-            caller.MovePath = GetSimplePath(start, end);
-        }
-        catch (System.Exception e)
-        {
-            GD.Print(e);
-            throw e;
-        }
+        caller.MovePath = GetSimplePath(start, end);
     }
 }

@@ -8,7 +8,7 @@ public class NpcIdleState : NpcMotionState
     public override void _Ready()
     {
         timer.OneShot = true;
-        timer.WaitTime = 3;
+        timer.WaitTime = 5;
         timer.Connect("timeout", this, "MoveAtRandom");
         AddChild(timer);
         base._Ready();

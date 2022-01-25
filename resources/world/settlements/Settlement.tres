@@ -16,15 +16,18 @@ settlementInfo = SubResource( 4 )
 [resource]
 script = ExtResource( 1 )
 jobsAvailable = {
-"baker": 1,
-"blacksmith": 1,
-"craftsman": 1,
-"farmer": 2,
-"logistics_officer": 1,
-"lumberjack": 1,
-"miner": 1,
-"soldier": 3,
-"trader": 1
+"baker": 0,
+"blacksmith": 0,
+"caravan": 0,
+"craftsman": 0,
+"farmer": 0,
+"logistics_officer": 0,
+"lumberjack": 0,
+"miner": 0,
+"soldier": 0,
+"trader": 0
+}
+itemDemand = {
 }
 settlementName = "Settlement"
 settlementFaction = SubResource( 2 )

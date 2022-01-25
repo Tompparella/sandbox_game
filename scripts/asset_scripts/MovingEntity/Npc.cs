@@ -9,6 +9,10 @@ public class Npc : Character
 	public List<Character> nearbyTraders { get; private set; } = new List<Character>();
 	public List<Item> soldItems { get; private set; } = new List<Item>();
 
+	[Signal]
+	public delegate void GetProfitableTrader(Npc caravan);
+	[Signal]
+	public delegate void ReturnCaravanToDepot(Npc caravan);
 
 	public bool hasTraded = true;
 	public bool outOfWork = false; // If there's nothing for the Npc to do, idle.
@@ -94,23 +98,24 @@ public class Npc : Character
 		return (surroundingResources.Any(x => x.workerProfession.Equals(GetProfession())));
 	}
 
-	/*
-	public void ClearSurroundings() {
+	public void ClearSurroundings() {	// Used in a few selected places, such as when forcing the caravan to go on a trademission.
 		surroundingResources.ToList().ForEach(x => _OnSurroundingsExited(x));
 	}
-	public void AddSurroundings(List<Resources> newSurroundings) {
-		newSurroundings.ForEach(x => _OnSurroundingsEntered(x));
+
+	/// <summary> Clears surrounding resources and adds one vital resource. Necessary when an npc needs to be set to work on a certain resource from far away. </summary>
+	public void AddVitalSurrounding(Resources newSurrounding) {	// Used in a few instances, such as when ending a caravan trademission to guide them back home.
+		surroundingResources.Clear();
+		_OnSurroundingsEntered(newSurrounding);
 	}
-	*/
 
 	private void SurroundingRemoved(Interactive resource)
 	{
 		if (!WorkableResourcesExist())
 		{
 			outOfWork = true;
+			outOfWorkTimer.Start();
 		}
-		resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
-		surroundingResources.Remove((Resources)resource);
+		_OnSurroundingsExited(resource);
 	}
 
 	public void AddNearbyTrader(Character trader) {
@@ -175,7 +180,7 @@ public class Npc : Character
 		return surroundingResources.Where(x => x.workerProfession.Equals(GetProfession())).ToList();
 	}
 
-	private bool IsEnemy(string factionName) {
+	public bool IsEnemy(string factionName) {
 		if (stats.faction != null) {
 			return stats.faction.hostileFactions.Contains(factionName);
 		}

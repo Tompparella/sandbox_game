@@ -71,16 +71,10 @@ public class Camp : Refinery
     {
         if (patrolling) {
             rand.Randomize();
-            try
-            {
-                int radius = (int)Math.Sqrt(Math.Pow(workRange, 2) / 2);    // Workrange is the maximum hypotenuse
-                worker.GetMovePath(worker.GlobalPosition, GlobalPosition + new Vector2(rand.RandiRange(-radius, radius), rand.RandiRange(-radius, radius)), worker); // Go for a patrol. This should be improved.
-            }
-            catch (System.Exception)
-            {
-                GD.Print("Error on Camp");
-                throw;
-            }
+
+            int radius = (int)Math.Sqrt(Math.Pow(workRange, 2) / 2);    // Workrange is the maximum hypotenuse
+            worker.GetMovePath(worker.GlobalPosition, GlobalPosition + new Vector2(rand.RandiRange(-radius, radius), rand.RandiRange(-radius, radius)), worker); // Go for a patrol. This should be improved.
+
         } else {
             base.workAction(worker);
         }

@@ -4,8 +4,9 @@
 
 [resource]
 script = ExtResource( 1 )
-itemName = "Goods"
+itemName = "Commodity"
 itemDescription = "Goods being processed into something."
 value = 0
 nutritionValue = 0.0
 commodityValue = 1.0
+healValue = 0.0

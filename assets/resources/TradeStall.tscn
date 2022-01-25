@@ -1,19 +1,23 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://resources/sprites/assets/resources/full/trade_stall.png" type="Texture" id=1]
 [ext_resource path="res://scripts/utilities/resources/TradeStall.cs" type="Script" id=2]
 [ext_resource path="res://resources/items/Inventory.cs" type="Script" id=3]
 [ext_resource path="res://resources/items/resources/Wheat.tres" type="Resource" id=4]
 [ext_resource path="res://resources/items/resources/Lumber.tres" type="Resource" id=5]
+[ext_resource path="res://resources/items/resources/IronOre.tres" type="Resource" id=6]
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 3 )
 currency = 250
-items = [ ExtResource( 4 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 5 ), null, null, null, null, null, null, null, null, null, null, null, null ]
+items = [ ExtResource( 4 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 6 ), null, null, null, null, null, null, null, null, null, null ]
 
 [node name="TradeStall" type="Area2D" groups=[
 "resource",
 ]]
+monitoring = false
+collision_layer = 2
+collision_mask = 0
 script = ExtResource( 2 )
 portraitResource = "res://resources/sprites/assets/resources/portrait/trade_stall_portrait.png"
 entityName = "Trader's Stall"
