@@ -150,15 +150,12 @@ script = ExtResource( 27 )
 
 [node name="Settlements" type="Node" parent="World"]
 
-[node name="TestSettlement 1" type="Area2D" parent="World/Settlements" groups=[
-"settlement",
-"spawner",
-]]
+[node name="TestSettlement 1" type="Area2D" parent="World/Settlements" groups=["settlement", "spawner"]]
 position = Vector2( 1200, 32 )
 scale = Vector2( 46.4703, 37.3973 )
-monitorable = false
 collision_layer = 4
 collision_mask = 3
+monitorable = false
 script = ExtResource( 21 )
 settlementInfo = ExtResource( 29 )
 
@@ -166,13 +163,10 @@ settlementInfo = ExtResource( 29 )
 position = Vector2( 0.172153, 0 )
 polygon = PoolVector2Array( 61.9751, 50.6988, 42.1775, 57.3303, 13.6001, 42.5699, -32.7091, 1.71135, -11.7064, -48.9875, 28.7495, -62.4644, 51.3016, -54.5494 )
 
-[node name="TestSettlement 2" type="Area2D" parent="World/Settlements" groups=[
-"settlement",
-"spawner",
-]]
-monitorable = false
+[node name="TestSettlement 2" type="Area2D" parent="World/Settlements" groups=["settlement", "spawner"]]
 collision_layer = 4
 collision_mask = 3
+monitorable = false
 script = ExtResource( 21 )
 settlementInfo = SubResource( 1 )
 
@@ -180,14 +174,11 @@ settlementInfo = SubResource( 1 )
 position = Vector2( -9768, 1960 )
 polygon = PoolVector2Array( 2008, 1160, -1504, 1608, -2504, 888, -2088, -24, -72, -664, 1728, 176 )
 
-[node name="TestSettlement3" type="Area2D" parent="World/Settlements" groups=[
-"settlement",
-"spawner",
-]]
+[node name="TestSettlement3" type="Area2D" parent="World/Settlements" groups=["settlement", "spawner"]]
 position = Vector2( -5192, -952 )
-monitorable = false
 collision_layer = 4
 collision_mask = 3
+monitorable = false
 script = ExtResource( 21 )
 settlementInfo = SubResource( 2 )
 
@@ -293,9 +284,7 @@ position = Vector2( -8816, 2528 )
 position = Vector2( -5232, -632 )
 inventory = SubResource( 4 )
 
-[node name="Characters" type="YSort" parent="NavigationHandler/MapSort" groups=[
-"characters_node",
-]]
+[node name="Characters" type="YSort" parent="NavigationHandler/MapSort" groups=["characters_node"]]
 
 [node name="Player" parent="NavigationHandler/MapSort/Characters" instance=ExtResource( 3 )]
 position = Vector2( 424, 424 )

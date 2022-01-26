@@ -1,11 +1,9 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 public class NpcTradeState : NpcMoveState
 {
-    private Thread thread = new Thread(); // Trying to play a bit with threads, since TradeInventory can be quite a taxing function to run.
     public override void Enter()
     {
         owner.GetMovePath(owner.Position, owner.GetInteractive().Position, owner);
@@ -31,15 +29,14 @@ public class NpcTradeState : NpcMoveState
         float distanceToLast = owner.Position.DistanceTo(owner.movePath.LastOrDefault());
         if (distanceToLast > Constants.DEF_ATTACKRANGE) {
             base.MovementLoop(delta);
-        } else if (!thread.IsActive()){
-            thread.Start(this, "TradeInventory", owner.GetInteractive().tradeInventory);
-            thread.CallDeferred("wait_to_finish");
+        } else {
+            TradeInventory();
         }
     }
 
-    public void TradeInventory(Inventory traderInventory) {
+    public void TradeInventory() {
         bool tradeSuccess = false;
-        Trade tradeInstance = new Trade(owner.tradeInventory, traderInventory); // Buyer = Owner, Seller = Trader
+        Trade tradeInstance = new Trade(owner.tradeInventory, owner.GetInteractive().tradeInventory); // Buyer = Owner, Seller = Trader
         Npc npcOwner = owner as Npc;
         /*
         Handling for caravans has to be done separately, since they're optimally always on the move.
