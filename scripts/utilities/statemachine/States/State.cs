@@ -24,11 +24,10 @@ public class State : Node
         return;
     }
     public virtual void HandleAttack() {
-        if (owner.stats.currentHealth <= 0) {
+        if (owner.IsDead()) {
             EmitSignal("Finished", "dead");
         } else {
-        EmitSignal("Finished", "battle");
-        return;
+            EmitSignal("Finished", "battle");
         }
     }
     public virtual void Update(float delta) {

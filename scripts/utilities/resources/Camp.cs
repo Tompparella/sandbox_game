@@ -80,29 +80,6 @@ public class Camp : Refinery
         }
     }
 
-/*
-    public void SupplySoldiers(int foodAmount, int commodityAmount) {
-        List<Npc> soldiers = GetWorkers().Where(x => x is Npc).Cast<Npc>().ToList();
-        bool supplyFood, supplyCommodities;
-        foreach (Npc soldier in soldiers)
-        {
-            supplyFood = soldier.GetHungerValue() < Constants.DEF_MAXHUNGER / 2 && foodAmount > 0;
-            supplyCommodities = soldier.GetCommoditiesValue() < Constants.DEF_MAXCOMMODITIES / 2 && commodityAmount > 0;
-
-            if (supplyFood || supplyCommodities) {
-                foodAmount = supplyFood ? foodAmount - 1 : foodAmount;
-                commodityAmount = supplyCommodities ? commodityAmount - 1 : commodityAmount;
-                soldier.CheckNeeds();
-                soldier.SetInteractive();
-            }
-
-            if (foodAmount <= 0 && commodityAmount <= 0) {
-                return;
-            }
-        }
-    }
-*/
-
     private float GetCamperDistance() {  // For debugging
         if (workers.Any()) {
             return workers[0].Position.DistanceTo(Position);

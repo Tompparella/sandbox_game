@@ -45,6 +45,10 @@ public class NpcMoveState : NpcMotionState
             EmitSignal(nameof(Finished), "idle");
             return;
         }
+        if ((agilityTickDelta += delta) > agilityTick) {
+            owner.TrainAgility();
+            agilityTickDelta = 0;
+        }
         float currentSpeed = owner.currentSpeed * delta;
         Vector2 startPoint = owner.Position;
         for (int i = 0; i < owner.movePath.Count(); i++)

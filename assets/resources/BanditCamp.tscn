@@ -3,13 +3,10 @@
 [ext_resource path="res://resources/sprites/assets/resources/full/tree.png" type="Texture" id=1]
 [ext_resource path="res://scripts/utilities/resources/BanditCamp.cs" type="Script" id=2]
 
-[node name="BanditCamp" type="Area2D" groups=[
-"resource",
-"spawner",
-]]
-monitoring = false
+[node name="BanditCamp" type="Area2D" groups=["resource", "spawner"]]
 collision_layer = 2
 collision_mask = 0
+monitoring = false
 script = ExtResource( 2 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]

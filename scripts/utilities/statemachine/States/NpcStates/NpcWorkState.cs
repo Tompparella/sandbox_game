@@ -10,7 +10,7 @@ public class NpcWorkState : NpcMoveState
     private Resources resource;
 
     public override void Enter() {
-        resource = (Resources)owner.GetInteractive();
+        resource = owner.GetInteractive() as Resources;
         if (resource != null && !resource.GetExhausted() && resource.AddWorker(owner)) {
             workRange = resource.workRange;
             owner.GetMovePath(owner.GlobalPosition, resource.Position, owner);
@@ -53,6 +53,7 @@ public class NpcWorkState : NpcMoveState
 
     private void WorkTarget() {
         resource.workAction(owner);
+        owner.TrainLabour();
         if (owner.GetInteractive() == null) {
             //GD.Print("Exiting workstate");
             EmitSignal(nameof(Finished), "idle");
@@ -71,6 +72,10 @@ public class NpcWorkState : NpcMoveState
             //owner.Position = owner.movePath[0];
             owner.currentSpeed = 0;
             return;
+        }
+        if ((agilityTickDelta += delta) > agilityTick) {
+            owner.TrainAgility();
+            agilityTickDelta = 0;
         }
         float currentSpeed = owner.currentSpeed * delta;
         Vector2 startPoint = owner.Position;

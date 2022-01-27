@@ -12,21 +12,19 @@ script = ExtResource( 3 )
 currency = 250
 items = [ ExtResource( 4 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 6 ), null, null, null, null, null, null, null, null, null, null ]
 
-[node name="TradeStall" type="Area2D" groups=[
-"resource",
-]]
-monitoring = false
+[node name="TradeStall" type="Area2D" groups=["resource"]]
 collision_layer = 2
 collision_mask = 0
+monitoring = false
 script = ExtResource( 2 )
 portraitResource = "res://resources/sprites/assets/resources/portrait/trade_stall_portrait.png"
 entityName = "Trader's Stall"
 inventory = SubResource( 1 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-position = Vector2( -32, 0 )
+position = Vector2( -34, -15 )
 polygon = PoolVector2Array( -80, 16, -72, -192, 112, -192, 152, -128, 160, -56, 160, 24, -16, 48 )
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 0, -128 )
+position = Vector2( -1, -146 )
 texture = ExtResource( 1 )

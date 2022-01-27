@@ -38,16 +38,20 @@ public class TradeStall : Resources
     }
 
     public override bool AddWorker(Character worker) {      // Upon entering, make it so that the trader used the stall's inventory while trading.
-        worker.AddToGroup(Constants.TRADER_GROUP);
+        if (!worker.IsInGroup(Constants.TRADER_GROUP)) {
+            worker.AddToGroup(Constants.TRADER_GROUP);
+            worker.EmitSignal("Refresh", worker);
+        }
         worker.tradeInventory = inventory;
-        worker.EmitSignal("Refresh", worker);
         return base.AddWorker(worker);
     }
 
     public override void RemoveWorker(Character worker) {   // Upon exiting, return default inventory as the traded inventory.
-        worker.RemoveFromGroup(Constants.TRADER_GROUP);
+        if (worker.IsInGroup(Constants.TRADER_GROUP)) {
+            worker.RemoveFromGroup(Constants.TRADER_GROUP);
+            worker.EmitSignal("Refresh", worker);
+        }
         worker.tradeInventory = worker.inventory;
-        worker.EmitSignal("Refresh", worker);
         base.RemoveWorker(worker);
     }
 
@@ -92,6 +96,9 @@ public class TradeStall : Resources
         EmitSignal(nameof(BeginTradeMission), this);
     }
     private void UpdatePrices(Dictionary<string,int> itemDemand) {
+        if (tradeInventory.IsFull()) {
+            EmitSignal(nameof(BeginTradeMission), this);
+        }
         foreach (KeyValuePair<string,int> kvp in itemDemand)
         {
             if (inventory.itemPriceModifiers.ContainsKey(kvp.Key)) {

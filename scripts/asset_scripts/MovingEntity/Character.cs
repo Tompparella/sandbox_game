@@ -24,7 +24,9 @@ public class Character : MovingEntity
     [Signal]
     public delegate void UnderAttack(Character attacker);
     [Signal]
-    public delegate void OnItemWanted(Item item);
+    public delegate void OnItemWanted(string itemName, int amount);
+    [Signal]
+    public delegate void OnWantFulfilled(string itemName, int amount);
     [Signal]
     public delegate void Refresh(Character attacker);
     [Signal]
@@ -114,8 +116,16 @@ public class Character : MovingEntity
             int takenDamage = (int)(attack.damage * (1 - 0.005f * stats.defence));
             // Increase aggro
             targets[attack.source] += takenDamage;
-            stats.currentHealth -= takenDamage;
-            GD.Print(entityName, ":", stats.currentHealth);
+            Hurt(takenDamage);
+            if (IsDead()) {
+                attack.source.GainTribulation(GetTribulationValue(), GetSkillUpgradesAmount());
+                attack.source.ClearCurrentTarget();
+            }
+            //GD.Print(entityName, ":", stats.currentHealth);
+            if (attack.isCritical) {
+                GD.Print(string.Format("{0}: Critical hit of {1} against {2}!", attack.source.entityName, takenDamage, entityName));
+                newCounter.Scale = new Vector2(2,2);
+            }
             newCounter.init(takenDamage.ToString());
         } else {
             newCounter.init("Dodge");
@@ -133,7 +143,7 @@ public class Character : MovingEntity
             if (itemsInQueue < kvp.Value) {
                 for (int i = itemsInQueue; i < kvp.Value; i++) {
                     neededItems.Add(kvp.Key);
-                    EmitSignal("OnItemWanted", kvp.Key);
+                    EmitSignal("OnItemWanted", kvp.Key.itemName, kvp.Value);
                     //GD.Print(string.Format("'{0}' added item '{1}' to buy queue.", Name, kvp.Key.itemName));
                 }
                 itemsAdded = true;
@@ -141,6 +151,30 @@ public class Character : MovingEntity
         }
         //neededItems.ForEach(x => GD.Print(x.itemName));
         return itemsAdded;
+    }
+    public bool IsEnemy(string factionName) {
+		if (stats.faction != null) {
+			return stats.faction.hostileFactions.Contains(factionName);
+		}
+		return false;
+	}
+	public float GetHungerValue()
+	{
+		return stats.hunger;
+	}
+	public float GetCommoditiesValue()
+	{
+		return stats.commodities;
+	}
+	public float GetCurrentHealth()
+	{
+		return stats.currentHealth;
+	}
+    public int GetTribulationValue() {
+        return stats.tribulation;
+    }
+    public int GetSkillUpgradesAmount() {
+        return stats.skillUpgrades;
     }
     public bool IsDead() {
         return stats.isDead;
@@ -151,6 +185,19 @@ public class Character : MovingEntity
     public void SetProfession(string profession) {
         aggressive = Constants.AGGRESSIVE_PROFESSIONS.Contains(profession);
         stats.profession = profession;
+    }
+    public void TrainLabour() {
+        stats?.TrainLabour();
+    }
+    public void TrainAgility() {
+        stats?.TrainAgility();
+    }
+    public void GainTribulation(int tribulation = 0, int skills = 0) {
+        if (tribulation == 0 && skills == 0) {
+            stats?.GetPassiveTribulation();
+        } else {
+            stats?.GetTribulationFromKill(tribulation, skills);
+        }
     }
 
     public override void CheckNeeds(Item item = null) {
@@ -191,6 +238,12 @@ public class Character : MovingEntity
         } else {
             GetCommodities();
         }
+    }
+    public void Heal(float heal) {
+        stats?.RaiseHealth(heal);
+    }
+    public void Hurt(float hurt) {
+        stats?.LowerHealth(hurt);
     }
     
 

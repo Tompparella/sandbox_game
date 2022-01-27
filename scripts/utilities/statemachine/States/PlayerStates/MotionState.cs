@@ -3,6 +3,8 @@ using System;
 
 public class MotionState : State
 {
+    protected float agilityTickDelta = 0;
+    protected float agilityTick = 5 * Constants.TICK;
     
     public override void HandleInput(InputEvent @event)
     {

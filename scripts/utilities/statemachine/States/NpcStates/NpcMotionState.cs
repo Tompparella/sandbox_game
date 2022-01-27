@@ -6,6 +6,8 @@ public class NpcMotionState : State
 
     private float needsTickDelta = 0;
     private float needsTick = 5 * Constants.TICK;
+    protected float agilityTickDelta = 0;
+    protected float agilityTick = 5 * Constants.TICK;
     
     public override void HandleInput(InputEvent @event)
     {

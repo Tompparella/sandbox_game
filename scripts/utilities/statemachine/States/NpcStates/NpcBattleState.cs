@@ -28,6 +28,7 @@ public class NpcBattleState : NpcMoveState
 
     public override void Exit()
     {
+        owner.ClearTargets();
         combatCooldown = 0;
         base.Exit();
     }
@@ -90,10 +91,8 @@ public class NpcBattleState : NpcMoveState
     public override void HandleAttack()
     {
         combatCooldown = 0;
-        if (owner.stats.currentHealth <= 0) {
+        if (owner.IsDead()) {
             base.HandleAttack();
-        } else {
-            // Play staggered animation
         }
     }
 

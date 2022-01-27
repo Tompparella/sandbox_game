@@ -140,18 +140,26 @@ public class Settlement : Area2D {
         if (character.GetFaction().Equals(GetFactionString())) {
             character.Connect("Dead", this, nameof(OnVillagerDied));
             character.Connect("UnderAttack", this, nameof(NotifySoldiers));
-            character.Connect("OnItemWanted", this, nameof(OnTraderItemWanted));
+            character.Connect("OnItemWanted", this, nameof(OnItemWanted));
+            character.Connect("OnWantFulfilled", this, nameof(OnWantFulfilled));
             settlementInfo.WorkerAdded(character.GetProfession());
         }
     }
 
     // Trade handling. Controls item prices based on need and supply.
     /// <summary> When an Npc needs an item to buy, the price of the item increases locally. </summary>
-    private void OnTraderItemWanted(Item item) {
-        if (itemDemandChange.ContainsKey(item.itemName)) {
-            itemDemandChange[item.itemName] += 1;
+    private void OnItemWanted(string itemName, int amount) {
+        if (itemDemandChange.ContainsKey(itemName)) {
+            itemDemandChange[itemName] += amount;
         } else {
-            itemDemandChange.Add(item.itemName, 1);
+            itemDemandChange.Add(itemName, amount);
+        }
+    }
+    private void OnWantFulfilled(string itemName, int amount) {
+        if (itemDemandChange.ContainsKey(itemName)) {
+            itemDemandChange[itemName] -= amount;
+        } else {
+            itemDemandChange.Add(itemName, -amount);
         }
     }
     /// <summary> When the trader sells an item, the value of the item increases in steps </summary>

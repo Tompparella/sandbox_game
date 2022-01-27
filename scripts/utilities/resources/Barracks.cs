@@ -96,8 +96,10 @@ public class Barracks : Refinery
     }
     public override void RemoveWorker(Character worker) {
         if (trading) {
-            worker.RemoveFromGroup(Constants.LOGISTICS_GROUP);
             worker.tradeInventory = worker.inventory;
+        }
+        if (worker.IsInGroup(Constants.LOGISTICS_GROUP)) {
+            worker.RemoveFromGroup(Constants.LOGISTICS_GROUP);
             worker.EmitSignal("Refresh", worker);
         }
         trading = false;
@@ -109,9 +111,11 @@ public class Barracks : Refinery
         If the Logistics Officer hasn't got any better things to do, it will start to trade,
         providing soldiers with free munitions and goods.
         */
-        worker.AddToGroup(Constants.LOGISTICS_GROUP);
+        if (!worker.IsInGroup(Constants.LOGISTICS_GROUP)) {
+            worker.AddToGroup(Constants.LOGISTICS_GROUP);
+            worker.EmitSignal("Refresh", worker);
+        }
         worker.tradeInventory = inventory;
-        worker.EmitSignal("Refresh", worker);
         trading = true;
 
         int edibleItems = inventory.GetEdibleItemCount();
@@ -125,9 +129,11 @@ public class Barracks : Refinery
     private void TradingOff() {
         if (workers.Any()) {
             Character worker = workers.First();
-            worker.RemoveFromGroup(Constants.LOGISTICS_GROUP);
+            if (worker.IsInGroup(Constants.LOGISTICS_GROUP)) {
+                worker.RemoveFromGroup(Constants.LOGISTICS_GROUP);
+                worker.EmitSignal("Refresh", worker);
+            }
             worker.tradeInventory = worker.inventory;
-            worker.EmitSignal("Refresh", worker);
         }
         trading = false;
     }
@@ -162,31 +168,29 @@ public class Barracks : Refinery
             Food- and commodity items require separate handling.
             */
 
-            if (i is ConsumableItem) {                                                          
-                ConsumableItem item = (ConsumableItem)i;
+            if (i is ConsumableItem item) {                                                          
                 if (item.nutritionValue > 0) {
                     if (inventory.HasItem(item, storedFoodAmount)) { // If inventory has stored amount of food/commodities, don't add it to workqueue and clear food/commodities from logistics officer's neededItems.
                         ((Npc)worker).ClearFoodFromBuyQueue();
                         continue;
                     }
-                    ConsumableItem originItem = worker.inventory.GetEdibleItems()?.Last();  
+                    ConsumableItem originItem = worker.inventory.GetEdibleItems()?.LastOrDefault();  
                     if (originItem != null) {
                         item.nutritionValue = originItem.nutritionValue;
                         item.healValue = originItem.healValue;
-                        addItemToWorkQueue(i, worker);
+                        addItemToWorkQueue(item, worker);
                         return true;
                     }
                 }
-
                 else if (item.commodityValue > 0) {
                     if (inventory.HasItem(item, storedCommodityAmount)) {
                         ((Npc)worker).ClearCommoditiesFromBuyQueue();
                         continue;
                     }
-                    ConsumableItem originItem = worker.inventory.GetCommodityItems()?.Last();
+                    ConsumableItem originItem = worker.inventory.GetCommodityItems()?.LastOrDefault();
                     if (originItem != null) {
                         item.commodityValue = originItem.commodityValue;
-                        addItemToWorkQueue(i, worker);
+                        addItemToWorkQueue(item, worker);
                         return true;
                     }
                 }

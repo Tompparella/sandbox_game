@@ -41,6 +41,7 @@ public class WorkState : MoveState
 
     private void WorkTarget() {
         resource.workAction(owner);
+        owner.TrainLabour();
         if (owner.GetInteractive() == null) {
             EmitSignal("Finished", "idle");
             return;

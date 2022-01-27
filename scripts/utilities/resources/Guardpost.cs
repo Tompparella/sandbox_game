@@ -45,8 +45,8 @@ public class Guardpost : Resources
     }
 
     public override void GiveResource(Character worker) { // Something exciting here, such as granting exp instead of currency.
+        worker.GainTribulation();
         if (!isExhausted) {
-            worker.inventory.currency++;
             EmitSignal(nameof(SupplyUsed));
         }
     }

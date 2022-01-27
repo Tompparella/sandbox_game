@@ -98,7 +98,7 @@ public class BattleState : MoveState
 
     public override void HandleAttack()
     {
-        if (owner.stats.currentHealth <= 0) {
+        if (owner.IsDead()) {
             base.HandleAttack();
         } else {
             // Play staggered animation

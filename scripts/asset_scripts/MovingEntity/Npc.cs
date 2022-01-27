@@ -23,19 +23,25 @@ public class Npc : Character
 	{
 		switch(area) {
 			case Resources resource:
-				if (resource.workerProfession.Equals(GetProfession())) {
-				outOfWork = false;
+				if (!surroundingResources.Contains(area)) {
+					if (resource.workerProfession.Equals(GetProfession())) {
+						outOfWork = false;
+					}
+					surroundingResources.Add(resource);
+					if (!area.IsConnected("OnRemoval", this, nameof(SurroundingRemoved))) {
+						area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
+					}
 				}
-				surroundingResources.Add(resource);
-				area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
 			break;
 			case Character character:
-				character.Connect("Refresh", this, nameof(_RefreshSurroundingCharacter));
+				if (!character.IsConnected("Refresh", this, nameof(_RefreshSurroundingCharacter))) {
+					character.Connect("Refresh", this, nameof(_RefreshSurroundingCharacter));
+				}
 				if (GetProfession().Equals(Constants.SOLDIER_PROFESSION)) {
 					if (character.IsInGroup(Constants.LOGISTICS_GROUP)) {
 						AddNearbyTrader(character);
 					}
-				} else if (character.IsInGroup(Constants.TRADER_GROUP)) {
+				} else if (character.IsInGroup(Constants.TRADER_GROUP) && !nearbyTraders.Contains(character)) {
 					AddNearbyTrader(character);
 				}
 			break;
@@ -46,14 +52,13 @@ public class Npc : Character
 		switch (area)
 		{
 			case Resources resource:
-				if (surroundingResources.Contains(resource))
+			if (surroundingResources.Contains(resource)) {
+				if (resource.IsConnected("OnRemoval", this, nameof(SurroundingRemoved)))
 				{
-					if (resource.IsConnected("OnRemoval", this, nameof(SurroundingRemoved)))
-					{
-						resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
-					}
-					surroundingResources.Remove(resource);
+					resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
 				}
+				surroundingResources.Remove(resource);
+			}
 			break;
 			case Character character:
 				if (nearbyTraders.Count() > 1 && nearbyTraders.Contains(character))	// Most Npc's always need at least 1 nearby trader. This can be redone.
@@ -151,54 +156,30 @@ public class Npc : Character
 		}
 		bool foundWork = false;
 		Resources currentResource = null;
-		float shortestDistance = float.MaxValue;
 		int leastWorkers = int.MaxValue;
 		foreach (Resources i in GetSurroundingWorkableResources())
 		{
-			if ((currentResource == null || i.GetWorkerNumber() <= leastWorkers))
+			if (i.GetWorkerNumber() < i.maxWorkers)	// TODO: Re-work this logic
 			{
 				if (!IsInstanceValid(i) || i.GetExhausted())
 				{
 					surroundingResources.Remove(i);
 					continue;
-				} else if (i.maxWorkers <= i.GetWorkerNumber()) {
-					continue;
 				}
-				if (Position.DistanceTo(i.Position) < shortestDistance && i.maxWorkers > i.GetWorkerNumber())
-				{
+				if (currentResource == null || i.GetWorkerNumber() < leastWorkers) {
 					foundWork = true;
 					currentResource = i;
-					shortestDistance = Position.DistanceTo(currentResource.Position);
-					leastWorkers = i.GetWorkers().Count();
+					leastWorkers = i.GetWorkerNumber();
 				}
 			}
 		}
 		SetInteractive(currentResource);
 		return foundWork;
 	}
-	private List<Resources> GetSurroundingWorkableResources() {
-		return surroundingResources.Where(x => x.workerProfession.Equals(GetProfession())).ToList();
+	private IEnumerable<Resources> GetSurroundingWorkableResources() {
+		return surroundingResources.Where(x => x.workerProfession.Equals(GetProfession()));
 	}
 
-	public bool IsEnemy(string factionName) {
-		if (stats.faction != null) {
-			return stats.faction.hostileFactions.Contains(factionName);
-		}
-		return false;
-	}
-
-	public float GetHungerValue()
-	{
-		return stats.hunger;
-	}
-	public float GetCommoditiesValue()
-	{
-		return stats.commodities;
-	}
-	public float GetCurrentHealth()
-	{
-		return stats.currentHealth;
-	}
 	public override void GetFood()
 	{
 		addFoodToBuyQueue();
@@ -214,7 +195,7 @@ public class Npc : Character
 		{
 			ConsumableItem foodItem = new ConsumableItem(_nutritionValue: 1);
 			neededItems.Add(foodItem);
-			EmitSignal("OnItemWanted", foodItem);
+			EmitSignal("OnItemWanted", foodItem.itemName, 1);
 		}
 	}
 	public void addCommoditiesToBuyQueue()
@@ -223,7 +204,7 @@ public class Npc : Character
 		{
 			ConsumableItem commodityItem = new ConsumableItem(_commodityValue: 1);
 			neededItems.Add(commodityItem);
-			EmitSignal("OnItemWanted", commodityItem);
+			EmitSignal("OnItemWanted", commodityItem.itemName, 1);
 		}
 	}
 

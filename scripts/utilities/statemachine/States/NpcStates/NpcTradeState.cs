@@ -80,15 +80,17 @@ public class NpcTradeState : NpcMoveState
         {
             if (item is ConsumableItem){
                 if (((ConsumableItem)item).commodityValue > 0) {
-                    if (tradeInstance.BuyConsumableItem("commodity")) {
+                    if (tradeInstance.BuyConsumableItem(Constants.DEF_COMMODITYNAME)) {
                         tradeSuccess = true;
+                        owner.EmitSignal("OnWantFulfilled", Constants.DEF_COMMODITYNAME, 1);
                         ((Npc)owner).ClearCommoditiesFromBuyQueue();
                         continue;
                     }
 
                 } else if (((ConsumableItem)item).nutritionValue > 0) {
-                    if (tradeInstance.BuyConsumableItem("food")) {
+                    if (tradeInstance.BuyConsumableItem(Constants.DEF_FOODNAME)) {
                         tradeSuccess = true;
+                        owner.EmitSignal("OnWantFulfilled", Constants.DEF_FOODNAME, 1);
                         ((Npc)owner).ClearFoodFromBuyQueue();
                         continue;
                     }
@@ -96,6 +98,7 @@ public class NpcTradeState : NpcMoveState
             }
             else if (tradeInstance.BuyItem(item)) {
                 tradeSuccess = true;
+                owner.EmitSignal("OnWantFulfilled", item.itemName, 1);
                 ((Npc)owner).PopFromBuyQueue(item);
                 continue;
             }
