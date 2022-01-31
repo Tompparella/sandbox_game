@@ -22,7 +22,7 @@ public class Resources : Interactive
 
     protected string defaultTexture;
     protected string defaultPortrait;
-    protected string defaultName;
+    protected string defaultName = "Resource";
     protected string defaultDescription;
 
     protected string exhaustedTexture;
@@ -31,49 +31,61 @@ public class Resources : Interactive
     protected string exhaustedDescription;
     protected bool isExhausted = false;
     protected List<Character> workers = new List<Character>();
-    public int maxWorkers  { get; protected set; } = 3; // Default maximum amount of workers a resource can have.
+    public int maxWorkers { get; protected set; } = 3; // Default maximum amount of workers a resource can have.
     public float workRange { get; protected set; } = Constants.DEF_ATTACKRANGE;
     protected string defaultInventory; // The inventory that will be loaded upon refreshing the resource.
 
     private Timer refreshTimer = new Timer();
 
 
-    public int GetWorkerNumber() {
+    public int GetWorkerNumber()
+    {
         return workers.Count();
     }
-    public List<Character> GetWorkers() {
+    public List<Character> GetWorkers()
+    {
         return workers;
     }
-    public virtual bool AddWorker(Character worker) {
+    public virtual bool AddWorker(Character worker)
+    {
         workers.Add(worker);
         return true;
     }
-    public virtual void RemoveWorker(Character worker) {
+    public virtual void RemoveWorker(Character worker)
+    {
         workers.Remove(worker);
     }
-    public bool GetExhausted() {
+    public bool GetExhausted()
+    {
         return isExhausted;
     }
-    public virtual void workAction(Character worker) {
+    public virtual void workAction(Character worker)
+    {
         currentActions++;
         //GD.Print(currentActions);
-        if (currentActions >= requiredActions) {
+        if (currentActions >= requiredActions)
+        {
             GiveResource(worker);
             currentActions = 0;
         }
     }
 
-    public virtual void GiveResource(Character worker) {
-        if (!isExhausted) {
-            if (!worker.inventory.IsFull()) {
+    public virtual void GiveResource(Character worker)
+    {
+        if (!isExhausted)
+        {
+            if (!worker.inventory.IsFull())
+            {
                 Item givenItem = inventory.PopLastItem();
                 worker.AddToSellQueue(givenItem);
                 worker.inventory.AddItem(givenItem);
-                if (worker.inventory.IsFull()) {
+                if (worker.inventory.IsFull())
+                {
                     worker.SetInteractive();
                     EmitSignal(nameof(OnRemoval), this);
                 }
-                if (inventory.IsEmpty()) {
+                if (inventory.IsEmpty())
+                {
                     worker.SetInteractive();
                     ExhaustResource();
                 }
@@ -81,7 +93,8 @@ public class Resources : Interactive
         }
     }
 
-    private void ExhaustResource() {
+    private void ExhaustResource()
+    {
         isExhausted = true;
         EmitSignal(nameof(OnRemoval), this);
         sprite.Texture = (Texture)ResourceLoader.Load(exhaustedTexture);
@@ -93,7 +106,8 @@ public class Resources : Interactive
         //QueueFree();
     }
 
-    private void RefreshResource() {
+    private void RefreshResource()
+    {
         inventory = (Inventory)ResourceLoader.Load(defaultInventory).Duplicate();
         isExhausted = false;
         sprite.Texture = (Texture)ResourceLoader.Load(defaultTexture);
@@ -105,7 +119,8 @@ public class Resources : Interactive
 
     public override void _Ready()
     {
-        if (sprite == null) {
+        if (sprite == null)
+        {
             sprite = (Sprite)GetNode("Sprite");
         }
         portrait = (Texture)ResourceLoader.Load(portraitResource);
@@ -117,14 +132,16 @@ public class Resources : Interactive
         refreshTimer.WaitTime = refreshTime;
         refreshTimer.Connect("timeout", this, nameof(RefreshResource));
         AddChild(refreshTimer);
-        
+
         base._Ready();
     }
 
-    public virtual void _OnMouseOver() {
+    public virtual void _OnMouseOver()
+    {
         EmitSignal("OnMouseOver", this);
     }
-    public virtual void _OnMouseExit() {
+    public virtual void _OnMouseExit()
+    {
         EmitSignal("OnMouseExit");
     }
 }

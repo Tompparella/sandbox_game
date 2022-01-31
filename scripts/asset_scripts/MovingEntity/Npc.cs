@@ -21,30 +21,39 @@ public class Npc : Character
 
 	public void _OnSurroundingsEntered(Area2D area)
 	{
-		switch(area) {
+		switch (area)
+		{
 			case Resources resource:
-				if (!surroundingResources.Contains(area)) {
-					if (resource.workerProfession.Equals(GetProfession())) {
+				if (!surroundingResources.Contains(area))
+				{
+					if (resource.workerProfession.Equals(GetProfession()))
+					{
 						outOfWork = false;
 					}
 					surroundingResources.Add(resource);
-					if (!area.IsConnected("OnRemoval", this, nameof(SurroundingRemoved))) {
+					if (!area.IsConnected("OnRemoval", this, nameof(SurroundingRemoved)))
+					{
 						area.Connect("OnRemoval", this, nameof(SurroundingRemoved));
 					}
 				}
-			break;
+				break;
 			case Character character:
-				if (!character.IsConnected("Refresh", this, nameof(_RefreshSurroundingCharacter))) {
+				if (!character.IsConnected("Refresh", this, nameof(_RefreshSurroundingCharacter)))
+				{
 					character.Connect("Refresh", this, nameof(_RefreshSurroundingCharacter));
 				}
-				if (GetProfession().Equals(Constants.SOLDIER_PROFESSION)) {
-					if (character.IsInGroup(Constants.LOGISTICS_GROUP)) {
+				if (GetProfession().Equals(Constants.SOLDIER_PROFESSION))
+				{
+					if (character.IsInGroup(Constants.LOGISTICS_GROUP))
+					{
 						AddNearbyTrader(character);
 					}
-				} else if (character.IsInGroup(Constants.TRADER_GROUP) && !nearbyTraders.Contains(character)) {
+				}
+				else if (character.IsInGroup(Constants.TRADER_GROUP) && !nearbyTraders.Contains(character))
+				{
 					AddNearbyTrader(character);
 				}
-			break;
+				break;
 		}
 	}
 	public void _OnSurroundingsExited(Area2D area)
@@ -52,48 +61,60 @@ public class Npc : Character
 		switch (area)
 		{
 			case Resources resource:
-			if (surroundingResources.Contains(resource)) {
-				if (resource.IsConnected("OnRemoval", this, nameof(SurroundingRemoved)))
+				if (surroundingResources.Contains(resource))
 				{
-					resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
+					if (resource.IsConnected("OnRemoval", this, nameof(SurroundingRemoved)))
+					{
+						resource.Disconnect("OnRemoval", this, nameof(SurroundingRemoved));
+					}
+					surroundingResources.Remove(resource);
 				}
-				surroundingResources.Remove(resource);
-			}
-			break;
+				break;
 			case Character character:
-				if (nearbyTraders.Count() > 1 && nearbyTraders.Contains(character))	// Most Npc's always need at least 1 nearby trader. This can be redone.
+				if (nearbyTraders.Count() > 1 && nearbyTraders.Contains(character)) // Most Npc's always need at least 1 nearby trader. This can be redone.
 				{
 					nearbyTraders.Remove(character);
 				}
-				if (character.IsConnected("Refresh", this, nameof(_RefreshSurroundingCharacter))) {
+				if (character.IsConnected("Refresh", this, nameof(_RefreshSurroundingCharacter)))
+				{
 					character.Disconnect("Refresh", this, nameof(_RefreshSurroundingCharacter));
 				}
 				break;
 			default:
-			break;
+				break;
 		}
 	}
 
-	public void _OnProximityEntered(Area2D area) {
-		if (aggressive && area is Character character) {
-			if (IsEnemy(character.GetFaction())) {
+	public void _OnProximityEntered(Area2D area)
+	{
+		if (aggressive && area is Character character)
+		{
+			if (IsEnemy(character.GetFaction()))
+			{
 				AttackTarget(character);
 			}
 		}
 	}
-	public void _OnProximityExited(Area2D area) {
+	public void _OnProximityExited(Area2D area)
+	{
 	}
 
-	public void _RefreshSurroundingCharacter(Character character) {
+	public void _RefreshSurroundingCharacter(Character character)
+	{
 
-		if (nearbyTraders.Contains(character)) {
+		if (nearbyTraders.Contains(character))
+		{
 			nearbyTraders.Remove(character);
 		}
-		if (GetProfession().Equals(Constants.SOLDIER_PROFESSION)) {
-			if (character.IsInGroup(Constants.LOGISTICS_GROUP)) {
+		if (GetProfession().Equals(Constants.SOLDIER_PROFESSION))
+		{
+			if (character.IsInGroup(Constants.LOGISTICS_GROUP))
+			{
 				AddNearbyTrader(character);
 			}
-		} else if (character.IsInGroup(Constants.TRADER_GROUP)) {
+		}
+		else if (character.IsInGroup(Constants.TRADER_GROUP))
+		{
 			nearbyTraders.Add(character);
 		}
 	}
@@ -103,28 +124,34 @@ public class Npc : Character
 		return (surroundingResources.Any(x => x.workerProfession.Equals(GetProfession())));
 	}
 
-	public void ClearSurroundings() {	// Used in a few selected places, such as when forcing the caravan to go on a trademission.
+	public void ClearSurroundings()
+	{   // Used in a few selected places, such as when forcing the caravan to go on a trademission.
 		surroundingResources.ToList().ForEach(x => _OnSurroundingsExited(x));
 	}
 
 	/// <summary> Clears surrounding resources and adds one vital resource. Necessary when an npc needs to be set to work on a certain resource from far away. </summary>
-	public void AddVitalSurrounding(Resources newSurrounding) {	// Used in a few instances, such as when ending a caravan trademission to guide them back home.
+	public void AddVitalSurrounding(Resources newSurrounding)
+	{   // Used in a few instances, such as when ending a caravan trademission to guide them back home.
 		surroundingResources.Clear();
 		_OnSurroundingsEntered(newSurrounding);
 	}
 
 	private void SurroundingRemoved(Interactive resource)
 	{
+		/*
 		if (!WorkableResourcesExist())
 		{
 			outOfWork = true;
 			outOfWorkTimer.Start();
 		}
+		*/
 		_OnSurroundingsExited(resource);
 	}
 
-	public void AddNearbyTrader(Character trader) {
-		if (!nearbyTraders.Contains(trader)) {
+	public void AddNearbyTrader(Character trader)
+	{
+		if (!nearbyTraders.Contains(trader))
+		{
 			nearbyTraders.Add(trader);
 		}
 	}
@@ -159,14 +186,15 @@ public class Npc : Character
 		int leastWorkers = int.MaxValue;
 		foreach (Resources i in GetSurroundingWorkableResources())
 		{
-			if (i.GetWorkerNumber() < i.maxWorkers)	// TODO: Re-work this logic
+			if (i.GetWorkerNumber() < i.maxWorkers) // TODO: Re-work this logic
 			{
 				if (!IsInstanceValid(i) || i.GetExhausted())
 				{
 					surroundingResources.Remove(i);
 					continue;
 				}
-				if (currentResource == null || i.GetWorkerNumber() < leastWorkers) {
+				if (currentResource == null || i.GetWorkerNumber() < leastWorkers)
+				{
 					foundWork = true;
 					currentResource = i;
 					leastWorkers = i.GetWorkerNumber();
@@ -176,7 +204,8 @@ public class Npc : Character
 		SetInteractive(currentResource);
 		return foundWork;
 	}
-	private IEnumerable<Resources> GetSurroundingWorkableResources() {
+	private IEnumerable<Resources> GetSurroundingWorkableResources()
+	{
 		return surroundingResources.Where(x => x.workerProfession.Equals(GetProfession()));
 	}
 
@@ -208,12 +237,14 @@ public class Npc : Character
 		}
 	}
 
-	public void ClearFoodFromBuyQueue() {
+	public void ClearFoodFromBuyQueue()
+	{
 		//GD.Print(string.Format("Npc '{0}' cleared fooditems", entityName));
 		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).nutritionValue > 0);
 	}
 
-	public void ClearCommoditiesFromBuyQueue() {
+	public void ClearCommoditiesFromBuyQueue()
+	{
 		//GD.Print(string.Format("Npc '{0}' cleared commodities", entityName));
 		neededItems.RemoveAll(x => x is ConsumableItem && ((ConsumableItem)x).commodityValue > 0);
 	}
@@ -249,20 +280,27 @@ public class Npc : Character
 	}
 
 	// These are used mainly for debugging.
-	private string GetNeededItemsString() {
+	private string GetNeededItemsString()
+	{
 		//GD.Print(string.Join("," ,neededItems.Select(x => x.itemName)));
-		return string.Join(", " ,neededItems.Select(x => x.itemName));
+		return string.Join(", ", neededItems.Select(x => x.itemName));
 	}
-	private string GetNearbyTradersString() {
-		return string.Join(", " ,nearbyTraders.Select(x => x.entityName));
+	private string GetNearbyTradersString()
+	{
+		return string.Join(", ", nearbyTraders.Select(x => x.entityName));
 	}
-	private string GetSurroundingWorkableResourcesString() {
-		return string.Join(", " ,GetSurroundingWorkableResources().Select(x => x.entityName));
+	private string GetSurroundingWorkableResourcesString()
+	{
+		return string.Join(", ", GetSurroundingWorkableResources().Select(x => x.entityName));
 	}
-	private string GetHostilesString() {
-		if (stats.faction != null) {
-			return string.Join(", " ,stats.faction?.hostileFactions);
-		} else {
+	private string GetHostilesString()
+	{
+		if (stats.faction != null)
+		{
+			return string.Join(", ", stats.faction?.hostileFactions);
+		}
+		else
+		{
 			return "";
 		}
 	}

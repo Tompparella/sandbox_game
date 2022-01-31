@@ -39,9 +39,9 @@ public class GameManager : Node
 		// Spawner initiation
 		Godot.Collections.Array spawners = sceneTree.GetNodesInGroup(Constants.SPAWNER_GROUP);
 		foreach (Node spawner in spawners)
-        {
-            spawner.Connect("SpawnEntity", this, nameof(ConnectNewCharacter));
-        }
+		{
+			spawner.Connect("SpawnEntity", this, nameof(ConnectNewCharacter));
+		}
 
 		GD.Print("GameManager Initialization Completed.");
 	}
